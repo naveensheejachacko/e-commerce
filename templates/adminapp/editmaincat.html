@@ -1,0 +1,48 @@
+{% extends 'adminapp/admin_base.html' %}
+{% block content %}
+<div class="add main category col-lg-10">
+<div class="modal-content col-lg-6 mt-5 m-auto" style="align-items: center;">
+		<form method="POST" action="" enctype='multipart/form-data'>
+                {% csrf_token %}
+				
+				<div class="modal-header">						
+					<h4 class="modal-title">Edit Main Category</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>	
+				
+				<div class="modal-body">
+					
+					<!-- <div class="form-group">
+						<label>Select Main Category</label>	
+						<select name="selectmain" id="selectmain" class="form-control border border-primary" >
+							<option selected="selected"  disabled>Select Main Category</option>
+							{% for m in main_category %}
+							<option value="{{ m.id }}">{{ m.main_category_name }}</option>
+							{% endfor %}
+						</select>		
+						</div> -->
+
+					<div class="form-group">
+						
+						<label>Main Category Name</label>
+						<input type="text" name="maincatname" class="form-control" required="" placeholder="{{ m.main_category_name }}">
+						
+					</div>
+					<div class="form-group">
+						<label>Image</label><br>
+						<input type="file" name="maincatimage" class="col-10"
+                        	placeholder="Add image" required="">
+					</div>		
+						
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-default" data-dismiss="modal"> <a href="{% url 'main_category' %}" style="text-decoration:none;">Cancel</a></button>
+					<button type="submit" class="btn btn-success" >Update</button>
+				</div>
+					
+			</form>
+
+			
+	</div>
+</div>
+{% endblock %}

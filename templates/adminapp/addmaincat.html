@@ -1,0 +1,86 @@
+{% extends 'adminapp/admin_base.html' %}
+{% block content %}
+
+<!-- Edit Modal HTML -->
+<div class="add main category col-lg-10">
+		<div class="modal-content col-lg-6 mt-5 m-auto" style="align-items: center;">
+			<form action="{% url 'add_main_cat' %}" method="POST"  enctype='multipart/form-data'>
+				{% csrf_token %}
+				<div class="modal-header">						
+					<h4 class="modal-title">Add Main Category</h4>
+					<!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> -->
+				</div>
+				<div class="modal-body">					
+					<div class="form-group">
+						<label>Main Category Name</label>
+						<input name="maincatname" type="text" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<label>Image</label><br>
+						<input type="file" name="maincatimage" class="col-10"
+                        	placeholder="Add image" required="">
+					</div>					
+				</div>
+				{% for msg in messages %}
+                    <h4 class="col-12 p-0 my-2 text-info text-center font-weight-bold"> {{msg}}
+                    </h4>
+                {% endfor %}
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-default" data-dismiss="modal"> <a href="{% url 'main_category' %}" style="text-decoration:none;">Cancel</a></button>
+					<button type="submit" class="btn btn-success" >ADD</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+<!-- Edit Modal HTML -->
+<!-- <div id="editEmployeeModal" >
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form>
+				<div class="modal-header">						
+					<h4 class="modal-title">Edit Main Category</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">					
+					<div class="form-group">
+						<label>Main Category Name</label>
+						<input type="text" class="form-control" required>
+					</div>
+
+					<div class="form-group">
+						<label>Image</label>
+						<input type="text" class="form-control" required>
+					</div>					
+				</div>
+				<div class="modal-footer">
+					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+					<input type="submit" class="btn btn-info" value="Save">
+				</div>
+			</form>
+		</div>
+	</div>
+</div> -->
+<!-- Delete Modal HTML -->
+<!-- <div id="deleteEmployeeModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form>
+				<div class="modal-header">						
+					<h4 class="modal-title">Delete Main Category</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">					
+					<p>Are you sure you want to delete these Records?</p>
+					<p class="text-warning"><small>This action cannot be undone.</small></p>
+				</div>
+				<div class="modal-footer">
+					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+					<input type="submit" class="btn btn-danger" value="Delete">
+				</div>
+			</form>
+		</div>
+	</div>
+</div> -->
+
+{% endblock %}

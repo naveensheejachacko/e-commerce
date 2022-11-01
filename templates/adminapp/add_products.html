@@ -1,0 +1,140 @@
+{% extends 'adminapp/admin_base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="container tm-mt-big tm-mb-big mt-5">
+    <div class="row">
+    <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto">
+        <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+            <div class="row">
+              <div class="col-12">
+                <h2 class="tm-block-title d-inline-block">Add Product</h2>
+              </div>
+            </div>
+            <div class="row tm-edit-product-row">
+
+                <form action="{% url 'add_product' %}" method="POST" class="tm-edit-product-form" enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    
+                    <div class="col-xl-6 col-lg-6 col-md-12">
+                        <div class="form-group mb-3">
+                            <label for="name" >Product Name </label>
+                            <input id="productname" name="productname" type="text" class="form-control validate" required/>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="product" >Description</label>
+                            <textarea name="product_desc" id="product_desc" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="main_category" >Main Category</label>
+                            <select name="selectmain" id="category" class="custom-select tm-select-accounts" >
+                            <option selected>Select Main Category</option>
+                            {% for m in main %}
+                            <option value="{{ m.id }}">{{ m.main_category_name }}</option>
+                            {% endfor %}
+                            </select>	
+                        </div>
+                        <div class="form-group ">
+                            <label for="selectsubcat">Sub Category</label>
+                                <select class="form-control"  name="selectsub" id="subcategory1">
+
+                                </select>
+                        </div>
+
+                    
+                        <div class="tm-product-img-dummy mx-auto">
+                        <div class="form-group">
+                            <label>Upload Product Image</label><br>
+                                <input type="file" name="images" id="images" class="col-10" placeholder="Add image" required="">
+                            </div>		
+                        </div>		
+                            <!-- <div class="custom-file mt-3 mb-3 ">
+                            <div class="form-group">
+                            <input type="file" id="image" name="image" class="btn btn-primary btn-block mx-auto" value="UPLOAD PRODUCT IMAGE"required="">
+                                </div>
+                            </div> 		 -->
+                        <div class="row">
+                        <div class="form-group mb-3 col-xs-12 col-sm-6">
+                            <label for="date" >Price</label>
+                            <input id="price" name="price" type="text" class="form-control validate" data-large-mode="true"/>
+                        </div>
+                        <div class="form-group mb-3 col-xs-12 col-sm-6">
+                            <label for="stock" >Units In Stock</label>
+                            <input id="stock" name="stock" type="text" class="form-control validate" required/>
+                        </div>
+                            <!-- <div class="form-group mb-3 col-xs-12 col-sm-6">
+                                <label for="expire_date" >Created Date</label>
+                                <input id="expire_date" name="expire_date" type="text" class="form-control validate" data-large-mode="true"/>
+                            </div> -->
+
+                       
+                        </div>
+                        {% for msg in messages %}
+                        <h4 class="col-12 p-0 my-2 text-danger text-center font-weight-bold"> {{msg}} </h4>
+                        {% endfor %}
+                        <div class="custom-file mt-3 mb-3">
+                        <button type="submit" class="btn btn-primary btn-block text-uppercase success">Add Product Now</button>
+                        </div>
+                        
+                    </div>
+                        <!-- <div class="col-12">
+                        <button type="submit" class="btn btn-primary btn-block text-uppercase">Add Product Now</button>
+                        </div> -->
+                        
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+    <footer class="tm-footer row tm-mt-small">
+    </footer> 
+
+
+<!-- ajaxxxx -->
+<script src="js/main.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script> -->
+
+<script src="https://code.jquery.com/jquery-3.6.1.slim.min.js" integrity="sha256-w8CvhFs7iHNVUtnSP0YKEg00p9Ih13rlL9zGqvLdePA=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+
+<script>
+
+    $("#category").change(function (){
+        var url = "{% url 'dropdown_P' %}"
+        var category_id = $(this).val();
+
+        $.ajax({
+          url : url,
+          data :{"category":category_id},
+          success: function(data){
+            $("#subcategory1").html(data);
+          }
+
+        });
+
+      });
+
+
+</script>
+<!-- ajax end -->
+
+
+
+
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <!-- https://jquery.com/download/ -->
+    <script src="jquery-ui-datepicker/jquery-ui.min.js"></script>
+    <!-- https://jqueryui.com/download/ -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- https://getbootstrap.com/ -->
+    <!-- <script>
+      $(function() {
+        $("#expire_date").datepicker();
+      });
+    </script> -->
+{% endblock %}
+
+
