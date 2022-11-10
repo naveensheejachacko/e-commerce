@@ -1,0 +1,61 @@
+
+{% extends 'userapp/base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg">
+
+    <div class="container">
+        <div class="row">
+        <aside class="col-md-3">
+            <!--   SIDEBAR   -->
+            <ul class="list-group">
+                <a class="list-group-item " href="{% url 'dashboard' %}"> My order history </a>
+                <a class="list-group-item" href="#"> Transactions </a>
+                <a class="list-group-item" href="#"> Return and refunds </a>
+                <a class="list-group-item" href="#">Settings </a>
+                <a class="list-group-item active" href="#"> Address </a>
+                <a class="list-group-item" href="#"> Received orders </a>
+            </ul>
+            <br>
+            <a class="btn btn-light btn-block" href="{% url 'user_logout' %}"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a> 
+            <!--   SIDEBAR .//END   -->
+        </aside>
+        <main class="col-md-7">
+            <article class="card">
+
+                <header class="card-header" >
+                    <strong class="d-inline-block mr-3">Saved Address:</strong>
+                     
+                    <a href="{% url 'add_address' %}" class="btn  btn-success " style="margin-left:20em;" > <span class="text">Add New Address</span>  </a> 
+                
+            </header>   
+            {% for address in address %}
+            <div class="card-body">
+                <div class="row"> 
+                    <div class="col-md-8">
+                        <h3 class="text-muted">{{address.fname}} {{address.lname}}</h3>
+                        
+                        Phone:{{address.phone_number}} Email: {{address.email}} <br>
+                        <p>{{address.address}} <br>  
+                        Location: {{address.state}}, {{address.country}}, <br> 
+                        P.O. Box: {{address.pincode}} 
+                         </p>
+                         <hr>
+                    </div>
+                    {% endfor %}
+                </div> <!-- row.// -->
+            </div> <!-- card-body .// -->
+<!-- table-responsive .end// -->
+            </article> <!-- order-group.// --> 
+        </main>
+    </div> <!-- row.// -->
+    </div>
+    
+    
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+
+
+    {% endblock %}

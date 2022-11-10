@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 
 @login_required(login_url='admin_login')
 def main_category(request):
-    main_category=Main_Category.objects.all()
+    main_category=Main_Category.objects.all().order_by('-id')
     context={
         'main_category':main_category
     }
@@ -47,15 +47,18 @@ def add_main_cat(request):
     return redirect('main_cat_add_page')
 @login_required(login_url='admin_login')
 def edit_main_cat(request,id):
+    main=Main_Category.objects.get(pk=id)
     if request.method=='POST':
-        main=Main_Category.objects.get(pk=id)
         main_cat_name=request.POST.get('maincatname')
         main.main_category_name=main_cat_name
         main.slug=slugify(main_cat_name)
         main.save()
         messages.error(request,"Updated")
         return redirect('main_category')
-    return render(request,'adminapp/editmaincat.html')
+    return render(request,'adminapp/editmaincat.html',
+    {
+        'main':main
+    })
     
 
 # def main_cat_up(request):
@@ -83,7 +86,7 @@ def subcat_add_page(request):
     return render(request,'adminapp/add-sub-category.html',context)
 @login_required(login_url='admin_login')
 def sub_category(request):
-    sub_cat=Sub_Category.objects.all()
+    sub_cat=Sub_Category.objects.all().order_by('-id')
     context={
             'sub_cat':sub_cat
         }
@@ -173,7 +176,7 @@ def dropdown_P(request):
 #................ products..................
 @login_required(login_url='admin_login')
 def product(request):
-    products=Product.objects.all()
+    products=Product.objects.all().order_by('-id')
     return render(request,'adminapp/products.html',{
         'products':products
     })
@@ -205,6 +208,15 @@ def add_product(request):
         
         if 'images' in request.FILES:
             obj.images=request.FILES['images']
+            print('................image fetch.....................')
+        if 'img1' in request.FILES:
+            obj.img1=request.FILES['img1']
+            print('................image fetch.....................')
+        if 'img2' in request.FILES:
+            obj.img2=request.FILES['img2']
+            print('................image fetch.....................')
+        if 'img3' in request.FILES:
+            obj.img3=request.FILES['img3']
             print('................image fetch.....................')
         if int(obj.stock) < 0:
             print('.................saved...........................')

@@ -2,7 +2,10 @@
 {% block content %}
 <div class="container-xl">
 	<div class="table-responsive">
-		<div class="table-wrapper">
+
+
+		<div class="table-wrapper"> 
+		
 			<div class="table-title">
 				<div class="row">
 					{% for msg in messages %}
@@ -33,10 +36,7 @@
 					{% for s in sub_cat %}
 					<tr>
 						<th>
-							<span class="custom-checkbox">
-								<input type="checkbox" id="selectAll">
-								<label for="selectAll"></label>
-							</span>
+
 						</th>
 						<td>{{forloop.counter}}</td>
 						<td>{{s.parent_main}}</td>
@@ -64,6 +64,7 @@
 				</ul>
 			</div> -->
 		</div>
+		
 	</div>        
 </div>
 <!-- Edit Modal HTML -->

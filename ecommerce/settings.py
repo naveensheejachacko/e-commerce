@@ -41,6 +41,12 @@ INSTALLED_APPS = [
     'userapp',
     'account',
     'categories',
+    'cartapp',
+    'orders',
+    'store',
+    'widget_tweaks',
+
+    
 ]
 
 MIDDLEWARE = [
@@ -66,6 +72,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'store.context_processors.menu_links',
+                'cartapp.context_processors.counter',
             ],
         },
     },
@@ -85,6 +93,7 @@ DATABASES = {
         'USER':'postgres',
         'PASSWORD':123,
         'HOST':'localhost',
+       
         
     }
 }

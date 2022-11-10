@@ -7,8 +7,19 @@ urlpatterns = [
     path('user_logout',views.user_logout,name='user_logout'),
 
 
+
     path('otp_login/',views.otp_login,name='otp_login'),
     path('otp_login_page/',views.otp_login_page,name='otp_login_page'),
     path('enter_otp/',views.enter_otp,name='enter_otp'),
     path('verify_otp/',views.verify_otp,name='verify_otp'),
+
+    path('dashboard/',views.dashboard,name='dashboard'),
+    path('view_address/',views.view_address,name='view_address'),
+    path('add_address/',views.add_address,name='add_address'),
+
+
+    
 ]
+
+
+

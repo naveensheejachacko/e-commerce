@@ -1,0 +1,169 @@
+
+{% extends 'userapp/base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg">
+
+    <div class="container">
+        {% for message in messages %}
+<h4 style="color: rgb(0, 0, 0);">{{message}}</h4>
+{% endfor %}
+        <div class="row">
+
+        <aside class="col-md-3">
+            <!--   SIDEBAR   -->
+            <ul class="list-group">
+                <a class="list-group-item active" href="#"> My order history </a>
+                <a class="list-group-item" href="#"> Transactions </a>
+                <a class="list-group-item" href="#"> Return and refunds </a>
+                <a class="list-group-item" href="#">Settings </a>
+                <a class="list-group-item" href="{% url 'view_address' %}"> Address </a>
+                <a class="list-group-item" href="#"> Received orders </a>
+            </ul>
+            <br>
+            <a class="btn btn-light btn-block" href="{% url 'user_logout' %}"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a> 
+            <!--   SIDEBAR .//END   -->
+        </aside>
+       
+        <main class="col-md-9">
+           
+            <article class="card">
+                
+                {% for order in orders %}
+                
+            <header class="card-header">
+               
+                <strong class="d-inline-block mr-3">Order ID:{{order.tracking_no}}</strong>
+               
+                <!-- <span>Order Date:</span> -->
+            </header>
+       
+            <div class="card-body">
+                <div class="row"> 
+                    <div class="col-md-4">
+                        
+                        <h6 class="text-muted">Delivery to</h6>
+                        <p>{{order.address.fname}}<br>  
+                        Phone:{{order.address.phone_number}}  Email: {{order.address.email}}<br>
+                        Location: {{order.address.address}},  {{order.address.state}},  {{order.address.country}}, <br> 
+                        P.O. Box: {{order.address.pincode}}
+                         </p>
+                        
+                    </div>
+                
+                    <div class="col-md-3">
+                    
+
+                                        <div class="media">
+                                          
+                                            <div class="media-body my-auto text-right">
+                                                {% for item in order.orderitem_set.all %}
+                                                
+                                                <img src="{{item.product.images.url}}" style="width: 100px;" alt=""> 
+                                                <div class="row  my-auto flex-column flex-md-row">
+                                                    <div class="col my-auto"> <h6 class="mb-0"> {{item.product.product_name}}</h6>  </div>
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                      
+                    </div>
+                   <div class="col-md-2">
+                    <div class="status">
+                       <h5>Order Status</h5>
+                    </div>
+                    {{order.status}}
+                   </div>
+                    <div class="col-md-2">
+                        {% for item in order.orderitem_set.all %}
+                        
+                        <h6 class="text-muted">Payment</h6>
+                        <span class="text-success">
+                            <!-- <i class="fab fa-lg fa-cc-visa"></i> -->
+                           {{order.payment_mode}}
+                        </span>
+                        <p>Quantity:{{item.quantity}} 
+                        <p>Price: ${{item.product.price}} *{{item.quantity}} <br>
+                         Tax:$5% <br> 
+                         <span class="b">Total:${{order.total_price}}</span>
+                        </p>
+                        {% endfor %}
+                    </div>
+                </div> <!-- row.// -->
+               <br>
+            </div> <!-- card-body .// -->
+         
+            <div class="table-responsive">
+
+            <!-- <table class="table table-hover">
+                <tr>
+                    <td width="65">
+                        <img src="../images/items/1.jpg" class="img-xs border">
+                    </td>
+                    <td> 
+                        <p class="title mb-0">{{i.product.product_name}} </p>
+                        <var class="price text-muted">USD {{i.grand_total}}</var>
+                    </td>
+                    <td> Seller <br> Nike clothing </td>
+                    <td width="250"> <a href="#" class="btn btn-outline-primary">Track order</a> <a href="#" class="btn btn-light"> Details </a> </td>
+                </tr>
+
+
+            </table> -->
+  
+           
+            </div> <!-- table-responsive .end// -->
+            {% endfor %}
+            
+            </article> <!-- order-group.// --> 
+        </main>
+       
+    </div> <!-- row.// -->
+    </div>
+    
+    
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+
+
+
+
+
+
+<!-- 
+    <div class="container-fluid pt-5">
+        <div class="row px-xl-5">
+            <div class="col-lg-8 table-responsive mb-5">
+             
+              <div class="  ">
+                  <a href="{% url 'add_address' %}"><button class="btn btn-primary ">Add New Address</button></a>
+              </div>
+              <div class="container mt-5">
+                <div class="row">
+                  {% for address in address%}
+              <div class="card  ml-4" style="width: 18rem;">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ address.fname}}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ address.country}},{{ address.state}}</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ address.pincode}}</h6>
+                    <p class="card-text">{{ address.address }}</p>
+                    <a href="#" class="card-link">Edit</a>
+                    <a href="#" class="card-link">Delete</a>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+              </div>
+            </div>
+           
+            
+               
+
+                
+                
+            </div>
+        </div>
+    </div> -->
+    {% endblock %}

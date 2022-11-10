@@ -1,0 +1,103 @@
+
+{% extends 'userapp/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="container">
+    <div class="py-5 text-center">
+      
+      <h2>Add Address</h2>
+    </div>
+  
+    <form action="" method="POST">
+      {% csrf_token %}
+    
+      <div class="col-md-12 order-md-1">
+        <h4 class="mb-3">Billing address</h4>
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="firstName">First name</label>
+              <!-- <input type="text" class="form-control" name="fname" id="firstName" placeholder="" value="" required> -->
+              {{form.fname|add_class:"form-control"}}
+              <div class="invalid-feedback">
+                Valid first name is required.
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="lastName">Last name</label>
+              <!-- <input type="text" class="form-control" name="lname" id="lastName" placeholder="" value="" required> -->
+              {{form.lname|add_class:"form-control"}}
+              <div class="invalid-feedback">
+                Valid last name is required.
+              </div>
+            </div>
+          </div>
+          <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="email">Email <span class="text-muted">(Optional)</span></label>
+            <!-- <input type="email" class="form-control" name="email" id="email" placeholder="you@example.com"> -->
+            {{form.email|add_class:"form-control"}}
+            <div class="invalid-feedback">
+              Please enter a valid email address for shipping updates.
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="phone_number">phone_number<span class="text-muted"></span></label>
+            <!-- <input type="email" class="form-control" name="email" id="email" placeholder="you@example.com"> -->
+            {{form.phone_number|add_class:"form-control"}}
+            <div class="invalid-feedback">
+              Please enter a valid Phone Number for shipping updates.
+            </div>
+          </div>
+        </div>
+
+          <div class="mb-3">
+            <label for="address">Address</label>
+            <!-- <input type="text" class="form-control" name="address" id="address" placeholder="1234 Main St" required> -->
+            {{form.address|add_class:"form-control"}}
+            <div class="invalid-feedback">
+              Please enter your shipping address.
+            </div>
+          </div>
+  
+         
+          <div class="row">
+            <div class="col-md-5 mb-3">
+              <label for="country">Country</label>
+              <!-- <select class="custom-select d-block w-100" name="country" id="country" required>
+                <option value="">Choose...</option>
+                <option value="united states">United States</option>
+              </select> -->
+              {{form.country|add_class:"form-control d-block w-100"}}
+              <div class="invalid-feedback">
+                Please select a valid country.
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="state">State</label>
+              <!-- <select class="custom-select d-block w-100" name="state" id="state" required>
+                <option value="">Choose...</option>
+                <option value="california">California</option>
+              </select> -->
+              {{form.state|add_class:"form-control d-block w-100"}}
+              <div class="invalid-feedback">
+                Please provide a valid state.
+              </div>
+            </div>
+            <div class="col-md-3 mb-3">
+              <label for="zip">Zip</label>
+              <!-- <input type="text" class="form-control" name="zip" id="zip" placeholder="" required> -->
+              {{form.pincode|add_class:"form-control"}}
+              <div class="invalid-feedback">
+                Zip code required.
+              </div>
+            </div>
+          </div>
+          <hr class="mb-4">
+          <button class="btn btn-primary btn-lg text-center" style="width:22.5rem;" type="submit">Add Address  </button>
+        </div>
+      </form>
+    
+    </div>
+{% endblock %}

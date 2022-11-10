@@ -25,13 +25,14 @@
 					<div class="form-group">
 						
 						<label>Main Category Name</label>
-						<input type="text" name="maincatname" class="form-control" required="" placeholder="{{ m.main_category_name }}">
+						<input type="text" name="maincatname" class="form-control" required="" value="{{ main.main_category_name }}" placeholder="">
 						
 					</div>
 					<div class="form-group">
 						<label>Image</label><br>
+						<img src="{{ main.thumbnail.url }}" style="width:80px ; height:80 px;" alt="">
 						<input type="file" name="maincatimage" class="col-10"
-                        	placeholder="Add image" required="">
+                        	 placeholder="Add image" required="">
 					</div>		
 						
 				</div>

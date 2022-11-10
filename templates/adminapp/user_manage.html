@@ -27,7 +27,7 @@
 						<th>Phone Number</th>
 						<th>Last Login</th>
 						<th>Active Status</th>
-						<th>Is Superuser</th>
+						<!-- <th>Is Superuser</th> -->
 						<th>Actions</th>
 					</tr>
 				</thead>
@@ -37,10 +37,10 @@
 					{% for i in user_details %}
 					<tr>
 						<th>
-							<span class="custom-checkbox">
-								<input type="checkbox" id="selectAll">
-								<label for="selectAll"></label>
-							</span>
+							<!-- <span class="custom-checkbox"> -->
+								<!-- <input type="checkbox" id="selectAll">
+								<label for="selectAll"></label> -->
+							<!-- </span> -->
 						</th>
 						<td>{{forloop.counter}}</td>
 						<td>{{i.first_name}}</td>
@@ -50,7 +50,7 @@
 						
 						<td>{{i.last_login}}</td>
 						<td>{{i.is_active}}</td>
-						<td>{{i.is_superadmin}}</td>
+						<!-- <td>{{i.is_superadmin}}</td> -->
 						
 
 						{% if i.is_blocked is True  %}

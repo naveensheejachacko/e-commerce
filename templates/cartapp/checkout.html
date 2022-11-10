@@ -1,0 +1,133 @@
+{% extends 'userapp/base.html' %}
+{% load static %}
+{% block content %}
+
+
+
+<section class="section-content padding-y bg">
+    <div class="container col-10">
+        <form action="{% url 'place_order' %}" method="POST">
+            {% csrf_token %}
+    
+    <!-- ============================ COMPONENT 1 ================================= -->
+    
+    <div class="row">
+        <aside class="col-lg-6">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title mb-4">
+                Billing Address
+            </h4>
+             {% for address in address %}
+            <div class="card-body">
+                <div class="row"> 
+                    <div class="col-md-8">
+                        <input type="radio" required value="{{ address.id }}" name="radio-address" class="float-left  mr-2" style="height:2rem;width:1rem;" >
+                        <h3 class="text-muted">{{address.fname}} {{address.lname}}</h3>
+                        
+                        Phone:{{address.phone_number}} <br>
+                        Email: {{address.email}} <br>
+                        <p>{{address.address}} <br>  
+                        Location: {{address.state}}, {{address.country}}, <br> 
+                        P.O. Box: {{address.pincode}} 
+                         </p>
+                         <hr>
+                    </div>
+                    {% endfor %}
+                    <a href="{% url 'add_address' %}" class="btn btn-primary"> Add New Address</a> 
+                </div> <!-- row.// -->
+            </div>
+
+
+        
+</div>
+
+        
+    </div> <!-- card.// -->
+    
+        </aside> <!-- col.// -->
+        <aside class="col-lg-5">
+    
+                
+    <div class="row">
+
+    <div class="card">
+    <table class="table table-borderless table-shopping-cart">
+    <thead class="text-muted">
+    <tr class="small text-uppercase">
+      <th scope="col">Product</th>
+      <th scope="col" width="120">Quantity</th>
+      <th scope="col" width="120">Price</th>
+      <th scope="col" class="text-right" width="200"> </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        {% for cart_item in cart_items %}
+
+        <td>
+            
+            <figure class="itemside align-items-center">
+                <div class="aside"><img src="{{cart_item.product.images.url}}" class="img-sm"></div>
+                <figcaption class="info">
+                    <a href="#" class="title text-dark">{{cart_item.product.product_name}}</a>
+                    <p class="text-muted small">{{cart_item.product.prdt_desc}}</p>
+                </figcaption>
+            </figure>
+        </td>
+        <td> <p class="text-muted small">{{cart_item.quantity}}</p>
+        </figcaption>
+        </td>
+        <td> 
+            <div class="price-wrap"> 
+                <var class="price">${{ cart_item.sub_total }}</var> 
+                <small class="text-muted"> ${{ cart_item.product.price}} each </small> 
+            </div> <!-- price-wrap .// -->
+        </td>
+        {% endfor %}
+
+    </tr>
+
+    <tr>
+        <td>
+        </td>
+    </tr>
+
+
+    </tbody>
+    </table>
+
+
+            <div class="card mb-5">
+            <div class="card-body col-lg-12 ">
+                
+
+                <div class="price-wrap"> 
+                    {% for cart_item in cart_items %}
+                    <var class="price">Toal Price:{{ cart_item.sub_total }}</var> <br>
+                    <var class="price">Tax:{{tax }}</var> <br>
+                    <var class="price">Grand Total:{{grand_total }}</var> <br>
+           
+           
+                {% endfor %}
+                </div>
+
+                <input type="hidden" value="COD" name="payment_mode">
+                <button type="submit" name="submit" class="btn btn-primary btn-block">Place Order</button>
+                
+            </div> 
+            <a href="{% url 'home' %}" class="btn btn-light btn-block">Continue Shopping</a><!-- card-body.// -->
+            </div> <!-- card.// -->
+    
+    </aside> <!-- col.// -->
+    
+    
+    </div> <!-- row.// -->
+    <!-- ============================ COMPONENT 1 END .// ================================= -->
+</form>
+    </div> <!-- container .//  -->
+
+    </section>
+
+
+{% endblock %}

@@ -38,6 +38,7 @@ def admin_home(request):
         # context={'user_details':Account.objects.all()}#show user details
     else:
         return redirect('admin_login')
+    
 def admin_logout(request):
     print("logout")
     logout(request)
@@ -46,7 +47,7 @@ def admin_logout(request):
     #prfdt management
 
 def user_manage(request):
-    context={'user_details':Account.objects.all()}#show user details
+    context={'user_details':Account.objects.all().order_by('-id')}#show user details
     return render(request,'adminapp/user_manage.html',context)
 
 @login_required(login_url='admin_login')

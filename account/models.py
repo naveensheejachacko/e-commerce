@@ -5,7 +5,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,BaseUserManager
 from django.contrib import messages
 import random
-from django.db import models
+
 
 
 
@@ -69,3 +69,6 @@ class Account(AbstractBaseUser):
         return self.is_admin
     def has_module_perms(self,app_label):
         return True
+
+
+
