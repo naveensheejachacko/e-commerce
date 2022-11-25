@@ -11,18 +11,22 @@
         <aside class="col-md-3">
             <!--   SIDEBAR   -->
             <ul class="list-group">
-                <a class="list-group-item " href="{% url 'dashboard' %}"> My order history </a>
-                <a class="list-group-item" href="#"> Transactions </a>
+
+                <a class="list-group-item " href="{% url 'dashboard' %}">Dashboard </a>
                 <a class="list-group-item" href="#"> Return and refunds </a>
-                <a class="list-group-item" href="#">Settings </a>
-                <a class="list-group-item active" href="#"> Address </a>
-                <a class="list-group-item" href="#"> Received orders </a>
+                <a class="list-group-item" href="{% url 'change_password' %}">Change Password</a>
+                <a class="list-group-item active" href="{% url 'view_address' %}"> Address </a>
+                <a class="list-group-item" href="{% url 'user_orders' %}">Your Orders</a>
             </ul>
             <br>
             <a class="btn btn-light btn-block" href="{% url 'user_logout' %}"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a> 
             <!--   SIDEBAR .//END   -->
         </aside>
+
         <main class="col-md-7">
+            {% for message in messages %}
+            <h4 style="color: rgb(0, 0, 0);">{{message}}</h4>
+            {% endfor %}
             <article class="card">
 
                 <header class="card-header" >
@@ -42,6 +46,10 @@
                         Location: {{address.state}}, {{address.country}}, <br> 
                         P.O. Box: {{address.pincode}} 
                          </p>
+                         <span>
+                            <a href="{% url 'delete-address' address.id %}" class="small-gray-text"
+                               onclick="deleteAddress()" style="color: red;">Delete</a>
+                        </span>
                          <hr>
                     </div>
                     {% endfor %}
@@ -56,6 +64,27 @@
     
     </section>
     <!-- ========================= SECTION CONTENT END// ========================= -->
-
+    <script>
+        function deleteAddress() {
+            event.preventDefault();
+            var dlt = event.currentTarget.href
+            console.log(dlt)
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    
+                    window.location = dlt;
+                }
+            })
+        }
+    </script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     {% endblock %}

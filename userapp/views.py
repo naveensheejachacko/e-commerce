@@ -4,8 +4,8 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from account.models import Account
 from orders.models import Order,OrderItem
-from userapp.models import Address
-from .forms import CreateUserForm
+from userapp.models import Address, UserProfile
+from .forms import CreateUserForm, UserForm, UserProfileForm
 from django.contrib import messages
 from multiprocessing import context
 from django.contrib.auth import authenticate,login,logout
@@ -67,7 +67,28 @@ def user_signup(request):
         if request.method == 'POST':
             form = CreateUserForm(request.POST)
             if form.is_valid():
-                form.save()
+                first_name = request.POST['first_name']
+                last_name = request.POST['last_name']
+                email = request.POST['email']
+                phone_number = request.POST['phone_number']
+                password = request.POST['password1']
+                username = request.POST['username']
+            
+                user = Account.objects.create_user(
+                first_name=first_name,
+                last_name=last_name,
+                email=email,
+                password=password,
+                username=username,
+                phone_number=phone_number
+            )
+                 # Create a user profile
+                profile = UserProfile()
+                profile.user_id = user.id
+                profile.profile_picture = "avatar.jpeg"
+                profile.save()
+                user.save()
+                # form.save()
                 #user=form.cleaned_data.get('username')
                 #messages.success(request,'Account was created for' +user)
                 return redirect('user_login')
@@ -77,9 +98,31 @@ def user_signup(request):
 def home(request):
     maincategory=Main_Category.objects.all()
     subcategory=Sub_Category.objects.all()
-    topitems=Product.objects.all().order_by('created_date')[3::-1]
+    topitems=Product.objects.all().order_by('created_date')   # [3::-1]
     cartitem=CartItem.objects.all()
     cart=Cart.objects.all()
+    orders=Order.objects.all()
+    orderitems=OrderItem.objects.all()
+    tax=0
+    try:
+        if request.user.is_authenticated:
+            cart_items=CartItem.objects.filter(user=request.user,is_active=True)
+        else:
+            cart=Cart.objects.get(cart_id=_cart_id(request))
+            cart_items=CartItem.objects.filter(cart=cart,is_active=True)
+
+        # for cart_item in cart_items:
+        #     total+=(cart_item.product.price*cart_item.quantity)
+        #     quantity+=cart_item.quantity
+        # tax=(5*total)/100
+        # grand_total=total+tax
+        
+    except: 
+        pass
+
+
+
+
     if request.user.is_authenticated:
         if request.user.is_superadmin is False:
             return render(request,'userapp/index.html',{
@@ -88,6 +131,8 @@ def home(request):
         'topitems':topitems,
         'cartitem':cartitem,
         'cart':cart,
+        'orders':orders,
+        'orderitems':orderitems,
     })
         else:
             return redirect('admin_login')
@@ -97,6 +142,7 @@ def home(request):
         'topitems':topitems,
         'cartitem':cartitem,
         'cart':cart,
+        'orderitems':orderitems,
     })
 # def base(request):
 #     maincategory=Main_Category.objects.all()
@@ -110,26 +156,142 @@ def home(request):
 
 #     })
 
-
-def dashboard(request):
-    total=0
-    tax=0
-    orders = Order.objects.filter(user=request.user)
-    order_item=OrderItem.objects.all()
-
-    for item in order_item:
-        total=total+(item.product.price*item.quantity)
-    tax=(50/1000)*total
+@login_required(login_url="user_login")
+def  dashboard(request):
+    orders = OrderItem.objects.filter(
+        user=request.user
+    ).order_by("-created_at")
 
 
 
-    print('..............................',orders)
-    context={
+    order = Order.objects.order_by("-created_at").filter(
+        user_id=request.user.id
+    )
+
+    print('.......................................................userprofile 1',orders,'...................................')
+    orders_count = order.count()
+    print('...............................',orders_count,'.............................')
+
+    userprofile = UserProfile.objects.filter(user_id=request.user.id)
+    context = {
+        'orders_count': orders_count,
+        'userprofile': userprofile,
         'orders':orders,
-        'order_item':order_item,
-        'tax':tax,
+
     }
-    return render(request,'userapp/dashboard.html',context)
+
+    return render(request, 'userapp/dashboard.html', context)
+
+
+
+@login_required(login_url="user_login")
+def edit_profile(request):
+    print('................hi.......................')
+    userprofile =get_object_or_404(UserProfile,user=request.user)
+    print('...............................',userprofile,'..........................')
+    if request.method == "POST":
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = UserProfileForm(
+            request.POST, request.FILES, instance=userprofile
+        )
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, "Your profile has been updated.")
+            return redirect('dashboard')
+    else:
+        user_form = UserForm(instance=request.user)
+        profile_form = UserProfileForm(instance=userprofile)
+    context = {
+        "user_form": user_form,
+        "profile_form": profile_form,
+        "userprofile": userprofile,
+    }
+    return render(request,'userapp/editprofile.html', context)
+
+
+@login_required(login_url="user_login")
+def change_password(request):
+    if request.method == "POST":
+        current_password = request.POST["current_password"]
+        new_password = request.POST["new_password"]
+        confirm_password = request.POST["confirm_password"]
+
+        user = Account.objects.get(username__exact=request.user.username)
+
+        if new_password == confirm_password:
+            success = user.check_password(current_password)
+            if success:
+                user.set_password(new_password)
+                user.save()
+                # auth.logout(request)
+                messages.success(request, "Password Updated Successfully.")
+                return redirect("change_password")
+            else:
+                messages.error(request, "Your Existing Password Is Incorrect")
+                return redirect("change_password")
+        else:
+            messages.info(request, "Password Does Not Match!")
+            return redirect("change_password")
+
+    return render(request, "userapp/change_password.html")
+
+def user_orders(request):
+    orders = OrderItem.objects.filter(
+    user=request.user
+    ).order_by("-created_at")
+
+
+
+    order = Order.objects.order_by("-created_at").filter(
+        user_id=request.user.id
+    )
+
+    print('.......................................................userprofile 1',orders,'...................................')
+    orders_count = order.count()
+    print('...............................',orders_count,'.............................')
+
+    userprofile = UserProfile.objects.filter(user_id=request.user.id)
+    context = {
+        'orders_count': orders_count,
+        'userprofile': userprofile,
+        'orders':orders,
+
+    }
+
+    return render(request, 'userapp/user_orders.html', context)
+
+
+
+@login_required(login_url="user_login")
+def cancel_order(request, pk):
+    product = OrderItem.objects.get(pk=pk)
+    product.status = "Cancelled_item"
+    product.save()
+    item = Product.objects.get(pk=product.product.id)
+    item.stock += product.quantity
+    item.save()
+    return redirect("dashboard")
+
+def return_order(request,id):
+    order_item=OrderItem.objects.get(id=id)
+    order_item.status="return"
+    order_item.save()
+    
+    return HttpResponseRedirect(request.META["HTTP_REFERER"])
+
+def accept_return(request,id):
+    
+    order_item=OrderItem.objects.get(id=id)
+    
+    order_item.status="Refund Initiated"
+    product_id=order_item.product_id
+    product=Product.objects.get(id=product_id)
+    product.stock+=order_item.quantity
+    order_item.save()
+    product.save()
+    return HttpResponseRedirect(request.META["HTTP_REFERER"])
+
 
 
 
@@ -240,7 +402,74 @@ def add_address(request):
         'form':address_form,
     })
 
+@login_required
+def delete_address(request, pk):
+    dlt = Address.objects.filter(id=pk)
+    print(dlt)
+    dlt.delete()
+    messages.success(request, "Your Address Has been deleted")
+    return redirect("view_address")
 
+
+
+
+
+def ordersummary(request,id):
+        # try:
+    orders=Order.objects.get(id=id,user=request.user)
+      
+        # except:
+        #     return HttpResponse("not found")
+    data={
+            'order_id':orders.id,
+            'date':str(orders.created_at),
+            'name':orders.user.first_name,
+            'address':orders.address.address,
+            'total_price':orders.total_price,
+            'payment_id':orders.payment_id,
+            'payment_mode':orders.payment_mode,
+            'user_email':orders.user.email,
+            'orders':orders,
+        }
+    return render(request,'userapp/ordersummary.html',data)
+
+
+
+
+from io import BytesIO
+from django.http import HttpResponse
+from xhtml2pdf import pisa
+from django.views.generic import View
+from django.template.loader import get_template
+class generateInvoice(View):
+    def get(self,request,id,*args,**kwargs):
+        try:
+            orders=OrderItem.objects.get(id=id,user=request.user)
+            
+        except:
+            return HttpResponse("505 not found")
+        data={
+            'order_id':orders.id,
+            'date':str(orders.created_at),
+            'name':orders.user.first_name,
+            'address':orders.order.address.address,
+            'total_price':orders.order.total_price,
+            'transaction_id':orders.order.payment_id,
+            'payment_mode':orders.order.payment_mode,
+            'user_email':orders.user.email,
+            'orders':orders
+        }
+        pdf=render_to_pdf('userapp/invoice.html',data)
+        return HttpResponse(pdf,content_type='application/pdf')
+
+def render_to_pdf(template_src,context_dict={}):
+    template=get_template(template_src)
+    html=template.render(context_dict)
+    result=BytesIO()
+    pdf=pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")),result)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(),content_type='application/pdf')
+    return None
 
 # .....................shopppppppp................
 

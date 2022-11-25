@@ -5,6 +5,7 @@ from django.urls import reverse
 from cartapp.views import _cart_id
 from django.http import HttpResponse
 from cartapp.models import CartItem,Cart
+from orders.models import Order,OrderItem
 from django.core.paginator import EmptyPage,Paginator,PageNotAnInteger 
 from django.db .models import Q
 # Create your views here.
@@ -16,6 +17,11 @@ def store(request,maincategory_slug=None,subcategory_slug=None):
     products=None
     main_category=Main_Category.objects.all()
     sub_category=Sub_Category.objects.all()
+    # cartitem=CartItem.objects.filter(user=request.user,is_active=True)
+    
+    cart=Cart.objects.all()
+    orders=Order.objects.all()
+    orderitems=OrderItem.objects.all()
     if maincategory_slug !=None:
         print('main slug:',maincategory_slug)
         maincategories=get_object_or_404(Main_Category,slug=maincategory_slug)
@@ -43,7 +49,15 @@ def store(request,maincategory_slug=None,subcategory_slug=None):
         'main_category':main_category,
         'sub_category':sub_category,
         'products':paged_products,
-        'product_count':product_count
+        'product_count':product_count,
+        # 'cartitem':cartitem,
+        'cart':cart,
+        'orders':orders,
+        'orderitems':orderitems,
+
+
+
+
     }
     return render(request,'storeapp/store.html',context)
 

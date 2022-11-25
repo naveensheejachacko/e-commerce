@@ -7,4 +7,11 @@ urlpatterns = [
     path('admin_logout/',views.admin_logout,name='admin_logout'),
     path('user_manage/',views.user_manage,name='user_manage'),
     path('block_user/<int:bid>/', views.block_user, name="block_user"),
+
+
+
+    path('activeorders/',views.activeorders,name='activeorders'),
+    path('order_history/',views.order_history,name='order_history'),
+    path('order_status_change',views.order_status_change,name='order_status_change'),
+
 ]

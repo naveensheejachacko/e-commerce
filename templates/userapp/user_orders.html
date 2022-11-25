@@ -1,0 +1,167 @@
+
+{% extends 'userapp/base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<section class="section-conten padding-y bg">
+    {% include 'includes/alerts.html' %}
+    <div class="container">
+
+        <div class="row">
+
+        <aside class="col-md-3">
+            <!--   SIDEBAR   -->
+            <ul class="list-group">
+
+              <a class="list-group-item" href="{% url 'dashboard' %}"> DashBoard</a>
+              <a class="list-group-item" href="#"> Return and refunds </a>
+              <a class="list-group-item" href="{% url 'change_password' %}">Change Password</a>
+              <a class="list-group-item" href="{% url 'view_address' %}"> Address </a>
+              <a class="list-group-item active" href="{% url 'user_orders' %}"> Your Orders </a>
+            </ul>
+            <br>
+            <a class="btn btn-light btn-block" href="{% url 'user_logout' %}"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a> 
+            <!--   SIDEBAR .//END   -->
+        </aside>
+<!-- row.// -->
+
+  
+	<main class="col-md-9">
+		<article class="card">
+		<header class="card-header">
+			<strong class="d-inline-block mr-3">Your Orders</strong>
+			
+		</header>
+    {% if not orders %}
+    <!-- <h3 class="text-center mt-5" style="color: #FF7F7F;">Oops..!</h3> -->
+    <!-- <h5 class="text-center" style="color: #313031;">It looks like you haven't made your order yet.</h5> -->
+    <img src="{% static 'emptyorder.jpg' %}" height="500" style="z-index: 0;">
+      <a href="{% url 'store' %}" class="btn btn-primary col-4"  style="z-index: 1; margin-left: 25em; margin-bottom: 10em;">Shop Now</a>
+    </div>
+    {% else %}
+		<div class="card-body  shadow p-3 mb-5 bg-white rounded">
+			<div class="row "> 
+				<div class="col-md-12 ">
+                    <table class="table table-hover table-responsive">
+                        <thead>
+                          <tr>
+                            <!-- <th scope="col">Order #</th>
+                            <th scope="col">Product Name</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Amount Paid</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Status</th> -->
+                          </tr>
+                        </thead>
+                        <tbody>
+                              {% for order in orders %}
+                              
+                          <tr>
+                            
+                            <th scope="row"><a href="{% url 'generateinvoice' order.id %}" style="color: rgb(0, 0, 0);">{{order.order.tracking_no}}</a></th>
+                            <td><img src="{{order.product.images.url}}" alt="product image" style="height:100px;width:100px;margin: 10px;"></td>
+                            <td>{{order.product.product_name}}<br>
+                            {{order.quantity}}Qty</td>
+                            <td>₹ {{order.order.total_price}}</td>
+                            <td>{{order.created_at}}</td>
+                          
+                            {% if order.status == 'New' %}
+                            <td><a href="{%  url 'cancel_order' order.id %}" class="btn btn-sm btn-outline-danger" onclick="cancelOrder()">Cancel</a></td>
+                            {% elif order.status == 'Cancelled_item'  %}
+                            <td><button class="btn btn-sm btn-warning" disabled>Cancelled</button></td>
+                            {% elif order.status == 'Placed'%}
+                            <td><a href="{%  url 'cancel_order' order.id %}" class="btn btn-sm btn-outline-primary"  onclick="cancelOrder()">Placed</a>
+                            {% elif order.status == 'Shipped'%}
+                            <td><a href="{%  url 'cancel_order' order.id %}" class="btn btn-sm btn-outline-info"  onclick="cancelOrder()">Shipped</a>
+                            {% elif order.status == 'Accepted'%}
+                            <td><a href="{%  url 'cancel_order' order.id %}" class="btn btn-sm btn-outline-dark"  onclick="cancelOrder()">Accepted</a>
+
+                            {% endif %}
+
+                            {% if order.status == 'Delivered' %}
+                            <td><a href="{%  url 'return_order' order.id %}" class="btn btn-sm btn-success" onclick="return_order()">Delivered</a></td>
+                            {% elif order.status == 'return'%}
+                            <td><button class="btn btn-sm btn-danger" disabled>return</button></td>
+                            {% elif order.status == 'Refund Initiated'%}
+                            <td><button class="btn btn-sm btn-danger" disabled>Refund <br> Initiated</button></td>
+                            {% endif %}
+
+
+                      
+                          </tr>
+                      {% endfor %}
+      
+                        </tbody>
+                      </table>
+				</div>
+
+			</div> <!-- row.// -->
+		</div> <!-- card-body .// -->
+    {% endif %}
+		</article> <!-- order-group.// --> 
+	</main>
+</main>
+
+<!-- row.// -->
+
+
+
+</section>
+
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+
+
+<script>
+	function cancelOrder() {
+		event.preventDefault();
+		var dlt = event.currentTarget.href
+		console.log(dlt)
+		Swal.fire({
+			title: 'Cancel this order?',
+			text: "You won't be able to revert this!",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#2DAD49',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'cancel order',
+      cancelButtonText: 'Back',
+		}).then((result) => {
+			if (result.isConfirmed) {
+				
+				window.location = dlt;
+			}
+		})
+	}
+</script>
+
+<script>
+	function return_order() {
+		event.preventDefault();
+		var dlt = event.currentTarget.href
+		console.log(dlt)
+		Swal.fire({
+			title: 'return this order?',
+			text: "You won't be able to revert this!",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#2DAD49',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Return Order',
+      cancelButtonText: 'Back',
+		}).then((result) => {
+			if (result.isConfirmed) {
+				
+				window.location = dlt;
+			}
+		})
+	}
+</script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{% endblock %}

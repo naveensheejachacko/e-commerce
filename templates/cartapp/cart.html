@@ -5,7 +5,7 @@
     
 <main>
     <!-- page-banner-area-start -->
-    <div class="page-banner-area page-banner-height-2" data-background="assets/img/banner/page-banner-4.jpg">
+    <div class="page-banner-area page-banner-height-2" data-background="{% static 'assets/img/banner/page-banner-4.jpg' %}">
         <div class="container">
             <div class="row">
                 <div class="col-xl-12">
@@ -74,13 +74,13 @@
                                                 </div>
                                                 <input type="text" class="form-control"  value="{{cart_item.quantity}}">
                                                 <div class="input-group-append">
-                                                <a href="{% url 'add_cart' cart_item.product.id %}" class="btn btn-light" type="button" id="button-minus"> <i class="fa fa-plus"></i> </a>
+                                                <a href="{% url 'add_cart' cart_item.product.id %}" class="btn btn-light" type="button" id="button-minus" > <i class="fa fa-plus"></i> </a>
                                                 </div>
                                             </div> <!-- input-group.// -->
                                         </div> 
                                       </td>
                                       <td class="product-subtotal"><span class="amount">$ {{ cart_item.sub_total }}</span></td>
-                                      <td><a href="{% url 'delete_cart_item' cart_item.product.id %}" class="btn btn-danger">Remove</a></td>
+                                      <td><a href="{% url 'delete_cart_item' cart_item.product.id %}" class="btn btn-danger" onclick="cancelOrder()">Remove</a></td>
                                    </tr>
                                    {% endfor %}
 
@@ -174,5 +174,34 @@
     <!-- cta-area-end -->
 
 </main>
+
+<script>
+	function cancelOrder() {
+		event.preventDefault();
+		var dlt = event.currentTarget.href
+		console.log(dlt)
+		Swal.fire({
+			title: 'remove this item?',
+			text: "You won't be able to revert this!",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#2DAD49',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'remove item',
+      cancelButtonText: 'Back',
+		}).then((result) => {
+			if (result.isConfirmed) {
+				
+				window.location = dlt;
+			}
+		})
+	}
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+
 
 {% endblock %}

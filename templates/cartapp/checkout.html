@@ -15,14 +15,14 @@
         <aside class="col-lg-6">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title mb-4">
+            <h4 class="card-title lg-4">
                 Billing Address
             </h4>
              {% for address in address %}
             <div class="card-body">
                 <div class="row"> 
                     <div class="col-md-8">
-                        <input type="radio" required value="{{ address.id }}" name="radio-address" class="float-left  mr-2" style="height:2rem;width:1rem;" >
+                        <input type="radio" required value="{{ address.id }}" name="address" class="address float-left  mr-2" style="height:2rem;width:1rem;" >
                         <h3 class="text-muted">{{address.fname}} {{address.lname}}</h3>
                         
                         Phone:{{address.phone_number}} <br>
@@ -80,18 +80,17 @@
         </td>
         <td> 
             <div class="price-wrap"> 
-                <var class="price">${{ cart_item.sub_total }}</var> 
-                <small class="text-muted"> ${{ cart_item.product.price}} each </small> 
-            </div> <!-- price-wrap .// -->
+                <var class="price">₹{{ cart_item.sub_total }}</var> 
+                <small class="text-muted"> ₹{{ cart_item.product.price}}each </small> 
+            </div>
+            <!-- price-wrap .// -->
         </td>
-        {% endfor %}
+        
 
     </tr>
 
-    <tr>
-        <td>
-        </td>
-    </tr>
+{% endfor %}
+
 
 
     </tbody>
@@ -100,23 +99,36 @@
 
             <div class="card mb-5">
             <div class="card-body col-lg-12 ">
-                
+      
 
                 <div class="price-wrap"> 
-                    {% for cart_item in cart_items %}
-                    <var class="price">Toal Price:{{ cart_item.sub_total }}</var> <br>
-                    <var class="price">Tax:{{tax }}</var> <br>
-                    <var class="price">Grand Total:{{grand_total }}</var> <br>
+                    
+                    <var class="price">Total Price ........ :₹{{total }}</var> <br>
+                    
+
+                    <var class="price">Tax ...................... :₹{{tax }}</var> <br>
+                    <var class="price">Grand Total ....... :₹{{grand_total}}</var> <br>
+             
+                    
            
            
-                {% endfor %}
+              
                 </div>
 
                 <input type="hidden" value="COD" name="payment_mode">
-                <button type="submit" name="submit" class="btn btn-primary btn-block">Place Order</button>
-                
+                {% if not address%}
+                <button disabled type="submit" name="submit" class="btn btn-primary btn-block w-100 cod" type="button">Cash on Delivey</button>
+                {% else %}
+                <div class="mt-3">
+                <button type="submit" name="submit" class="btn btn-primary btn-block w-100 cod" type="button">Cash on Delivey</button>
+               
+                <button class="btn btn-success btn-block w-100 mt-2 payWithRazorpay " type="button">Pay With Razorpay  </button>
+                <div id="paypal-button-container" class="mt-2"></div>
+                </div>
+                {% endif %}
+            </div>
             </div> 
-            <a href="{% url 'home' %}" class="btn btn-light btn-block">Continue Shopping</a><!-- card-body.// -->
+            <a href="{% url 'home' %}" class="btn btn-light btn-block ">Continue Shopping</a><!-- card-body.// -->
             </div> <!-- card.// -->
     
     </aside> <!-- col.// -->
@@ -128,6 +140,102 @@
     </div> <!-- container .//  -->
 
     </section>
+
+    
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    
+    <script src="{% static '/admin/js/jquery-3.6.1.js' %}"></script>
+    <script src="{% static '/admin/js/checkout.js' %}"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+<!-- .....................paypal.................... -->
+
+
+<script src="https://www.paypal.com/sdk/js?&client-id=ATlWz5sh8OnJT10LuEAfrTmbZSJmZnO_VvkdIe5Aq3XP9wFkVil2ohNJplfe3Ca5BYGZCQMm9yezv_EC&currency=USD"></script>
+
+
+
+<script>
+    paypal.Buttons({
+        style:{
+            shape:'pill',
+        },
+
+        onClick:function(data,actions){
+            var address=$(".address:checked").val();
+            var token=$('input[name=csrfmiddlewaretoken]').val();
+            console.log(address)
+            if (address == undefined){
+                
+                swal("Please Select Address", "Alert!", "error");
+                return false;
+            }
+            else{
+              return true;
+            }
+
+          },
+      // Sets up the transaction when a payment button is clicked
+      createOrder: function(data, actions) {
+        return actions.order.create({
+          purchase_units: [{
+            amount: {
+              value: '{{usd}}'// Can reference variables or functions. Example: `value: document.getElementById('...').value`
+            }
+          }]
+        });
+      },
+
+      // Finalize the transaction after payer approval
+      onApprove: function(data, actions) {
+        return actions.order.capture().then(function(orderData) {
+          // Successful capture! For dev/demo purposes:
+              console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+              
+              alert(orderData.id);
+
+          // When ready to go live, remove the alert and show a success message within this page. For example:
+          // var element = document.getElementById('paypal-button-container');
+          // element.innerHTML = '';
+          // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+          // Or go to another URL:  actions.redirect('thank_you.html');
+        var address=$(".address:checked").val();
+        var token=$('input[name=csrfmiddlewaretoken]').val();
+        data={
+            'address':address,
+            "payment_mode":"Paypal",
+            'payment_id': orderData.id,
+            csrfmiddlewaretoken:token
+        }
+        $.ajax({
+            method: "POST",
+            url: "/orders/place_order/",
+            data: data,
+            success: function (responsec) {
+                swal("Congrats",responsec.status).then((value) => {
+                    window.location.href='/dashboard/'
+                });
+                
+                
+            }
+        });
+        });
+      }
+    }).render('#paypal-button-container');
+
+
+
+
+
+
+  </script>
+
+
+
+
+
 
 
 {% endblock %}

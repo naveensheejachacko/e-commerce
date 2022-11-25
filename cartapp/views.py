@@ -33,7 +33,7 @@ def add_cart(request,product_id):
                 user=current_user,
             )
         cart_item.save()
-        return HttpResponseRedirect(request.META["HTTP_REFERER"])
+        return redirect('cart')
 
 
     else:
@@ -63,8 +63,8 @@ def add_cart(request,product_id):
             )
         cart_item.save()
 
-    # return redirect('cart')
-        return HttpResponseRedirect(request.META["HTTP_REFERER"])
+    return redirect('cart')
+       
 
 
 
@@ -99,6 +99,8 @@ def delete_cart_item(request,product_id):
     return redirect('cart')
 
 def cart(request,total=0,quantity=0,cart_items=None):
+    tax=0
+    grand_total=0
     maincategory=Main_Category.objects.all()
     subcategory=Sub_Category.objects.all()
     try:
@@ -139,6 +141,7 @@ def checkout(request,total=0,quantity=0):
         quantity +=cart_item.quantity
     tax=(5*total)/100
     grand_total=total+tax
+    usd=int(grand_total/82)
 
     context={
         'total':total,
@@ -147,6 +150,7 @@ def checkout(request,total=0,quantity=0):
         'tax':tax,
         'grand_total':grand_total,
         'address':address,
+        'usd':usd,
     }
     return render(request,'cartapp/checkout.html',context)
 

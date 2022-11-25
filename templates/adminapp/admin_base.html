@@ -42,6 +42,17 @@
   <link rel="stylesheet" href="{% static 'admin_asset/css/vertical-layout-light/style.css' %}">
   <!-- endinject -->
   <link rel="shortcut icon" href="{% static 'admin_asset/images/favicon.png' %}" />
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.11/cropper.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.11/cropper.js"></script>
+
+
+
+
+
+
+
 </head>
 <body>
   <div class="container-scroller">
@@ -239,6 +250,7 @@
                 <li class="nav-item"> <a class="nav-link" href="{% url 'user_manage'%}"> User Table</a></li>
               </ul>
             </div>
+          </li>
           <li class="nav-item nav-category">Product Management</li>
           <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
@@ -265,6 +277,22 @@
                 <li class="nav-item"> <a class="nav-link" href="{% url 'main_category'%}">Main Category</a></li>
                 <li class="nav-item"> <a class="nav-link" href="{% url 'sub_category' %}">Sub Category</a></li>
                
+              </ul>
+            </div>
+          </li>
+
+
+          <li class="nav-item nav-category">Order Management</li>
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
+              <i class="menu-icon mdi mdi-chart-line"></i>
+              <span class="menu-title">Orders</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="charts">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="{% url 'activeorders'%}"> Active Orders</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{% url 'order_history'%}"> Order History</a></li>
               </ul>
             </div>
           </li>
@@ -305,7 +333,7 @@
             </div>
           </li> -->
 
-          </li>
+          
           <!-- <li class="nav-item nav-category">help</li>
           <li class="nav-item">
             <a class="nav-link" href="http://bootstrapdash.com/demo/star-admin2-free/docs/documentation.html">
@@ -356,7 +384,25 @@
         <script src="{% static 'admin_asset/js/dashboard.js' %}"></script>
         <script src="{% static 'admin_asset/js/Chart.roundedBarCharts.js' %}"></script>
         <script src="{% static 'admin_asset/js/category.js' %}"></script>
+        
         <!-- End custom js for this page-->
+
+
+	<script src="{% static 'vendors/scripts/core.js' %}"></script>
+	<script src="{% static 'vendors/scripts/script.min.js' %}"></script>
+
+	<!-- <link rel="stylesheet" href="//cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <script src="//cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script>
+      $(document).ready( function () {
+        $('#myTable').DataTable();
+    } );
+    </script> -->
+
+
+
+
+
       </body>
       
       </html>
