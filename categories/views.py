@@ -9,6 +9,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.utils.text import slugify
 from django.views.decorators.cache import never_cache
+from categories.forms import VariantsForm
 from categories.models import Main_Category,Sub_Category, Product
 from django.contrib.auth.decorators import login_required
 
@@ -281,3 +282,22 @@ def prdt_delete(request,id):
     return redirect('product')
 
 
+
+
+
+@login_required(login_url="adminsignin")
+def addvarient(request):
+    form = VariantsForm()
+
+    if request.method == "POST":
+
+        form = VariantsForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Variant added successfully")
+            return redirect("product")
+
+    context = {"form": form}
+
+    return render(request, "adminapp/add_varient.html", context)

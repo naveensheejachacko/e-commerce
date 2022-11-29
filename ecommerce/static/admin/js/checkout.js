@@ -6,8 +6,8 @@ $(document).ready(function(){
         if(address ==undefined)
         {
             swal(
+                'Please Select Address',
                 'Alert',
-                'Select Address',
                 'error'
               );
             return false;

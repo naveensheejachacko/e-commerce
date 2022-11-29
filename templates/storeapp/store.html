@@ -141,12 +141,48 @@
                 <figcaption class="info-wrap">
                     <div class="fix-height">
                         <a href="{{p.get_url}}" class="title">{{p.product_name}}</a>
-                        <div class="price-wrap mt-2">
+                      {% if p.productoffer.discount > 0 %}
+                           <h6 class="text-muted ml-2"><span style="color: green;"> {{ p.productoffer.discount }}% off</span></h6>
+                 
+                    
+                       {% endif %}
+                       <div class="price-wrap mt-2">
                             <span class="price">₹ {{p.price}}</span>
                             <!-- <del class="price-old">$1980</del> -->
                         </div> <!-- price-wrap.// -->
                     </div>
-                    <a href="{{p.get_url }}" class="btn btn-block btn-primary">View Details </a>
+                    <form action="{% url 'add_cart' p.id %}" method="post">
+                        {% csrf_token %}
+                    <div class="row ml-0 justify-content-center">
+                      <div class="item-option-select">
+                          <div class="row">
+                        <p class="col-5 mt-2">Color</p>
+                        <select name="color" class="form-control col-7" required>
+                           
+                          {% for i in p.variation_set.colors %}
+
+                          <option selected value="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}</option>
+                          {% endfor %}
+                      </select>
+                      </div>
+                    </div> <!-- row.// -->
+                   
+                    {% if p.stock <= 0 %} 
+                    <h5 class="text-danger">Out of stock</h5>
+                      {% else %}
+                      <div class="row">
+                      <div class="col p-0 mr-2"  #onclick="addItems(event)">
+                        <a href="{{p.get_url }}" class="btn btn-block btn-primary">View Details </a>
+                        <button type="submit" class="btn btn-primary" name="add_to_cart_button">Add to cart <i class="fas fa fa-shopping-cart text-white"></i></button>
+                       </div>
+                      
+                      </div>
+
+                      </div>
+      
+                      {% endif %}
+                  </form>
+                    
                 </figcaption>
             </figure>
             
@@ -193,5 +229,47 @@
     
     </div> <!-- container .//  -->
     </section>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function addItems(event){
+          event.preventDefault();
+          var link = event.currentTarget.href;
+          var name = event.currentTarget.name;
+          
+            
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener('mouseenter', Swal.stopTimer)
+                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+              })
+              
+              Toast.fire({
+                icon: 'success',
+                title: 'Successfully Added to Cart'
+              })
+          
+        }
+      </script>
+    
+      <style>
+        .btn-danger{
+            background-color: #fd6b22;
+            color: white;
+          }
+          
+          .btn-danger:hover{
+            background-color: #fd7a22;
+          }
+      </style>
+
+
+
 
     {% endblock %}

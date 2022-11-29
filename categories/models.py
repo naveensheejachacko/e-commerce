@@ -2,6 +2,15 @@ from tabnanny import verbose
 from django.db import models
 from django.urls import reverse
 
+
+from django.utils import timezone
+from django.conf import settings
+from random import choices
+from django.db import models
+from django.urls import reverse
+from django.apps import apps
+from django.db.models.aggregates import Sum
+
 # Create your models here.
 
 class Main_Category(models.Model):
@@ -46,3 +55,80 @@ class Product(models.Model):
     def get_url(self):
         return reverse("product_details",args=[self.parent_main_prdt.slug,self.parent_sub_prdt.slug,self.slug])
     
+    def get_revenue(self,month=timezone.now().month):
+        orderitems=apps.get_model("orders",'OrderItem')
+        orders=orderitems.objects.filter(product=self,created_at__month=month,status="Delivered")
+        return orders.values("product").annotate(revenue=Sum("price"))
+
+    def get_profit(self,month=timezone.now().month):
+        orderitems=apps.get_model("orders",'OrderItem')
+        orders=orderitems.objects.filter(product=self,created_at__month=month,status="Delivered")
+        calculating_profit=orders.values('product').annotate(profit=Sum('price'))
+        profit=calculating_profit[0]['profit']*0.23
+        return profit
+        
+    def get_count(self,month=timezone.now().month):
+        orderitems=apps.get_model("orders",'OrderItem')
+        orders=orderitems.objects.filter(product=self,created_at__month=month,status="Delivered")
+        return orders.values("product").annotate(quantity=Sum("quantity"))
+
+
+
+    def offer_price(self):
+        try:
+            if self.category.categoryoffer.is_valid:
+                offer_price=(self.price*(self.category.categoryoffer.discount) / 100)
+                new_price=self.price - offer_price
+                return {
+                    "new_price":new_price
+                }
+            raise
+        except:
+            try:
+                if self.subcategory.subcategoryoffer.is_valid:
+                    offer_price=(self.price*(self.subcategory.subcategoryoffer.discount) / 100)
+                    new_price=self.price - offer_price
+                    return {
+                        "new_price":new_price
+                    }
+                raise
+            except:
+                try:
+                    if  self.productoffer.is_valid:
+                        offer_price=(self.price*(self.productoffer.discount) / 100)
+                        new_price=self.price - offer_price
+                        return {
+                            "new_price":new_price
+                        }
+                    raise
+                except:
+                    return {
+                            "new_price":self.price
+                        }
+            
+
+
+
+
+class VariationManager(models.Manager):
+    def colors(self):
+        return super(VariationManager, self).filter(
+            variation_category="color", is_active=True
+        )
+
+variation_category_choices = (("color", "Color"),)
+
+
+class Variation(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    variation_category = models.CharField(
+        max_length=100, choices=variation_category_choices
+    )
+    variation_value = models.CharField(max_length=100)
+    is_active = models.BooleanField(default=True)
+    created_date = models.DateTimeField(auto_now=True)
+
+    objects = VariationManager()
+
+    def __str__(self):
+        return self.variation_value

@@ -1,5 +1,5 @@
 from django.shortcuts import render,get_object_or_404
-from  categories.models import Product,Main_Category,Sub_Category
+from  categories.models import Product,Main_Category,Sub_Category, Variation
 from cartapp.models import Cart,CartItem
 from django.urls import reverse
 from cartapp.views import _cart_id
@@ -17,6 +17,7 @@ def store(request,maincategory_slug=None,subcategory_slug=None):
     products=None
     main_category=Main_Category.objects.all()
     sub_category=Sub_Category.objects.all()
+    variations = Variation.objects.all()
     # cartitem=CartItem.objects.filter(user=request.user,is_active=True)
     
     cart=Cart.objects.all()
@@ -54,6 +55,7 @@ def store(request,maincategory_slug=None,subcategory_slug=None):
         'cart':cart,
         'orders':orders,
         'orderitems':orderitems,
+        'variations': variations,
 
 
 
@@ -72,20 +74,32 @@ def product_details(request,maincategory_slug,subcategory_slug,product_slug):
     except Exception as e:
         raise e
     
+    if request.user.is_authenticated:
+        try:
+            orderitem = OrderItem.objects.filter(
+                user=request.user, product_id=single_product.id
+            ).exists()
+        except OrderItem.DoesNotExist:
+            orderitem = None
+    else:
+        orderitem = None
 
     return render(request,'storeapp/product_details.html',{
         'main_category':main_category,
         'sub_category':sub_category,
         'single_product':single_product,
         'in_cart':in_cart,
+        'orderitem':orderitem,
     
     })
+
+
 
 def search(request):
     if 'keyword' in request.GET:
         keyword=request.GET['keyword']
         if 'keyword':
-            products=Product.objects.order_by('-created_date').filter(Q(prdt_desc__icontains=keyword)|Q(product_name=keyword))
+            products=Product.objects.order_by('-created_date').filter(Q(prdt_desc__icontains=keyword)|Q(product_name__icontains=keyword))
             product_count=products.count()
     context={
         'products':products,

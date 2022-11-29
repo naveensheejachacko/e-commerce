@@ -1,0 +1,59 @@
+
+{% extends 'adminapp/admin_base.html'%}
+{% block content %}
+
+
+      <!-- partial -->
+      <div class="main-panel">        
+        <div class="content-wrapper">
+          <div class="row">
+            
+            <div class="col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Add Category Offer Here</h4>
+                  <p class="card-description">
+                    Category Offer
+                  </p>
+                  <form class="forms-sample" method="POST" action="">
+                    {% csrf_token %}
+                    <div class="form-group row">
+                      <div class="col-sm-9">
+                        {{ form.category_name.label }}
+                        {{ form.category_name }}
+                      </div>
+
+                      <div class="col-sm-9 mt-4">
+                          {{ form.discount.label }}
+                          {{ form.discount }}
+                        <!-- <input type="text" name="catname" class="form-control" id="exampleInputUsername2" placeholder="Category Name" required> -->
+                      </div>
+                    </div>
+                    
+                    
+                    
+                    
+                    <button type="submit" class="btn btn-primary me-2">Submit</button>
+                    
+                  </form>
+                  {% include 'includes/alerts.html' %}
+
+                </div>
+              </div>
+            </div>
+
+
+            
+          </div>
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:../../partials/_footer.html -->
+
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+ {% endblock %}

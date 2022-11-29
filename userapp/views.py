@@ -15,7 +15,7 @@ import random
 from twilio.rest import Client
 from django.views.decorators.cache import never_cache
 from twilio.rest import Client
-from categories.models import Main_Category,Sub_Category, Product
+from categories.models import Main_Category,Sub_Category, Product, Variation
 from cartapp.models import Cart,CartItem
 from cartapp.views import _cart_id
 from django.db import models
@@ -98,8 +98,10 @@ def user_signup(request):
 def home(request):
     maincategory=Main_Category.objects.all()
     subcategory=Sub_Category.objects.all()
-    topitems=Product.objects.all().order_by('created_date')   # [3::-1]
+    topitems=Product.objects.filter(is_available=True).order_by('created_date')   # [3::-1]
+    variations = Variation.objects.all()
     cartitem=CartItem.objects.all()
+
     cart=Cart.objects.all()
     orders=Order.objects.all()
     orderitems=OrderItem.objects.all()
@@ -133,6 +135,7 @@ def home(request):
         'cart':cart,
         'orders':orders,
         'orderitems':orderitems,
+        'variations': variations,
     })
         else:
             return redirect('admin_login')
@@ -143,6 +146,7 @@ def home(request):
         'cartitem':cartitem,
         'cart':cart,
         'orderitems':orderitems,
+        'variations': variations,
     })
 # def base(request):
 #     maincategory=Main_Category.objects.all()
@@ -160,7 +164,7 @@ def home(request):
 def  dashboard(request):
     orders = OrderItem.objects.filter(
         user=request.user
-    ).order_by("-created_at")
+    ).order_by("-created_at") [3::-1]
 
 
 
@@ -457,7 +461,12 @@ class generateInvoice(View):
             'transaction_id':orders.order.payment_id,
             'payment_mode':orders.order.payment_mode,
             'user_email':orders.user.email,
-            'orders':orders
+            'orders':orders,
+            'status':orders.status,
+            'product_name':orders.product.product_name,
+            'quantity':orders.quantity,
+            'price':orders.product.price,
+
         }
         pdf=render_to_pdf('userapp/invoice.html',data)
         return HttpResponse(pdf,content_type='application/pdf')

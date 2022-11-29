@@ -12,12 +12,21 @@
     <!-- ============================ COMPONENT 1 ================================= -->
     
     <div class="row">
+        
         <aside class="col-lg-6">
     <div class="card">
         <div class="card-body">
             <h4 class="card-title lg-4">
                 Billing Address
             </h4>
+                      
+          {% if not address %}
+          <div class="col-md-8 order-md-1 mt-3 text-center">
+           <p> <b> Please Add Address to procced your order</b></p>
+            
+            <a href="{% url 'add_address' %}" class="btn btn-primary mt-5" style="width:16rem;" type="submit">Add New Address  </a>
+            </div>
+          {% else %}
              {% for address in address %}
             <div class="card-body">
                 <div class="row"> 
@@ -36,6 +45,7 @@
                     {% endfor %}
                     <a href="{% url 'add_address' %}" class="btn btn-primary"> Add New Address</a> 
                 </div> <!-- row.// -->
+
             </div>
 
 
@@ -71,7 +81,7 @@
                 <div class="aside"><img src="{{cart_item.product.images.url}}" class="img-sm"></div>
                 <figcaption class="info">
                     <a href="#" class="title text-dark">{{cart_item.product.product_name}}</a>
-                    <p class="text-muted small">{{cart_item.product.prdt_desc}}</p>
+                    <!-- <p class="text-muted small">{{cart_item.product.prdt_desc}}</p> -->
                 </figcaption>
             </figure>
         </td>
@@ -95,20 +105,59 @@
 
     </tbody>
     </table>
+    <div class="row">
 
+     {% endif %}
 
-            <div class="card mb-5">
+            <div class="card mb-5 mt-2">
             <div class="card-body col-lg-12 ">
-      
+              <div class="col-10">
+                <div class="coupon-all">
+                  <form class="mb-5" id="coupon_form">
+                      {% for i in messages %}
+                      <p class="pl-3"style="color:red;">{{i}}</p>
+                      {% endfor %}
+                   <div class="input-group">
+                      <input type="text" name="code" id="code" class="form-control p-2" placeholder="Coupon Code">
+                      <div class="input-group-append " >
+                          <a onclick='apply_coupon()' class="tp-btn-h1" >Apply Coupon</a>
+                      </div>
+                   <!-- <div class="coupon2">
+                      <button class="btn btn-block btn-primary" name="update_cart" type="submit">Update cart</button>
+                   </div> -->
+                </div>
+                </form>
+          </div>
+          </div>
 
                 <div class="price-wrap"> 
-                    
-                    <var class="price">Total Price ........ :₹{{total }}</var> <br>
-                    
+<!--                     
+                    <var class="price">Sub Total ........ :₹
+                      {{total }}</var> <br> -->
 
-                    <var class="price">Tax ...................... :₹{{tax }}</var> <br>
-                    <var class="price">Grand Total ....... :₹{{grand_total}}</var> <br>
-             
+                    <var id="grand_total">Total Amount .......................... :₹
+                      <strong id="grand_total">{{grand_total }}</strong>
+                    </var> <br>
+
+
+                    <var class="price-discount">
+                      Discount Price ......................... :₹
+                      <strong id="discount_price" style="color: green;">0</strong>
+                    </var>
+                    <li class="total">
+                      <span>Grand Total ................................ :₹ </span>
+                      <strong id="total"  style="color: rgb(0, 0, 0);" name="total">{{ total|floatformat:"2"  }}</strong>
+                      
+                    </li>
+
+
+                    <!-- <var id="discount_price">Discount Price......
+                      <strong id="discount_price"  style="color: green;"></strong></var> <br>
+                    </var> <br>
+
+                    
+                    <var id="total" name="total">Grand Total ....... :₹{{grand_total}}</var> <br> -->
+
                     
            
            
@@ -144,16 +193,16 @@
     
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
-    
     <script src="{% static '/admin/js/jquery-3.6.1.js' %}"></script>
     <script src="{% static '/admin/js/checkout.js' %}"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
-
+<!-- 
+    <script src="{% static '/js/coupon.js' %}"></script> -->
 <!-- .....................paypal.................... -->
-
+<script src="https://cdn.jsdelivr.net/gh/cosmogicofficial/quantumalert@latest/minfile/quantumalert.js" charset="utf-8"></script>
 
 <script src="https://www.paypal.com/sdk/js?&client-id=ATlWz5sh8OnJT10LuEAfrTmbZSJmZnO_VvkdIe5Aq3XP9wFkVil2ohNJplfe3Ca5BYGZCQMm9yezv_EC&currency=USD"></script>
+
 
 
 
@@ -225,8 +274,45 @@
       }
     }).render('#paypal-button-container');
 
+    
+  let flag=0
+  function apply_coupon(){
+    
+    console.log(flag)
+    var code=document.getElementById("code").value
+    console.log(code)
+    if(flag == 0) 
+    {
 
+      $.ajax({
+        type:"GET",
+        url:"/cartapp/apply_coupon/",
+        data:{
+            'code':code
+        },
+        success : function(r){
+            
+            $('#total').text("₹"+r.total)
+            $('#discount_price').text("-"+r.discount)
+            Qual.success("Coupon Applied Successfully","");
+            
+        },
+        error:function(r){
+          Qual.error("Oh no !Something wrong happened","");
+        }
+      });
+      flag++;
+      console.log(flag);
 
+    }  
+    else
+    {
+      console.log('Coupon applied already')
+      Qual.error("Oh no ! Coupon already applied.","");
+    }         
+
+  } 
+    
 
 
 

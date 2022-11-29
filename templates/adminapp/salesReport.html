@@ -1,0 +1,266 @@
+{% extends 'adminapp/admin_base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+      <!-- partial -->
+      <div class="main-panel">
+        {% for message in messages %}
+        <h2>{{message}}</h2>
+        {% endfor %}
+        <div class="content-wrapper">
+            <div class="m-2">
+              {% if order %}
+                <div class="btn-wrapper">
+                    <a href="{% url 'generatesalesReportPdf' %}" class="btn btn-otline-dark"><i class="icon-printer"></i> Download as PDF</a>
+                    <!-- <a href="" class="btn btn-primary text-white me-0"><i class="icon-download"></i> Export as CSV</a> -->
+                    <button id="downlaodsalesReportexcel" class="btn mx-3 btn-success text-white me-0"><i class="icon-download"></i> Export as Excel</button>
+                </div>
+                {% else %}
+                
+                {% endif %}
+                <form action="{% url 'by_date' %}" method="GET">
+                    <div class="row mt-5">
+                        <div class="col-md-3">
+                            <label>From</label>
+                            <input type="date" class="form-control" name="from">
+                            <br>
+                        </div>
+                        <div class="col-md-4">
+                            <label>To</label>
+                            <input type="date" class="form-control" name="to">
+                        </div>
+                        <div class="col-md-4 mt-3">
+                            <button class="btn btn-primary" type="submit">Submit</button>
+                        </div>
+
+                    </div>
+                </form>
+                <!-- By month -->
+                <form action="{% url 'by_month' %}" method="POST">
+                  {% csrf_token %}
+                  <div class="row mt-3">
+                    <div class="col-md-4 mt-1">
+                      <select name="month" class="form-control" id="">
+                        <option value="01">January</option>
+                        <option value="02">February</option>
+                        <option value="03">March</option>
+                        <option value="04">April</option>
+                        <option value="05">May</option>
+                        <option value="06">June</option>
+                        <option value="07">July</option>
+                        <option value="08">August</option>
+                        <option value="09">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                      </select>
+                    </div>
+                    <div class="col-md-4 ">
+                      <button class="btn btn-primary" type="submit">Submit</button>
+                  </div>
+
+                  </div>
+                </form>
+
+
+                                <!-- By Year -->
+                                <form action="{% url 'by_year' %}" method="POST" >
+                                  {% csrf_token %}
+                                  <div class="row mt-3">
+                                    <div class="col-md-4 mt-1">
+                                      <select name="year" class="form-control" id="">
+                                        <option value="2020">2020</option>
+                                        <option value="2021">2021</option>
+                                        <option value="2022">2022</option>
+                                        
+                                      </select>
+                                    </div>
+                                    <div class="col-md-4 ">
+                                      <button class="btn btn-primary" type="submit">Submit</button>
+                                  </div>
+                
+                                  </div>
+                                </form>
+          <div class="row mt-4">
+            <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title text-center">Sales Report</h4>
+                  <p class="card-description">
+                    
+                  
+
+                  </p>
+                  <div class="table-responsive">
+                    {% if order %}
+                    <table class="table table-striped" id="sales-table">
+                      <thead>
+                        <tr>
+                          <th>Order ID</th>
+                          <th>Order Date</th>
+                          <th>Customer</th>
+                          <th>Amount</th>
+                          <th>Payment Method</th>
+                          <th>Order Status</th>
+                          <!-- <th>Is Available</th> -->
+                        
+                          
+                        </tr>
+                      </thead>
+                      
+                      <tbody>
+                        
+                        {% for o in order %}
+                        <tr>
+                            <td>{{ o.id }}</td>
+                            <td>{{ o.ordered_date }}</td>
+                            <td>{{ o.user }}</td>
+                            <td>{{ o.price }}</td>
+                            <td>{{ o.method }}</td>
+                            <td>{{ o.status }}</td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                      
+                    </table>
+                    {% else %}
+                        <h3 class="text-center mt-3">Sorry,No Data Found</h3>
+                    {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    
+                  {% comment %} </div> {% endcomment %}
+                    <!-- pagination -->
+                <!-- <div class="ml-2 mt-2 ms-auto">
+                  <ul class="pagination pg-blue ">
+                    <li class="page-item">
+                      <a class="page-link" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only"></span>
+                      </a>
+                    </li>
+                    <li class="page-item"><a class="page-link">1</a></li>
+                    <li class="page-item"><a class="page-link">2</a></li>
+                    <li class="page-item"><a class="page-link">3</a></li>
+                    <li class="page-item">
+                      <a class="page-link" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only"></span>
+                      </a>
+                    </li>
+                  </ul>
+                </div> -->
+
+
+
+                
+
+            {% comment%}  <div class="col-12 pb-1 mt-3">
+                <nav aria-label="Page navigation">
+                    {% if order.has_other_pages %}
+                  <ul class="pagination justify-content-center mb-3">
+                    {% if order.has_previous %}
+                    <li class="page-item">
+                      <a class="page-link" href="?page={{ order.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                      </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" aria-label="Previous">
+                          <span aria-hidden="true">&laquo;</span>
+                          <span class="sr-only">Previous</span>
+                        </a>
+                      </li>
+                      {% endif %}
+
+                    {% for i in order.paginator.page_range %}
+                    {% if order.number == i %}
+                    <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
+                    {% else %}
+                    <li class="page-item "><a class="page-link" href="?page={{ i }}">{{ i }}</a></li> 
+                    {% endif %}
+
+                    {% endfor %}
+
+
+                    {% if order.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ order.next_page_number }}" aria-label="Next">
+                          <span aria-hidden="true">&raquo;</span>
+                          <span class="sr-only">Next</span>
+                      </a>
+                      </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" aria-label="Next">
+                          <span aria-hidden="true">&raquo;</span>
+                          <span class="sr-only">Next</span>
+                      </a>
+                      </li>
+                      {% endif %}
+
+                    
+                </ul>
+                {% endif %}
+                </nav>
+            </div>
+            {% endcomment %}
+                {% comment %} </div> {% endcomment %}
+
+{% comment %}               
+              </div> {% endcomment %}
+            </div>
+
+
+
+            
+        
+          </div>
+          
+        </div>
+
+
+
+      
+
+        
+        <!-- content-wrapper ends -->
+        <!-- partial:../../partials/_footer.html -->
+
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+
+
+
+  <script src="{% static 'js/table2excel.js'  %}"></script>
+  <script>
+    document.getElementById('downlaodsalesReportexcel').addEventListener('click',function(){
+        var table2excel = new Table2Excel();
+        table2excel.export(document.querySelectorAll("#sales-table"));
+    })
+  </script>
+ {% endblock %}

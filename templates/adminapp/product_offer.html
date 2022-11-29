@@ -1,0 +1,100 @@
+
+{% extends 'adminapp/admin_base.html'%}
+{% block content %}
+
+
+
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="row">
+    {% for message in messages %}
+    <h2>{{message}}</h2>
+    {% endfor %}
+    <div class="content-wrapper">
+      <div class="row">
+        <div class="col-lg-8 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title text-center">Product Table</h4>
+
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <!-- <th>Product ID</th> -->
+                      
+                      <th>Product Name</th>
+                      <th>Image</th>
+                      <th>Price</th>
+                      <th>Discount</th>
+                      
+                      
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for p in prdt_offer %}
+                    <tr>
+                      
+                      
+                      <td>{{ p.product_name}}</td>
+                      <td> <img src="{{ p.product_name.img1.url }}" style="border-radius: 0%;" alt=""> </td>
+                      <td>{{ p.discount}}</td>
+                      
+                      
+                      
+                      <td> 
+                        <!-- <a href=""><button type="submit" class="btn btn-dark ">Edit</button> </a> -->
+                        <a href="{% url 'delete_product_offer' p.id %}"onclick="delprdtoffer(event)" type="button" class="btn btn-danger mx-2">Delete </a></td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <p class="card-description">
+                
+                <a href="{% url 'add_product_offer' %}"> <button type="button" class="btn btn-dark btn-lg btn-block float-left col-lg-6">Add Product Offer </button></a>
+  
+                </p>
+            </div>
+          </div>
+        </div>
+
+
+
+        
+    
+      </div>
+    </div>
+    <!-- content-wrapper ends -->
+    <!-- partial:../../partials/_footer.html -->
+
+    <!-- partial -->
+        </div>
+        </div>
+  </div>
+
+
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    function delprdtoffer() {
+      event.preventDefault();
+      var dlt = event.currentTarget.href
+      console.log(dlt)
+      Swal.fire({
+        title: 'Are you sure want to Remove Offer?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#2DAD49',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Delete',
+        cancelButtonText: 'Back',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          
+          window.location = dlt;
+        }
+      })
+    }
+  </script>
+  {% endblock %}

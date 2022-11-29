@@ -1,0 +1,92 @@
+
+
+{% extends 'adminapp/admin_base.html'%}
+{% block content %}
+
+
+
+
+
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            {% for message in messages %}
+              
+              <h3 class="m-3">{{ message }}</h3>
+            {% endfor %}
+            <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title text-center">SubCategory Offers</h4>
+                    <p class="card-description">
+                        <a href="{% url 'add_subcategory_offer' %}"><button type="button" class="btn btn-dark btn-md btn-block float-right">Add Category Offer</button></a> 
+
+                    </p>
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            
+                            
+                            <th>SubCategory Offer </th>
+                            <th>Discount</th>
+                            
+                            <th class="text-center">Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            {% for s in sub_offer %}
+                          <tr>
+                            
+                            
+                            <td>{{ s.subcategory_name }}</td>
+                            <td>{{ s.discount }}</td>
+                            <td> 
+                                <!-- <a href=""><button type="submit" class="btn btn-dark ">Edit</button> </a> -->
+                                <a href="{% url 'delete_subcategory_offer' s.id%}"onclick="delsubcatoffer(event)" type="button" class="btn btn-danger mx-2">Delete</a></td>
+                          </tr>
+                           
+
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>    
+
+            
+        
+          </div>
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:../../partials/_footer.html -->
+
+        <!-- partial -->
+      </div>
+
+      <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      <script>
+        function delsubcatoffer() {
+          event.preventDefault();
+          var dlt = event.currentTarget.href
+          console.log(dlt)
+          Swal.fire({
+            title: 'Are you sure want to Remove Offer?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#2DAD49',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Delete',
+            cancelButtonText: 'Back',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              
+              window.location = dlt;
+            }
+          })
+        }
+      </script>
+
+      {% endblock %}

@@ -28,5 +28,8 @@ urlpatterns = [
 
     path('prdt_delete/<int:id>',views.prdt_delete,name='prdt_delete'),
 
+
+    path("addvarient/", views.addvarient, name="addvarient"),
+
     # path('products',views.products,name='products'),
 ]

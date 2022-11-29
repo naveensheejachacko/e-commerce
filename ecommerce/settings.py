@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
+    'crispy_forms',
     'adminapp',
     'userapp',
     'account',
@@ -44,6 +46,7 @@ INSTALLED_APPS = [
     'cartapp',
     'orders',
     'store',
+    'offer',
     'widget_tweaks',
 
     

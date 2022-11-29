@@ -1,5 +1,8 @@
 {% extends 'userapp/base.html' %}
+{% load humanize %}
 {% load static %}
+
+
 {% block content %}
 
     
@@ -53,6 +56,7 @@
                                    <tr>
                                       <th class="product-thumbnail">Images</th>
                                       <th class="cart-product-name">Product</th>
+                                      <th  class="cart-product-name">Colour</th>
                                       <th class="product-price">Unit Price</th>
                                       <th class="product-quantity">Quantity</th>
                                       <th class="product-subtotal">Total</th>
@@ -64,30 +68,51 @@
                                     {% for cart_item in cart_items %}
                                    <tr>
                                       <td class="product-thumbnail"><img src="{{cart_item.product.images.url}}"></td>
-                                      <td class="product-name">{{cart_item.product.product_name}}</td>
+                                     <td> <a href="{{ cart_item.product.get_url }}"class="title text-dark">{{cart_item.product.product_name}}</a>
+                                    
+                                     </td> 
+                                     <td class="text-muted small text-dark">
+                                            {% if cart_item.variations.all %}
+                                            {% for item in cart_item.variations.all %}
+                                            {{ item.variation_category | capfirst }} : {{ item.variation_value | capfirst }} <br>
+                                            {% endfor %}
+                                            {% endif %}
+                                        </p>
+                                    
+                                    
+                                    </td>
+                                    
                                       <td class="product-price"><span class="amount">{{ cart_item.product.price}} </span></td>
                                       <td class="product-quantity">
                                         <div class="col"> 
                                             <div class="input-group input-spinner">
                                                 <div class="input-group-prepend">
-                                                <a href="{% url 'remove_cart' cart_item.product.id %}" class="btn btn-light" type="button" id="button-plus"> <i class="fa fa-minus"></i> </a>
+                                                <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}" class="btn btn-light" type="button" id="button-plus"> <i class="fa fa-minus"></i> </a>
                                                 </div>
                                                 <input type="text" class="form-control"  value="{{cart_item.quantity}}">
                                                 <div class="input-group-append">
-                                                <a href="{% url 'add_cart' cart_item.product.id %}" class="btn btn-light" type="button" id="button-minus" > <i class="fa fa-plus"></i> </a>
+
+                                                    <form action="{% url 'add_cart' cart_item.product.id %}" method="POST">
+                                                        {% csrf_token %}
+                                                        {% for item in cart_item.variations.all %}
+                                                        <input type="hidden" name="{{ item.variation_category | lower }}"
+                                                            value="{{ item.variation_value | capfirst }}">
+                                                        {% endfor %}
+                                                        <button class="btn btn-light" type="submit" id="button-minus" > <i class="fa fa-plus"></i> </button>
+                                                    </form>
                                                 </div>
                                             </div> <!-- input-group.// -->
                                         </div> 
                                       </td>
-                                      <td class="product-subtotal"><span class="amount">$ {{ cart_item.sub_total }}</span></td>
-                                      <td><a href="{% url 'delete_cart_item' cart_item.product.id %}" class="btn btn-danger" onclick="cancelOrder()">Remove</a></td>
+                                      <td class="product-subtotal"><span class="amount">₹ {{ cart_item.sub_total }}</span></td>
+                                      <td><a href="{% url 'delete_cart_item' cart_item.product.id cart_item.id %}" class="btn btn-danger" onclick="cancelOrder()">Remove</a></td>
                                    </tr>
                                    {% endfor %}
 
                                 </tbody>
                           </table>
                        </div>
-                       <div class="row">
+                       <!-- <div class="row">
                           <div class="col-12">
                                 <div class="coupon-all">
                                    <div class="coupon">
@@ -100,15 +125,18 @@
                                    </div>
                                 </div>
                           </div>
-                       </div>
+                       </div> -->
                        <div class="row justify-content-end">
                           <div class="col-md-5">
                                 <div class="cart-page-total">
                                    <h2>Cart totals</h2>
                                    <ul class="mb-20">
-                                      <li>Subtotal <span>${{total}}</span></li>
-                                      <li>Tax <span>${{tax}}</span></li>
-                                      <li>Grand Total <span>${{grand_total}}</span></li>
+                                    
+                                      <li>Total Price<span style="color: rgb(0, 0, 0);font-weight: bold;">₹{{total_price}}</span></li>
+
+                                      <li>Your Savings <span style="color: green;font-weight: bold;">-₹{{saved}}</span></li>
+
+                                      <li>Grand Total <span style="color: rgb(0, 0, 0);font-weight: bold;">₹{{grand_total}}</span></li>
                                    </ul>
                                    <a class="btn btn-block btn-primary" href="{% url 'checkout' %}">Proceed to checkout</a>
                                 </div>

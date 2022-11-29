@@ -20,6 +20,7 @@ def place_order(request):
     current_user=request.user
     if request.method=='POST':
         neworder=Order()
+        tax=0
         neworder.user=request.user
         neworder.address=Address.objects.get(id=request.POST.get('address'))
         neworder.payment_mode=request.POST.get('payment_mode')
@@ -28,12 +29,12 @@ def place_order(request):
         
         cart_items=CartItem.objects.filter(user=request.user)
         cart_total_price=0
-        tax=0
+ 
 
         for cart_item in cart_items:
             
-            tax=(5*cart_item.product.price)/100
-            cart_total_price+=((cart_item.product.price+tax)*cart_item.quantity)
+            
+            cart_total_price+=((cart_item.product.price)*cart_item.quantity)
         neworder.total_price=cart_total_price
         neworder.tax=tax
         neworder.user=request.user
@@ -79,7 +80,7 @@ def proceed_to_pay(request):
     tax=0
     for item in cart_item:
         tax=(5*item.product.price)/100
-        total_price+=total_price+((item.product.price+tax)*item.quantity)   
+        total_price+=total_price+((item.product.price)*item.quantity)   
       
     return JsonResponse({
         'total_price':total_price,

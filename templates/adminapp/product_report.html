@@ -1,0 +1,109 @@
+{% extends 'adminapp/admin_base.html' %}
+{%load static %}
+
+
+{% block content %}
+
+
+<div class="main-panel">
+    {% for message in messages %}
+    <h2>{{message}}</h2>
+    {% endfor %}
+    <div class="content-wrapper">
+        <div class="m-2">
+            <div class="btn-wrapper">
+                <a href="{% url 'generateProductPdf' %}" class="btn btn-otline-dark"><i class="icon-printer"></i> Download as PDF</a>
+                <a href="{% url 'product_csv' %}" class="btn btn-primary text-white me-0"><i class="icon-download"></i> Export as CSV</a>
+                <a href="{% url 'product_excel' %}" class="btn btn-success text-white me-0"><i class="icon-download"></i> Export as Excel</a>
+            </div>
+            <form action="{% url 'product_report' %}"  method="GET">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>From</label>
+                        <input type="date" class="form-control" name="from">
+                        <br>
+                    </div>
+                    <div class="col-md-4">
+                        <label>To</label>
+                        <input type="date" class="form-control" name="to">
+                    </div>
+                    <div class="col-md-4 mt-3">
+                        <button class="btn btn-primary" type="submit">Submit</button>
+                    </div>
+
+                </div>
+            </form>
+      <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title text-center">Product Report</h4>
+              <p class="card-description">
+                
+              
+
+              </p>
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Product ID</th>
+                      
+                      <th>Product Name</th>
+                      
+                      <th>Price</th>
+                      
+                      <th>Stock</th>
+                      <!-- <th>Is Available</th> -->
+                    <th>Main Category</th>
+                    <th>Sub Category</th>
+                      
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for p in products %}
+                    <tr>
+                      <td>{{ p.id}}</td>
+                      
+                      <td>{{ p.product_name}}</td>
+                    
+                      <td>{{ p.price}}</td>
+                      
+                      
+                      <td>{{ p.stock}}</td>
+                     
+                      <td>{{ p.parent_main_prdt.main_category_name}}</td>
+                      <td>{{ p.parent_sub_prdt.sub_cat_name }}</td>
+                      
+                    {% endfor %}
+                      
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+        
+    
+      </div>
+      
+    </div>
+
+
+
+
+  
+
+    
+    <!-- content-wrapper ends -->
+    <!-- partial:../../partials/_footer.html -->
+
+    <!-- partial -->
+  </div>
+  <!-- main-panel ends -->
+</div>
+
+{% endblock %}
