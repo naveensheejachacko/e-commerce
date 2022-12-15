@@ -102,9 +102,7 @@ DATABASES = {
         'USER':'postgres',
         'PASSWORD':123,
         'HOST':'localhost',
-       
-        
-    }
+}
 }
 
 
@@ -115,10 +113,8 @@ DATABASES = {
 #         'USER':'postgres',
 #         'PASSWORD':123,
 #         'HOST':'localhost',
-
-
-#     }
-# }
+#}
+#}
 
 
 
