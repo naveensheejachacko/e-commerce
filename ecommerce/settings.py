@@ -22,13 +22,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = 'django-insecure-eko%5elbapt069epw1r^b+-+ygd$glxn&xmsb*21wqf-gt3u+s'
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['54.248.26.243','localhost']
+
 
 
 # Application definition
@@ -104,6 +106,23 @@ DATABASES = {
         
     }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'electromart',
+#         'USER':'postgres',
+#         'PASSWORD':123,
+#         'HOST':'localhost',
+
+
+#     }
+# }
+
+
+
+
 
 
 # Password validation
