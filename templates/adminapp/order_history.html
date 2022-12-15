@@ -15,7 +15,7 @@
 					<h4 class="col-12 p-0 my-2 text-danger text-center font-weight-bold"> {{msg}} </h4>
 					{% endfor %}
 					<div class="col-sm-6">
-						<h2>Active Orders<b></b></h2>
+						<h2>Previous Orders<b></b></h2>
 					</div>
 					<div class="col-sm-6">
 						<!-- <a href="{%url 'add_product'%}" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add Products</span></a> -->
@@ -28,7 +28,7 @@
 					<tr>
 
 
-                        <th scope="col">No.</th>
+                
                         <th scope="col">Customer</th>
                         <th scope="col">Product</th>
                         <th scope="col">Payment</th>
@@ -44,7 +44,7 @@
 					{% for active_order in active_orders %}
                     <tr></tr>
 					<tr>
-						<th scope="row">{{forloop.counter}}</th>
+				
 						<td>{{ active_order.order.user.first_name}}</td>
 						
                         <td>{{active_order.product }}</td>
@@ -73,9 +73,71 @@
 					<li class="page-item"><a href="#" class="page-link">Next</a></li>
 				</ul>
 			</div> -->
+		
+		<div class="col-12 pb-1 mt-3">
+			<h6 style="color: #0D6EFD;">Showing {{ active_orders.end_index }} {{ active_orders_index }} of {{ active_orders.paginator.count }}</h6>
+			<nav aria-label="Page navigation">
+				{% if active_orders.has_other_pages %}
+			  <ul class="pagination justify-content-center mb-3">
+				{% if active_orders.has_previous %}
+				<li class="page-item">
+				  <a class="page-link" href="?page={{ active_orders.previous_page_number }}" aria-label="Previous">
+					<span aria-hidden="true">&laquo;</span>
+					<span class="sr-only">Previous</span>
+				  </a>
+				</li>
+				{% else %}
+				<li class="page-item disabled">
+					<a class="page-link" href="#" aria-label="Previous">
+					  <span aria-hidden="true">&laquo;</span>
+					  <span class="sr-only">Previous</span>
+					</a>
+				  </li>
+				  {% endif %}
+	
+				{% for i in active_orders.paginator.page_range %}
+				{% if active_orders.number == i %}
+				<li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
+				{% else %}
+				<li class="page-item "><a class="page-link" href="?page={{ i }}">{{ i }}</a></li> 
+				{% endif %}
+	
+				{% endfor %}
+	
+	
+				{% if active_orders.has_next %}
+				<li class="page-item">
+					<a class="page-link" href="?page={active_orders.next_page_number }}" aria-label="Next">
+					  <span aria-hidden="true">&raquo;</span>
+					  <span class="sr-only">Next</span>
+				  </a>
+				  </li>
+				{% else %}
+				<li class="page-item disabled">
+					<a class="page-link" href="#" aria-label="Next">
+					  <span aria-hidden="true">&raquo;</span>
+					  <span class="sr-only">Next</span>
+				  </a>
+				  </li>
+				  {% endif %}
+	
+				
+			</ul>
+			{% endif %}
+			</nav>
 		</div>
-	</div>        
+
+		</div>
+
+
+	</div> 
+
+	
+    
+
+           
 </div>
+
 
 
 

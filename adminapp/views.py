@@ -22,6 +22,9 @@ from django.utils.timezone import localtime, now
 
 
 from django.db.models import Count,Q
+#paginator
+from django.core.paginator import EmptyPage,Paginator,PageNotAnInteger 
+
 
 
 
@@ -41,6 +44,9 @@ from django.template.loader import get_template
 import xlwt
 import csv
 from io import BytesIO
+
+from store.forms import BannerForm, EditBanner
+from store.models import Banners
 # Create your views here.
 def admin_login(request):
     if request.user.is_authenticated:
@@ -69,17 +75,14 @@ def admin_login(request):
 def admin_home(request):
 
     if request.user.is_admin:
-        exclude_list = [
-        "Cancelled_item",
-        "Refund_Initiated",
-        ]
+
         products = Product.objects.all()
         total_users=Account.objects.filter(Q(is_active=True)& Q(is_admin=False)).count()
         day=datetime.datetime.now()
         visitors=Account.objects.filter(last_login=day).count()
 
-        total_revenue = OrderItem.objects.filter(status="Delivered").aggregate(Sum("price"))
-        total_orders = OrderItem.objects.all().exclude(status__in=exclude_list).count()
+        total_revenue=OrderItem.objects.filter(status='Delivered').aggregate(Sum('price'))
+        total_orders=OrderItem.objects.filter(status='Delivered').count()
         print('...................',total_orders,'.total orders...........................')
         total_products = Product.objects.filter(is_available=True).count()
         print('............................',visitors,'..visit today...............................')
@@ -202,16 +205,25 @@ def activeorders(request):
     
     exclude_list = [
         "Delivered",
+        "Cancelled",
+        "Refund Initiated",
         "Cancelled_item",
-        "Refund Initiated"
+        
     ]
     active_orders =OrderItem.objects.all().exclude(
         status__in=exclude_list
-    )#for reversing order
+    ).order_by('-id')#for reversing order
     status=STATUS1
+    paginator=Paginator(active_orders,5)
+    page=request.GET.get('page')
+    paged_orders_list=paginator.get_page(page) 
+
+    
+
     context ={
         "active_orders":active_orders,
         "status":status,
+        'active_orders':paged_orders_list
     }
     return render(request,'adminapp/active_orders.html',context)
 
@@ -227,9 +239,20 @@ def order_history(request):
         status__in=exclude_list
     )[::-1]
     status = STATUS1
+    paginator=Paginator(active_orders,10)
+    page=request.GET.get('page')
+    paged_orders_list=paginator.get_page(page) 
+
+  
+    
+
+
     context = {
         "active_orders": active_orders,
         "status": status,
+        "active_orders":paged_orders_list,
+   
+        
     }
     return render(request, "adminapp/order_history.html", context)
 
@@ -343,6 +366,57 @@ def add_product_offer(request):
 def delete_product_offer(request,id):
     ProductOffer.objects.filter(id=id).delete()
     return redirect('product_offer')
+
+
+
+#banner
+
+@login_required(login_url='admin_login')
+def add_banner(request):
+    form = BannerForm()
+    if request.method == "POST":
+        form = BannerForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect("banner")
+    context = {"form": form}
+    return render(request, "adminapp/banner_add.html", context)
+
+@login_required(login_url='admin_login')
+def banner(request):
+    banners = Banners.objects.all()
+    
+    return render(request, "adminapp/banner.html", {"banners": banners})
+
+
+# def editbanner(request, banner_id):
+#     edtbanner = Banners.objects.get(pk=banner_id)
+#     form = EditBanner(instance=edtbanner)
+#     if request.method == "POST":
+#         form = EditBanner(request.POST, instance=edtbanner)
+#         if form.is_valid():
+#             try:
+#                 form.save()
+
+#             except:
+#                 context = {"form": form}
+#                 # messages.info(request,"A user with that email address already exists.")
+#                 return render(request, "adminapp/editbanner.html", context)
+#             return redirect("banner")
+
+#     context = {"form": form}
+#     return render(request, "adminapp/editbanner.html", context)
+
+
+
+
+def deletebanner(request, banner_id):
+    bnr = Banners.objects.get(pk=banner_id)
+    bnr.delete()
+    messages.success(request, "Your Banner Has been deleted")
+    return redirect("banner")
+
+
 
 
 
@@ -521,23 +595,25 @@ def by_date(request):
         sales_date_to+=datetime.timedelta(days=1)
         orders=Order.objects.filter(created_at__range=[sales_date_from,sales_date_to])
 
-    new_order_list=[]
+        new_order_list=[]
 
-    for i in orders:
-        order_items=OrderItem.objects.filter(order_id=i.id)
-        for j in order_items:
-            item={
-                'id':i.id,
-                'ordered_date':i.created_at,
-                'user':i.user,
-                'price':j.price,
-                'method':i.payment_mode,
-                'status':j.status,
+        for i in orders:
+            order_items=OrderItem.objects.filter(order_id=i.id)
+            for j in order_items:
+                item={
+                    'id':i.id,
+                    'ordered_date':i.created_at,
+                    'user':i.user,
+                    'price':j.price,
+                    'method':i.payment_mode,
+                    'status':j.status,
 
 
-            }
-            new_order_list.append(item)
-        
+                }
+                new_order_list.append(item)
+    else:
+        messages.error(request,'Please select date')
+        return redirect('salesReport')
     return render(request,'adminapp/salesReport.html',{
         'order':new_order_list,
     })

@@ -94,7 +94,40 @@
         </div>
     </div> -->
     <!-- slider-area-end -->
-
+    <div class="intro-banner-wrap">
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                {% for banner in banners %}
+                {% if forloop.counter == 1 %}
+              <li data-target="#carouselExampleIndicators" data-slide-to="{{forloop.counter}}" class="active"></li>
+                {% else %}
+                <li data-target="#carouselExampleIndicators" data-slide-to="{{forloop.counter}}"></li>
+                {% endif %}
+              {% endfor %}
+            </ol>
+            <div class="carousel-inner">
+                {% for banner in banners %}
+                {% if forloop.counter == 1 %}
+              <div class="carousel-item active">
+                  {% else %}
+                <div class="carousel-item">
+                    {% endif %}
+                <a href="{{banner.product.get_url}}"><img src="{{ banner.image.url }}" class="d-block w-100 img-fluid rounded"></a>
+              </div>
+              {% endfor %}
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+    </div>
+    
+    </div> 
     <!-- trending-product-area-start -->
     <section class="trending-product-area light-bg-s pt-25 pb-15">
         
@@ -103,25 +136,61 @@
                 
                 <div class="col-xl-12">
                     <div class="section__head d-flex justify-content-between mb-30">
-                        <div class="section__title section__title-2">
+                        <div class="section__title section__title-2 row">
                             <h5 class="st-titile">Top Trending</h5>
+
                         </div>
                         <div class="button-wrap button-wrap-2">
                             <a href="{% url 'store' %}">See All Product <i class="fal fa-chevron-right"></i></a>
                         </div>
+                        
                     </div>
                 </div>
-               
+                {% for i in messages %}
+                <p class="pl-3"style="color:red;">{{i}}</p>
+                {% endfor %}
             </div>
             
             <div class="row">
                 {% for topitem in topitems %}
-                <div class="col-md-3" >
-                    <div class="card card-product-grid "  >
+                <div class="col-md-3"  >
+                    <div class="card card-product-grid "style="height: 25rem;"  >
+                        
+                        {% if request.user.is_authenticated %}
+
+                        <a href="{% url 'add_to_wishlist' topitem.id %}"  style="margin: 1rem;"> <i class="fas fa-heart text-primary"></i></a>
+                        {%else%}
+
+                        {% endif %}
                         <a href="{{topitem.get_url}}" style="margin:10px;" class="img-wrap"> <img src="{{topitem.images.url}}"> </a>
                         <figcaption class="info-wrap">
+                            
                             <a href="{{topitem.get_url}}" class="title">{{topitem.product_name}}</a>
-                            <div class="price mt-1">₹{{topitem.price}}</div> <!-- price-wrap.// -->
+
+                            
+                            <h6 class="text-muted ml-2"><span style="color: green;"> 
+                            
+                                        
+                                        
+                                        
+                            {% if topitem.productoffer.discount > topitem.parent_main_prdt.categoryoffer.discount and topitem.productoffer.discount > topitem.parent_sub_prdt.subcategoryoffer.discount %}  
+                                
+                                    upto {{ topitem.productoffer.discount }}% off
+                            {% elif topitem.parent_main_prdt.categoryoffer.discount > topitem.productoffer.discount and topitem.parent_main_prdt.categoryoffer.discount > topitem.parent_sub_prdt.subcategoryoffer.discount   %}
+                                    upto {{ topitem.parent_main_prdt.categoryoffer.discount }}% off
+                            
+                            {%else %}
+                                    upto {{ topitem.parent_sub_prdt.subcategoryoffer.discount }}% off
+                            {% endif %}
+
+
+
+
+
+
+           
+                            <div class="price mt-1">₹{{topitem.price}}</div> 
+    <!-- price-wrap.// -->
                         </figcaption>
                     </div>
                 </div>
@@ -131,27 +200,45 @@
            
         </div>
 
-        
+        <!-- <section class="moveing-text-area">
+            <div class="container">
+                <div class="ovic-running">
+                    <div class="wrap">
+                        <div class="inner">
+                            {% for c in coupons %}
+                            <p class="item">Free india Delivery </p>
+                            <p class="item">Chirstmas Week Use Code:{{c.coupon}}
+                                
+
+                                {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>  -->
+
+
+
     </section>
     <!-- trending-product-area-end -->
 
     <!-- banner__area-start -->
     <section class="categories__area light-bg-s pt-20 pb-10">
         <div class="container custom-conatiner">
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col-xl-12">
                     <div class="section__head d-flex justify-content-between mb-30">
                         <div class="section__title section__title-2">
                             <h5 class="st-titile">Popular Categories</h5>
                         </div>
                         <div class="button-wrap button-wrap-2">
-                            <a href="product.html">See All Product <i class="fal fa-chevron-right"></i></a>
+                            <a href="{% url 'store' %}">See All Product <i class="fal fa-chevron-right"></i></a>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="row">
-                <div class="col-xl-2 col-lg-3 col-md-4">
+                <!-- <div class="col-xl-2 col-lg-3 col-md-4">
                     <div class="categories__item p-relative w-img mb-30">
                         <div class="categories__img b-radius-2">
                             <a href="product-details.html"><img src="{% static 'assets/img/categorie/cat-1.jpg' %}" alt=""></a>
@@ -161,19 +248,26 @@
                             <p>(7 Products)</p>
                         </div>
                     </div>
-                </div>
-                <div class="col-xl-2 col-lg-3 col-md-4">
+                </div> -->
+                <!-- <div class="col-xl-2 col-lg-3 col-md-4">
                     <div class="categories__item p-relative w-img mb-30">
                         <div class="categories__img b-radius-2">
                             <a href="product-details.html"><img src="{% static 'assets/img/categorie/cat-2.jpg' %}" alt=""></a>
                         </div>
                         <div class="categories__content">
-                            <h6><a href="product-details.html">Smart Phones</a></h6>
+                            <h6>
+                            
+                                <li><a href="#"></li>
+                                     
+                                
+                                
+                                Smart Phones</a>
+                              </h6>
                             <p>(12 Products)</p>
                         </div>
                     </div>
-                </div>
-                <div class="col-xl-2 col-lg-3 col-md-4">
+                </div> -->
+                <!-- <div class="col-xl-2 col-lg-3 col-md-4">
                     <div class="categories__item p-relative w-img mb-30">
                         <div class="categories__img b-radius-2">
                             <a href="product-details.html"><img src="{% static 'assets/img/categorie/cat-3.jpg' %}" alt=""></a>
@@ -183,8 +277,8 @@
                             <p>(5 Products)</p>
                         </div>
                     </div>
-                </div>
-                <div class="col-xl-2 col-lg-3 col-md-4">
+                </div> -->
+                <!-- <div class="col-xl-2 col-lg-3 col-md-4">
                     <div class="categories__item p-relative w-img mb-30">
                         <div class="categories__img b-radius-2">
                             <a href="product-details.html"><img src="{% static 'assets/img/categorie/cat-4.jpg' %}" alt=""></a>
@@ -194,8 +288,8 @@
                             <p>(9 Products)</p>
                         </div>
                     </div>
-                </div>
-                <div class="col-xl-2 col-lg-3 col-md-4">
+                </div> -->
+                <!-- <div class="col-xl-2 col-lg-3 col-md-4">
                     <div class="categories__item p-relative w-img mb-30">
                         <div class="categories__img b-radius-2">
                             <a href="product-details.html"><img src="{% static 'assets/img/categorie/cat-5.jpg' %}" alt=""></a>
@@ -205,8 +299,8 @@
                             <p>(7 Products)</p>
                         </div>
                     </div>
-                </div>
-                <div class="col-xl-2 col-lg-3 col-md-4">
+                </div> -->
+                <!-- <div class="col-xl-2 col-lg-3 col-md-4">
                     <div class="categories__item p-relative w-img mb-30">
                         <div class="categories__img b-radius-2">
                             <a href="product-details.html"><img src="{% static 'assets/img/categorie/cat-6.jpg' %}" alt=""></a>
@@ -216,14 +310,51 @@
                             <p>(15 Products)</p>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
+
+
+        <section class="moveing-text-area">
+            <div class="container">
+                <div class="ovic-running">
+                    <div class="wrap">
+                        <div class="inner">
+                         
+                            {% for topitem in topitems %}
+                            
+                            <p class="item">Chirstmas Week
+                                
+                                                      
+                            {% if topitem.productoffer.discount > topitem.parent_main_prdt.categoryoffer.discount and topitem.productoffer.discount > topitem.parent_sub_prdt.subcategoryoffer.discount %}  
+                                
+                            upto {{ topitem.productoffer.discount }}% off
+                    {% elif topitem.parent_main_prdt.categoryoffer.discount > topitem.productoffer.discount and topitem.parent_main_prdt.categoryoffer.discount > topitem.parent_sub_prdt.subcategoryoffer.discount   %}
+                            upto {{ topitem.parent_main_prdt.categoryoffer.discount }}% off
+                    
+                    {%else %}
+                            upto {{ topitem.parent_sub_prdt.subcategoryoffer.discount }}% off
+                    {% endif %}
+
+                                
+                                {{topitem.product_name}}  </p>
+                            
+                        {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section> 
+
+
+
+
+
     </section>
     <!-- banner__area-end -->
 
     <!-- topsell__area-start -->
-    <section class="topsell__area light-bg-s pt-15">
+    <!-- <section class="topsell__area light-bg-s pt-15">
         <div class="container custom-conatiner">
             <div class="row">
                 <div class="col-xl-12">
@@ -369,10 +500,10 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
     <!-- topsell__area-end -->
 
-    <!-- banner__area-start -->
+    <!-- banner__area-start
     <section class="banner__area light-bg-s pt-40 pb-10">
         <div class="container custom-conatiner">
             <div class="row">
@@ -411,11 +542,11 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
     <!-- banner__area-end -->
 
     <!-- featured-start -->
-    <section class="featured light-bg pt-50 pb-40">
+    <!-- <section class="featured light-bg pt-50 pb-40">
         <div class="container custom-conatiner">
             <div class="row">
                 <div class="col-xl-12">
@@ -631,23 +762,11 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
     <!-- featured-end -->
 
     <!-- moveing-text-area-start -->
-    <section class="moveing-text-area">
-        <div class="container">
-            <div class="ovic-running">
-                <div class="wrap">
-                    <div class="inner">
-                        <p class="item">Free UK Delivery - Return Over ₹100.00 ( Excluding Homeware )   |   Free UK Collect From Store</p>
-                        <p class="item">Design Week / 15% Off the website / Code: AYOSALE-2020</p>
-                        <p class="item">Always iconic. Now organic. Introducing the ₹20 Organic Tee.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+
     <!-- moveing-text-area-end -->
 
     <!-- recomand-product-area-start -->
@@ -826,7 +945,7 @@
     <!-- blog-area-end -->
 
     <!-- brand-area-start -->
-    <section class="brand-area light-bg-s pb-60">
+    <!-- <section class="brand-area light-bg-s pb-60">
         <div class="container custom-conatiner">
             <div class="brand-slider brand-slider-2 swiper-container pt-35 pb-30">
                 <div class="swiper-wrapper">
@@ -851,7 +970,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
     <!-- brand-area-end -->
 
     <!-- features-2__area-start -->

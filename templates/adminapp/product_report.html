@@ -13,8 +13,14 @@
         <div class="m-2">
             <div class="btn-wrapper">
                 <a href="{% url 'generateProductPdf' %}" class="btn btn-otline-dark"><i class="icon-printer"></i> Download as PDF</a>
-                <a href="{% url 'product_csv' %}" class="btn btn-primary text-white me-0"><i class="icon-download"></i> Export as CSV</a>
-                <a href="{% url 'product_excel' %}" class="btn btn-success text-white me-0"><i class="icon-download"></i> Export as Excel</a>
+                <!-- <a href="" class="btn btn-primary text-white me-0"><i class="icon-download"></i> Export as CSV</a> -->
+
+                <a href="{% url 'product_csv' %}" class="btn btn-otline-dark me-0"><i class="icon-download"></i> Export csv</a>
+
+                <a href="{% url 'product_excel' %}" class="btn btn-otline-dark me-0"><i class="icon-download"></i> Export excel</a>
+                <hr>
+
+                <!-- <a href="{% url 'product_excel' %}" class="btn btn-success text-white me-0"><i class="icon-download"></i> Export as Excel</a> -->
             </div>
             <form action="{% url 'product_report' %}"  method="GET">
                 <div class="row">

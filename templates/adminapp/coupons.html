@@ -25,7 +25,7 @@
                         <th>Discount</th>
                         <th>Valid From</th>
                         <th>Valid To</th>
-                        <th>Coupon Limit</th>
+                        <!-- <th>Coupon Limit</th> -->
                         
                         <th class="text-center">Status</th>
 
@@ -43,7 +43,7 @@
                         <td>{{ c.discount }}</td>
                         <td>{{ c.valid_from }}</td>
                         <td>{{ c.valid_to }}</td>
-                        <td>{{ c.coupon_limit }}</td>
+    
                         <td> 
                             <!-- <a href=""><button type="submit" class="btn btn-dark ">Edit</button> </a> -->
                             <a href="{% url 'delete_coupons' c.id %}"onclick="delcoupons(event)" type="button" class="btn btn-danger mx-2">Delete </a></td>

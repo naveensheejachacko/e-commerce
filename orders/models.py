@@ -1,7 +1,7 @@
 
 from django.db import models
 from account.models import Account
-from categories.models import Product, Variation
+from categories.models import Product, Variations
 from userapp.models import Address
 
 STATUS1 = (
@@ -12,7 +12,8 @@ STATUS1 = (
     ("Delivered", "Delivered"),
     ("Cancelled_item", "Cancelled_item"),
     ("return", "return"),
-    ("Refund Initiated","Refund Initiated")
+    ("Refund Initiated","Refund Initiated"),
+    ("Out for Delivery","Out for Delivery")
 )
 
 
@@ -50,7 +51,7 @@ class OrderItem(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     status      =models.CharField(max_length=150,choices=STATUS1,default="New")
-    variations = models.ManyToManyField(Variation, blank=True)
+    variations = models.ManyToManyField(Variations, blank=True)
     ordered = models.BooleanField(default=False)
     def __str__(self):
         return '{} {}'.format(self.order.id,self.order.tracking_no)

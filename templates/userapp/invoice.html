@@ -145,29 +145,25 @@
     </style>
     </head>
 
-    <body>
     <header class="clearfix">
         <div id="logo" style="display:flex; justify-content:center; align-items:center;">
         {#<img src="static/firstapp/images/logo.png" class="brand-logo" width=60 height=60>#} <!--not working-->
         {#<img src="static/logo.png" class="brand-logo" height="200px">#} <!--not working-->
         <!-- <img src="D:\Mastering Django\firstproject\firstapp\logo.png" class="brand-logo" width=60 height=60> -->
-        <h1 class="brand-name">Electromart</h1>
+        <h1 class="brand-name">Eshopper</h1>
         </div>
         <h1>INVOICE</h1>
         <div id="company" class="clearfix">
-        <div>Electromart</div>
-        <div><a href="mailto:electromart@example.com">electromart@example.com</a></div>
-        <div><a href="www.electromartshop.in:8000">www.electromartshop.in:8000</a></div>
-        
-        
-    </div>
+        <div>Eshopper</div>
+      
+        </div>
         <div id="project">
-        <div><span>Client:</span> {{name}}</div>
-        <div><span>Address:</span>{{address}}</div>
-        <div><span>email:</span> <a href="mailto:{{user_email}}">{{user_email}}</a></div>
-        <div><span>Date:</span> {{date}}</div>
-        <div><span>Invoice ID:</span> {{order_id}}</div>
-        <div><span>Transaction ID:</span> {{transaction_id}}</div>
+        <div><span>CLIENT:</span> {{name}}</div>
+        <div><span>ADDRESS:</span>{{address}}</div>
+        <div><span>EMAIL:</span> <a href="mailto:{{user_email}}">{{user_email}}</a></div>
+        <div><span>DATE:</span> {{date}}</div>
+        <div><span>INVOICE ID:</span> {{order_id}}</div>
+        <div><span>TRANSACTION ID:</span> {{transaction_id}}</div>
         </div>
         <br>
         <br>
@@ -183,21 +179,22 @@
                 </tr>
             </thead>
             <tbody>
+                {% for i in orders.orderitem_set.all %}
+                
                 <tr>
+
+                    <td scope="row">{{i.product.product_name}}</td>
+                    <td>{{i.quantity}}</td>
+                    <td>{{i.price}}</td>
+                    <td>{{i.status}}</td>
                     
-   
-                    <td scope="row">{{product_name}}</td>
-                    <td>{{quantity}}</td>
-                    <td>{{price}}</td>
-                    <td>{{status}}</td>
+                    
                 </tr>
-          
+                {% endfor %}
                 <tr>
-                 
                     <td scope="row"></td>
                     <td>TOTAL: </td>
                     <td>{{total_price}}</td>
-            
                     
                 </tr>
             </tbody>

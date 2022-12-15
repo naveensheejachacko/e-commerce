@@ -41,7 +41,35 @@
                 </div> <!-- card-body.// -->
             </div>
         </article> <!-- filter-group  .// -->
+
+
+
         <article class="filter-group">
+            <header class="card-header">
+                <a href="#" data-toggle="collapse" data-target="#collapse_4" aria-expanded="true" class="">
+                    <i class="icon-control fa fa-chevron-down"></i>
+                    <h6 class="title">Brand</h6>
+                </a>
+            </header>
+            <div class="filter-content collapse show" id="collapse_4">
+                <div class="card-body">
+                    
+                    <ul class="list-menu">
+                        <li><a href="{% url 'store' %}">All Brands </a></li>
+                        {% for main_category  in links %}
+                        {% for sub in main_category.sub_category_set.all %}
+                    <li><a href="{{sub.get_url}}">{{sub.sub_cat_name}}</a> </li>
+                         {% endfor %} 
+                         {% endfor %}
+                    </ul>
+    
+                </div> <!-- card-body.// -->
+            </div>
+        </article> 
+
+
+
+        <!-- <article class="filter-group">
             <header class="card-header">
                 <a href="#" data-toggle="collapse" data-target="#collapse_4" aria-expanded="true" class="">
                     <i class="icon-control fa fa-chevron-down"></i>
@@ -69,24 +97,73 @@
                     <input type="checkbox">
                     <span class="btn btn-light"> XXL </span>
                   </label>
-            </div><!-- card-body.// -->
             </div>
-        </article> <!-- filter-group .// -->
+            </div>
+        </article>  -->
         
         <article class="filter-group">
-            <header class="card-header">
-                <a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" class="">
+            <!-- <header class="card-header">
+                <a href="{% url 'filter_price' %}" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" class="">
                     <i class="icon-control fa fa-chevron-down"></i>
                     <h6 class="title">Price range </h6>
                 </a>
-            </header>
+            </header> -->
             <div class="filter-content collapse show" id="collapse_3" style="">
                 <div class="card-body">
                     
                     <div class="form-row">
-                    <div class="form-group col-md-6">
+
+<!-- 
+                        <h5 class="font-weight-semi-bold mb-4">Filter by price</h5>
+                        <form action="#" method="GET">
+                            
+                                <div class="form-check mt-3">
+                                    <input class="form-check-input" value="1" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+                                    <label class="form-check-label" for="gridRadios2">
+                                        < 100
+                                    </label>
+                                  </div>
+                                  <div class="form-check mt-3">
+                                    <input class="form-check-input" value="2" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+                                    <label class="form-check-label" for="gridRadios2">
+                                      100 - 500 
+                                    </label>
+                                  </div>
+                                  <div class="form-check mt-3">
+                                    <input class="form-check-input" value="3" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+                                    <label class="form-check-label" for="gridRadios2">
+                                      500 - 1000
+                                    </label>
+                                  </div>
+                                  <div class="form-check mt-3">
+                                    <input class="form-check-input" value="4" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+                                    <label class="form-check-label" for="gridRadios2">
+                                    1000 - 5000
+                                    </label>
+                                  </div>
+                                  <div class="form-check mt-3">
+                                    <input class="form-check-input" value="5" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+                                    <label class="form-check-label" for="gridRadios2">
+                                     5000 - 10,000
+                                    </label>
+                                  </div>
+                                  <div class="form-check mt-3">
+                                    <input class="form-check-input" value="6" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+                                    <label class="form-check-label" for="gridRadios2">
+                                      > 10,000
+                                    </label>
+                                  </div>
+                                  
+                                  <div class="mt-3">
+                                    <button type="submit" class="btn btn-block btn-primary">Apply</button>
+                                      
+                                  </div> -->
+                        </form>
+
+
+                    <!-- <div class="form-group col-md-6">
                       <label>Min</label>
-                      <!-- <input class="form-control" placeholder="$0" type="number"> -->
+                     
                           <select class="mr-2 form-control">
                             <option value="0">₹0</option>
                             <option value="50">₹50</option>
@@ -96,8 +173,8 @@
                             <option value="500">₹500</option>
                             <option value="1000">₹1000</option>
                         </select>
-                    </div>
-                    <div class="form-group text-right col-md-6">
+                    </div> -->
+                    <!-- <div class="form-group text-right col-md-6">
                       <label>Max</label>
                           <select class="mr-2 form-control">
                             <option value="50">₹50</option>
@@ -108,12 +185,12 @@
                             <option value="1000">₹1000</option>
                             <option value="2000">₹2000+</option>
                         </select>
-                    </div>
+                    </div> -->
                     </div> <!-- form-row.// -->
-                    <button class="btn btn-block btn-primary">Apply</button>
+                    
                 </div><!-- card-body.// -->
             </div>
-        </article> <!-- filter-group .// -->
+        </article> 
         
     </div> <!-- card.// -->
     
@@ -124,6 +201,11 @@
             <div class="form-inline">
                 <span class="mr-md-auto"><b> {{product_count}} </b>Items found </span>
                 
+                {% for i in messages %}
+                <p class="pl-3"style="color:red;">{{i}}</p>
+                {% endfor %}
+                
+
             </div>
     </header><!-- sect-heading -->
     
@@ -131,9 +213,29 @@
         {% if products %}
         {% for p in products %}
         <div class="col-md-4">
+
             <figure class="card card-product-grid">
+                
+              {% if request.user.is_authenticated %}
+
+              <a href="{% url 'add_to_wishlist' p.id %}"> <i class="fas fa-heart text-primary " style="margin: 10px;"></i></a>
+
+
+
+
+
+              
+              {%else%}
+
+
+
+
+
+              {% endif %}
                 <div class="img-wrap"> 
+                    
                     <a href="{{p.get_url}}">
+                        
                     <img src="{{p.images.url}}" style="margin: 10px;">
                 </a>
                     
@@ -141,54 +243,53 @@
                 <figcaption class="info-wrap">
                     <div class="fix-height">
                         <a href="{{p.get_url}}" class="title">{{p.product_name}}</a>
-                      {% if p.productoffer.discount > 0 %}
-                           <h6 class="text-muted ml-2"><span style="color: green;"> {{ p.productoffer.discount }}% off</span></h6>
-                 
-                    
-                       {% endif %}
+                        
+                        <span style="color: green;"> 
+                  
+                  
+                        {% if p.productoffer.discount > p.parent_main_prdt.categoryoffer.discount and p.productoffer.discount > p.parent_sub_prdt.subcategoryoffer.discount %}  
+                            
+                                upto {{ p.productoffer.discount }}% off
+                        {% elif p.parent_main_prdt.categoryoffer.discount > p.productoffer.discount and p.parent_main_prdt.categoryoffer.discount > single_product.parent_sub_prdt.subcategoryoffer.discount   %}
+                                upto {{p.parent_main_prdt.categoryoffer.discount }}% off
+                        
+                        {%else %}
+                                upto {{p.parent_sub_prdt.subcategoryoffer.discount }}% off
+                        {% endif %}
+                  
+                        </span>
+                  
+                  
+                  
+              
+                  
+                  
                        <div class="price-wrap mt-2">
                             <span class="price">₹ {{p.price}}</span>
                             <!-- <del class="price-old">$1980</del> -->
                         </div> <!-- price-wrap.// -->
                     </div>
-                    <form action="{% url 'add_cart' p.id %}" method="post">
-                        {% csrf_token %}
-                    <div class="row ml-0 justify-content-center">
-                      <div class="item-option-select">
-                          <div class="row">
-                        <p class="col-5 mt-2">Color</p>
-                        <select name="color" class="form-control col-7" required>
-                           
-                          {% for i in p.variation_set.colors %}
 
-                          <option selected value="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}</option>
-                          {% endfor %}
-                      </select>
-                      </div>
-                    </div> <!-- row.// -->
                    
                     {% if p.stock <= 0 %} 
                     <h5 class="text-danger">Out of stock</h5>
                       {% else %}
+                      &nbsp
                       <div class="row">
-                      <div class="col p-0 mr-2"  #onclick="addItems(event)">
-                        <a href="{{p.get_url }}" class="btn btn-block btn-primary">View Details </a>
-                        <button type="submit" class="btn btn-primary" name="add_to_cart_button">Add to cart <i class="fas fa fa-shopping-cart text-white"></i></button>
-                       </div>
-                      
-                      </div>
 
-                      </div>
-      
-                      {% endif %}
-                  </form>
+                        <a href="{{p.get_url }}" class="btn btn-block btn-primary">View Details </a>
+                        
+                       </div>
+
+                         {% endif %}
+    
                     
                 </figcaption>
             </figure>
             
         </div> <!-- col.// -->
         {% endfor %}
-        {% else %}
+{% else %}
         <div><h2>Sorry,No Result Found</h2></div>
         {% endif %}
     </div> <!-- row end.// -->
@@ -231,7 +332,7 @@
     </section>
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
+    <!-- <script>
         function addItems(event){
           event.preventDefault();
           var link = event.currentTarget.href;
@@ -256,7 +357,7 @@
               })
           
         }
-      </script>
+      </script> -->
     
       <style>
         .btn-danger{

@@ -1,0 +1,83 @@
+{% extends 'adminapp/admin_base.html' %}
+{% block content %}
+      <!-- partial -->
+      <div class="main-panel">        
+        <div class="content-wrapper">
+            
+          <div class="row">
+            <div class="col md-6">
+            <div class="col-md-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  {% for msg in messages %}
+                  <h4 class="col-12 p-0 my-2 text-danger text-center font-weight-bold"> {{msg}} </h4>
+                  {% endfor %}
+                  <h4 class="card-title">Add Color</h4>
+                  
+                  <form class="forms-sample" method="POST" action="{% url 'add_color' %}">
+                    {% csrf_token %}
+                    <div class="form-group row"
+                      <label for="exampleInputUsername2" class="col-sm-3 col-form-label mt-4">Add Color</label>
+                      <div class="col-sm-9 mt-4" >
+                        <input type="text" name="color" class="form-control" id="exampleInputUsername2" placeholder="Color">
+                      </div>
+                    </div>
+                    
+                    
+                    
+                    
+                    <button type="submit" class="btn btn-primary me-2">Submit</button>
+                    
+                  </form>
+               
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Add Variations</h4>
+                    
+                    <form class="forms-sample" method="POST" action="{% url 'add_size' %}">
+                      {% csrf_token %}
+                      <div class="form-group row"style="height:6rem;">
+                        <div>
+                            
+                            <select name="selectcolor" id="selectcolor" required>
+                                <option selected="selected" disabled>Colour:</option>
+                                {% for c in color %}
+                                <option value="{{ c.id }}">{{ c.color_value }}</option>
+                                {% endfor %}
+                              </select>
+                        </div>
+                        
+                        <div class="col-sm-9">
+                          <input type="text" name="size" class="form-control" id="exampleInputUsername2" placeholder="Specification" >
+                        </div>
+                      </div>
+                      
+                      
+                      
+                      
+                      <button type="submit" class="btn btn-primary me-2">Submit</button>
+                      
+                    </form>
+                
+                  </div>
+
+                </div>
+              </div>
+        </div>
+
+            
+          </div>
+        </div>
+ 
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+{% endblock %}

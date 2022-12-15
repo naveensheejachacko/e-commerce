@@ -64,7 +64,6 @@ class CouponForm(forms.ModelForm):
         fields = [
             "coupon_name",
             "code",
-            "coupon_limit",
             "discount",
             "valid_from",
             "valid_to",

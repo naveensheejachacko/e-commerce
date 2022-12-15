@@ -17,7 +17,13 @@
             <div class="card-body">
               <h4 class="card-title text-center">Product Table</h4>
 
-              <div class="table-responsive">
+              <div class="table-responsive shadow p-3 mb-5 bg-white rounded">
+                {% if not prdt_offer %}
+                <h2 style="color: rgb(150, 150, 150);"> Sorry, No  offer  to Show</h2>
+                <a href="{% url 'add_product_offer' %}" class="btn btn-secondary btn-sm d-flex justify-content-center">Add Category Offer</a><br>
+                
+                {% else %}
+
                 <table class="table table-striped">
                   <thead>
                     <tr>
@@ -52,13 +58,13 @@
               </div>
               <p class="card-description">
                 
-                <a href="{% url 'add_product_offer' %}"> <button type="button" class="btn btn-dark btn-lg btn-block float-left col-lg-6">Add Product Offer </button></a>
+                <a href="{% url 'add_product_offer' %}" class="btn btn-secondary btn-sm d-flex col-md-3 ">Add Product Offer</a><br>
   
                 </p>
             </div>
           </div>
         </div>
-
+{% endif %}
 
 
         

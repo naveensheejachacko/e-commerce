@@ -19,10 +19,17 @@
                   <div class="card-body">
                     <h4 class="card-title text-center">SubCategory Offers</h4>
                     <p class="card-description">
-                        <a href="{% url 'add_subcategory_offer' %}"><button type="button" class="btn btn-dark btn-md btn-block float-right">Add Category Offer</button></a> 
+                      {% if not sub_offer %}
+                      <h2 style="color: rgb(150, 150, 150);"> Sorry, No  offer  available</h2>
+                      <a href="{% url 'add_subcategory_offer' %}" class="btn btn-secondary btn-sm d-flex justify-content-center">Add SubCategory Offer</a><br>
+                      
+                      {% else %}
+
+
+                      <a href="{% url 'add_subcategory_offer' %}" class="btn btn-secondary btn-sm d-flex justify-content-center">Add SubCategory Offer</a><br>
 
                     </p>
-                    <div class="table-responsive">
+                    <div class="table-responsive shadow p-3 mb-5 bg-white rounded">
                       <table class="table">
                         <thead>
                           <tr>
@@ -51,6 +58,7 @@
                         </tbody>
                       </table>
                     </div>
+                    {% endif %}
                   </div>
                 </div>
               </div>    

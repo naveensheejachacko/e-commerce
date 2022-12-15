@@ -3799,7 +3799,7 @@ input {
   vertical-align: top;
   min-width: 100%;
   white-space: nowrap;
-  animation: inherit;
+  animation: normal;
   animation-name: ovic-running-2;
 }
 .moveing-text-area .ovic-running .inner:hover,

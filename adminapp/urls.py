@@ -32,6 +32,17 @@ urlpatterns = [
     # path('edit_product_offer',views.edit_product_offer,name='edit_product_offer'),
     path('delete_product_offer/<int:id>/',views.delete_product_offer,name='delete_product_offer'),
 
+    #banner
+
+    path("add_banner", views.add_banner, name="add_banner"),
+    path("banner", views.banner, name="banner"),
+    # path("editbanner/<banner_id>", views.editbanner, name="editbanner"),
+    path("deletebanner/<banner_id>", views.deletebanner, name="deletebanner"),
+
+
+
+
+
     path('coupons/',views.coupons,name='coupons'),
     path('add_coupons/',views.add_coupons,name='add_coupons'),
     path('delete_coupons/<int:id>/',views.delete_coupons,name='delete_coupons'),

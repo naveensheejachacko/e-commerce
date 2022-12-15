@@ -17,11 +17,18 @@
                 <div class="card">
                   <div class="card-body">
                     <h4 class="card-title text-center">Category Offers</h4>
+                    {% if not cat_offer %}
+                    <h2 style="color: rgb(150, 150, 150);"> Sorry, No  offer  available</h2>
+                    <a href="{% url 'add_category_offer' %}" class="btn btn-secondary btn-sm d-flex justify-content-center">Add Category Offer</a><br>
+                    
+                    {% else %}
+
                     <p class="card-description">
-                        <a href="{% url 'add_category_offer'%}"><button type="button" class="btn btn-dark btn-md btn-block float-right">Add Category Offer</button></a> 
+
+                      <a href="{% url 'add_category_offer' %}" class="btn btn-secondary btn-sm d-flex justify-content-center">Add Category Offer</a><br>
 
                     </p>
-                    <div class="table-responsive">
+                    <div class="table-responsive shadow p-3 mb-5 bg-white rounded">
                       <table class="table">
                         <thead>
                           <tr>
@@ -69,7 +76,9 @@
                     </div>
                   </div>
                 </div>
-              </div>    
+                {% endif %}
+              </div>   
+
 
             
         

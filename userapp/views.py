@@ -1,9 +1,13 @@
+
+import datetime
 from multiprocessing import context
 from django.http import HttpResponse
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from account.models import Account
+from offer.models import Coupon
 from orders.models import Order,OrderItem
+from store.models import Banners
 from userapp.models import Address, UserProfile
 from .forms import CreateUserForm, UserForm, UserProfileForm
 from django.contrib import messages
@@ -15,7 +19,7 @@ import random
 from twilio.rest import Client
 from django.views.decorators.cache import never_cache
 from twilio.rest import Client
-from categories.models import Main_Category,Sub_Category, Product, Variation
+from categories.models import Main_Category,Sub_Category, Product, Variations
 from cartapp.models import Cart,CartItem
 from cartapp.views import _cart_id
 from django.db import models
@@ -24,7 +28,9 @@ from django.views.decorators.cache import cache_control
 from userapp .forms import UserAddressForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-
+from django.core.paginator import EmptyPage,PageNotAnInteger,Paginator
+from django.contrib import auth
+from decouple import config
 
 # from .models import *
 # Create your views here.
@@ -46,8 +52,32 @@ def user_login(request):
                     if is_cart_item_exists:
                         cart_item=CartItem.objects.filter(cart=cart)
                         for item in cart_item:
-                            item.user=user
-                            item.save()
+                            product_variation = []
+                        for item in cart_item:
+                            variation=item.variations.all()
+                            product_variation.append(list(variation))
+                        cart_item = CartItem.objects.filter(user=user)
+                        ex_var_list = []
+                        id = []
+                        for item in cart_item:
+                            existing_variations = item.variations.all()
+                            ex_var_list.append(list(existing_variations))
+                            id.append(item.id)
+
+
+                        for pr in product_variation:
+                            if pr in ex_var_list:
+                                index = ex_var_list.index(pr)
+                                item_id = id[index]
+                                item = CartItem.objects.get(id=item_id)
+                                item.quantity = item.quantity + 1
+                                item.user = user
+                                item.save()
+                            else:
+                                cart_item = CartItem.objects.filter(cart=cart)
+                                for item in cart_item:
+                                    item.user = user
+                                    item.save()
                 except:
                     pass
                 if user.is_superadmin==False:
@@ -73,35 +103,91 @@ def user_signup(request):
                 phone_number = request.POST['phone_number']
                 password = request.POST['password1']
                 username = request.POST['username']
+                request.session["first_name"]=first_name
+                request.session["last_name"]=last_name
+                request.session["email"]=email
+                request.session["phone"]=phone_number
+                request.session["password"]=password
+                request.session["username"]=username
+                OtpGenerate.send_otp(phone_number)
+                return redirect('signup-otp')
+
+    return render(request,'userapp/signup.html',{
+        'form':form
+    })
+
             
-                user = Account.objects.create_user(
+
+def signup_otp(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    return render(request,'userapp/signup-otp.html')
+def verify_signup_otp(request):
+    obj=OtpGenerate()
+    if request.method=='POST':
+        re_otp=request.POST.get('otp')
+        ge_otp=obj.Otp
+        if re_otp==ge_otp:
+            username=request.session["username"]
+            first_name=request.session["first_name"]
+            last_name=request.session["last_name"]
+            email=request.session["email"]
+            phone_number=request.session["phone"]
+            password=request.session["password"]
+
+
+            user=Account.objects.create_user(
+                username=username,
                 first_name=first_name,
                 last_name=last_name,
                 email=email,
-                password=password,
-                username=username,
-                phone_number=phone_number
+                phone_number=phone_number,
+                password=password
             )
-                 # Create a user profile
-                profile = UserProfile()
-                profile.user_id = user.id
-                profile.profile_picture = "avatar.jpeg"
-                profile.save()
-                user.save()
-                # form.save()
-                #user=form.cleaned_data.get('username')
-                #messages.success(request,'Account was created for' +user)
-                return redirect('user_login')
-    context={'form':form}
-    return render(request,'userapp/signup.html',context)
+            profile = UserProfile()
+            profile.user_id = user.id
+            profile.profile_picture = "avatar.jpeg"
+            profile.save()
+
+
+
+
+            user.phone_number=phone_number
+            user.save()
+            auth.login(request,user)
+            return redirect('home')
+        else:
+            messages.error(request,"Invalid Otp")
+            return redirect('signup-otp')
+    else:
+        messages.error(request,"Invalid Credentials")
+        return redirect('signup-otp')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def home(request):
+
     maincategory=Main_Category.objects.all()
     subcategory=Sub_Category.objects.all()
-    topitems=Product.objects.filter(is_available=True).order_by('created_date')   # [3::-1]
-    variations = Variation.objects.all()
+    topitems=Product.objects.filter(is_available=True).order_by('created_date') [2::-1]
+    variations = Variations.objects.all()
     cartitem=CartItem.objects.all()
-
+    coupons=Coupon.objects.all()
+    banners = Banners.objects.all()
+    print('..................................................................',banners)
     cart=Cart.objects.all()
     orders=Order.objects.all()
     orderitems=OrderItem.objects.all()
@@ -136,6 +222,8 @@ def home(request):
         'orders':orders,
         'orderitems':orderitems,
         'variations': variations,
+        'coupons':coupons,
+        'banners':banners,
     })
         else:
             return redirect('admin_login')
@@ -147,6 +235,8 @@ def home(request):
         'cart':cart,
         'orderitems':orderitems,
         'variations': variations,
+        'coupons':coupons,
+        'banners':banners,
     })
 # def base(request):
 #     maincategory=Main_Category.objects.all()
@@ -163,8 +253,8 @@ def home(request):
 @login_required(login_url="user_login")
 def  dashboard(request):
     orders = OrderItem.objects.filter(
-        user=request.user
-    ).order_by("-created_at") [3::-1]
+        user=request.user,status="Delivered"
+    ).order_by("-created_at") 
 
 
 
@@ -185,6 +275,8 @@ def  dashboard(request):
     }
 
     return render(request, 'userapp/dashboard.html', context)
+
+
 
 
 
@@ -239,7 +331,28 @@ def change_password(request):
             return redirect("change_password")
 
     return render(request, "userapp/change_password.html")
+@login_required(login_url="user_login")
+def order_summary(request):
+    orders=Order.objects.filter(user=request.user).order_by('created_at')[::-1]
+    paginator=Paginator(orders,8)
+    page=request.GET.get('page')
+    paged_orders=paginator.get_page(page)
+    return render(request,'userapp/ordersummary.html',{
+        
+        'orders':paged_orders,
+    })
 
+@login_required(login_url="user_login")
+def orderview(request,id):
+    orders=Order.objects.filter(id=id).filter(user=request.user).first()
+    order_items=OrderItem.objects.filter(order=orders)
+    context={
+        'orders':orders,
+        'order_items':order_items
+    }
+    return render(request,'userapp/orderview.html',context)
+
+@login_required(login_url="user_login")
 def user_orders(request):
     orders = OrderItem.objects.filter(
     user=request.user
@@ -275,7 +388,7 @@ def cancel_order(request, pk):
     item = Product.objects.get(pk=product.product.id)
     item.stock += product.quantity
     item.save()
-    return redirect("dashboard")
+    return HttpResponseRedirect(request.META["HTTP_REFERER"])
 
 def return_order(request,id):
     order_item=OrderItem.objects.get(id=id)
@@ -346,7 +459,43 @@ def verify_otp(request):
         ge_otp=obj.Otp
         if re_otp==ge_otp:
             user=Account.objects.get(phone_number=obj.phone_number)
-            if request.user.is_superuser is False:
+            if user.is_blocked == False :
+                try:
+                    cart=Cart.objects.get(cart_id=_cart_id(request))
+                    is_cart_item_exists=CartItem.objects.filter(cart=cart).exists()
+                    
+                    if is_cart_item_exists:
+                        cart_item=CartItem.objects.filter(cart=cart)
+                        product_variation = []
+                        for item in cart_item:
+                            variation=item.variations.all()
+                            product_variation.append(list(variation))
+                        cart_item = CartItem.objects.filter(user=user)
+                        ex_var_list = []
+                        id = []
+                        for item in cart_item:
+                            existing_variations = item.variations.all()
+                            ex_var_list.append(list(existing_variations))
+                            id.append(item.id)
+
+
+                        for pr in product_variation:
+                            if pr in ex_var_list:
+                                index = ex_var_list.index(pr)
+                                item_id = id[index]
+                                item = CartItem.objects.get(id=item_id)
+                                item.quantity = item.quantity + 1
+                                item.user = user
+                                item.save()
+                            else:
+                                cart_item = CartItem.objects.filter(cart=cart)
+                                for item in cart_item:
+                                    item.user = user
+                                    item.save()
+                except:
+                    pass
+
+            if user.is_superadmin == False:
                 login(request,user)
                 return redirect('home')
         else:
@@ -354,21 +503,23 @@ def verify_otp(request):
             return redirect('enter_otp')
     else:
         messages.error(request,"Invalid Credentials")
-        return redirect('otp_login_page')
+        return redirect('enter_otp')
+
+
 
 class OtpGenerate():
     Otp=None
     phone=None
 
     def send_otp(phone_number):
-        account_sid='AC53df4905dd72be8bff81dcd8e360d062'
-        auth_token='309ac70b4b050464550b95e61004da4d'
-        target_number = '+91' + phone_number
-        twilio_number='+15095161694'
+        account_sid=config('account_sid')
+        auth_token=config('auth_token')
+        target_number = '+918111850031'
+        twilio_number=config('twilio_number')
         otp=random.randint(1000,9999)
         OtpGenerate.Otp=str(otp)
         OtpGenerate.phone_number=phone_number
-        msg="your otp is " + str(otp)
+        msg="your otp for login to Electromart is " + str(otp)
         client=Client(account_sid,auth_token)
         message=client.messages.create(
         body=msg,
@@ -418,24 +569,24 @@ def delete_address(request, pk):
 
 
 
-def ordersummary(request,id):
-        # try:
-    orders=Order.objects.get(id=id,user=request.user)
+# def ordersummary(request,id):
+#         # try:
+#     orders=Order.objects.get(id=id,user=request.user)
       
-        # except:
-        #     return HttpResponse("not found")
-    data={
-            'order_id':orders.id,
-            'date':str(orders.created_at),
-            'name':orders.user.first_name,
-            'address':orders.address.address,
-            'total_price':orders.total_price,
-            'payment_id':orders.payment_id,
-            'payment_mode':orders.payment_mode,
-            'user_email':orders.user.email,
-            'orders':orders,
-        }
-    return render(request,'userapp/ordersummary.html',data)
+#         # except:
+#         #     return HttpResponse("not found")
+#     data={
+#             'order_id':orders.id,
+#             'date':str(orders.created_at),
+#             'name':orders.user.first_name,
+#             'address':orders.address.address,
+#             'total_price':orders.total_price,
+#             'payment_id':orders.payment_id,
+#             'payment_mode':orders.payment_mode,
+#             'user_email':orders.user.email,
+#             'orders':orders,
+#         }
+#     return render(request,'userapp/ordersummary.html',data)
 
 
 
@@ -446,27 +597,28 @@ from xhtml2pdf import pisa
 from django.views.generic import View
 from django.template.loader import get_template
 class generateInvoice(View):
+
     def get(self,request,id,*args,**kwargs):
         try:
-            orders=OrderItem.objects.get(id=id,user=request.user)
+            orders=Order.objects.get(id=id,user=request.user)
+            print(orders,'..............')
+            orderitem=OrderItem.objects.get(id=id,user=request.user)
+            print(orderitem)
+            print('............................')
+            date=orders.created_at.strftime("%A,%d-%m-%Y")
             
         except:
             return HttpResponse("505 not found")
         data={
             'order_id':orders.id,
-            'date':str(orders.created_at),
+            'date':date,
             'name':orders.user.first_name,
-            'address':orders.order.address.address,
-            'total_price':orders.order.total_price,
-            'transaction_id':orders.order.payment_id,
-            'payment_mode':orders.order.payment_mode,
+            'address':orderitem.order.address.address,
+            'total_price':orders.total_price,
+            'transaction_id':orders.payment_id,
+            'payment_mode':orders.payment_mode,
             'user_email':orders.user.email,
             'orders':orders,
-            'status':orders.status,
-            'product_name':orders.product.product_name,
-            'quantity':orders.quantity,
-            'price':orders.product.price,
-
         }
         pdf=render_to_pdf('userapp/invoice.html',data)
         return HttpResponse(pdf,content_type='application/pdf')
@@ -482,7 +634,25 @@ def render_to_pdf(template_src,context_dict={}):
 
 # .....................shopppppppp................
 
+#widhlist
 
+def user_wishlist(request):
+    products=Product.objects.filter(users_wishlist=request.user)
+    
+    return render(request,'userapp/wishlist.html',{
+        'wishlist':products,
+    })
+
+
+def add_to_wishlist(request,id):
+    product=get_object_or_404(Product,id=id)
+    if product.users_wishlist.filter(id=request.user.id).exists():
+        product.users_wishlist.remove(request.user)
+        messages.success(request,"Removed "+product.product_name+" from your wishlist")
+    else:
+        product.users_wishlist.add(request.user)
+        messages.success(request,"Added "+product.product_name+" to your wishlist")
+    return HttpResponseRedirect(request.META["HTTP_REFERER"])
 
 
 

@@ -1,0 +1,91 @@
+
+{% extends 'adminapp/admin_base.html' %}
+
+
+{% load static %}
+
+{% block content %}
+<div class="container col-md-6">
+<section>
+    <div class="row active_user_table mt-5">
+        <div class="table-responsive shadow p-3 mb-5 bg-white rounded">
+            {% if not banners %}
+<h2 style="color: rgb(182, 182, 182);"> Sorry, No  Banner is available</h2>
+<a href="{% url 'add_banner' %}" class="btn btn-secondary btn-sm d-flex justify-content-center">Add New Banner</a><br>
+
+{% else %}
+
+            <caption><p class="table_caption font-weight-bold">Active Banners</p></caption>
+            <table class="data-table table hover multiple-select-row nowrap" id="myTable">
+				<a href="{% url 'add_banner' %}" class="btn btn-secondary btn-sm d-flex justify-content-center">Add New Banner</a><br>
+				{% for msg in messages %}
+				<h4 class="col-12 p-0 my-2 text-warning text-center font-weight-bold"> {{msg}} </h4>
+				{% endfor %} 
+				<thead>
+                    <tr>
+                        <th scope="col">Banner</th>
+                        <th scope="col">Targeted Product</th>
+						
+						<th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+<br>
+
+
+
+
+
+
+
+
+                    {% for banner in banners %}
+                    <tr>
+                        <td><img src="{{banner.image.url}}"  width="75px" alt=""></td>
+                        <td>{{banner.product}}</td>
+						<!-- <a href="#"><i class="fas fa-pencil-alt"></i></a>  -->
+						<td><a href="{%  url 'deletebanner' banner.id %}" style="margin-left: 15px;" onclick="deleteBanner()"><i
+								class="far fa-trash-alt"></i></a>
+						</td>
+                        
+            
+                    </tr>   
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+</div>
+
+
+{% endif %}
+
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+	function deleteBanner() {
+		event.preventDefault();
+		var dlt = event.currentTarget.href
+		console.log(dlt)
+		Swal.fire({
+			title: 'Are you sure?',
+			text: "You won't be able to revert this!",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Yes, delete it!'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				
+				window.location = dlt;
+			}
+		})
+	}
+</script>
+
+
+{% endblock %}

@@ -8,7 +8,7 @@
 	box-sizing: border-box;
 	clear: both;
 	cursor: pointer;
-	display: block;
+	/* display: block; */
 	float: left;
 	font-family: inherit;
 	font-size: 14px;
@@ -44,7 +44,7 @@
 	border-bottom: 2px solid #999;
 	border-right: 2px solid #999;
 	content: '';
-	display: block;
+	/* display: block; */
 	height: 5px;
 	margin-top: -4px;
 	pointer-events: none;
@@ -76,15 +76,15 @@
 	transform: scale(1) translateY(0);
 }
 
-.nice-select.disabled {
+/* .nice-select.disabled {
 	border-color: #ededed;
 	color: #999;
 	pointer-events: none;
-}
-
+} */
+/* 
 .nice-select.disabled:after {
 	border-color: #cccccc;
-}
+} */
 
 .nice-select.wide {
 	width: 100%;
@@ -165,17 +165,17 @@
 	font-weight: bold;
 }
 
-.nice-select .option.disabled {
+/* .nice-select .option.disabled {
 	background-color: transparent;
 	color: #999;
 	cursor: default;
-}
+} */
 
-.no-csspointerevents .nice-select .list {
+/* .no-csspointerevents .nice-select .list {
 	display: none;
 }
 
 .no-csspointerevents .nice-select.open .list {
 	display: block;
 }
-
+ */

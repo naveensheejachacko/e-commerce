@@ -2,123 +2,151 @@
 {%load static%}
 
 {% block content %}
-<div class="page-banner-area page-banner-height-2" data-background="{% static 'assets/img/banner/page-banner-4.jpg' %}">
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-12">
-                <div class="page-banner-content text-center">
-                    <h4 class="breadcrumb-title">My account</h4>
-                    <div class="breadcrumb-two">
-                        <nav>
-                           <nav class="breadcrumb-trail breadcrumbs">
-                              <ul class="breadcrumb-menu">
-                                 <li class="breadcrumb-trail">
-                                    <a href="#"><span>Home</span></a>
-                                 </li>
-                                 <li class="trail-item">
-                                    <span>My account</span>
-                                 </li>
-                              </ul>
-                           </nav> 
-                        </nav>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="container-scroller">'
-    <div class="container-fluid page-body-wrapper full-page-wrapper">
-      <div class="row w-100 m-0">
-        <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
-          <div class="card col-lg-6 mx-auto">
-            <div class="card-body px-5 py-5">
-              <h3 class="card-title text-center mb-10">Register</h3>
-              <form action="" method="POST"> 
-                {% csrf_token %}
-                <div class="row">
-                  <div class="col-md-6 mb-6">
-                  <div class="form-group">
-                    <!-- <label>First Name</label> -->
-                    <label for="exampleInputname" style="color: rgb(0, 0, 0);">First Name</label><br>
-                      {{form.first_name}}
-                    <!-- <input type="text" class="form-control p_input"> -->
+
+<style>
+
+
+  .gradient-custom {
+    /* fallback for old browsers */
+    background: #f093fb;
+    
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to bottom right,  rgb(255, 245, 245), rgb(100, 111, 55));
+    
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to bottom right, rgb(255, 245, 245), rgb(100, 111, 55))
+    }
+    
+    .card-registration .select-input.form-control[readonly]:not([disabled]) {
+    font-size: 1rem;
+    line-height: 2.15;
+    padding-left: .75em;
+    padding-right: .75em;
+    }
+    .card-registration .select-arrow {
+    top: 13px;
+    }
+</style>
+
+<section class="vh-100 gradient-custom">
+  <div class="container py-5 h-100">
+    <div class="row justify-content-center align-items-center h-100">
+      <div class="col-12 col-lg-9 col-xl-7">
+        <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+          <div class="card-body p-4 p-md-5">
+            <h3 class="mb-4 pb-2 pb-md-0 mb-md-5  "style="align-items-center" >Signup Here<i class="fa-thin fa-user-plus"></i></h3>
+            <form action="" method="POST"> 
+              {% csrf_token %}
+
+              <div class="row">
+                <div class="col-md-6 mb-4">
+
+                  <div class="form-outline">
+                    <!-- <input type="text" id="firstName" name="first_name" class="form-control form-control-lg" /> -->
+                    {{form.first_name}}
+                    <label class="form-label" >{{form.first_name.label}}</label>
                   </div>
+
                 </div>
-                  <div class="col-md-6 mb-6">
-                  <div class="form-group">
-                    <label for="exampleInputname" style="color: rgb(0, 0, 0);">Last Name</label><br>
-                      {{form.last_name}}
-                    <!-- <label>Last Name</label>
-                    <input type="text" class="form-control p_input"> -->
+                <div class="col-md-6 mb-4">
+
+                  <div class="form-outline">
+                    <!-- <input type="text" id="lastName"name="last_name" class="form-control form-control-lg" /> -->
+                    {{form.last_name}}
+                    <label class="form-label">{{form.last_name.label}}</label>
                   </div>
-                </div>
-              </div>
-                <div class="row">
-                <div class="col-md-6 mb-6">
-                <div class="form-group">
-                  <label for="exampleInputname" style="color: rgb(0, 0, 0);">Username</label><br>
-                      {{form.username}}
-                  <!-- <label>Username</label>
-                  <input type="text" class="form-control p_input"> -->
-                </div>
-              </div>
-              <div class="col-md-6 mb-6">
-                <div class="form-group">
-                  <label for="exampleInputPhone" style="color: rgb(0, 0, 0);">Phone Number</label><br>
-                      {{form.phone_number}}
-                  <!-- <label>Phone Number</label>
-                  <input type="text" class="form-control p_input"> -->
+
                 </div>
               </div>
 
-            </div>
-            <div class="row">
+              <div class="row">
+                <div class="col-md-6 mb-4 d-flex align-items-center">
+
+                  <div class="form-outline datepicker w-100">
+                    <!-- <input type="text" name="username" class="form-control form-control-lg" id="birthdayDate" /> -->
+                    {{form.username}}
+                    <label class="form-label" >{{form.username.label}}</label>
+                    
+                  </div>
+
+                </div>
+                <div class="col-md-6 mb-4">
 
 
-              <div class="col-md-12 mb-12">
-                <div class="form-group">
-                  <label for="email" style="color: rgb(0, 0, 0);">Email</label><br>
-                  {{form.email}}
-                  <!-- <label>Email</label>
-                  <input type="email" class="form-control p_input"> -->
+
+
+                  <div class="form-outline">
+                    <!-- <input type="text" name="Phone_number" id="emailAddress" class="form-control form-control-lg" />
+                    <label class="form-label" for="text">Phone Number</label> -->
+                    {{form.phone_number}}
+                    <label class="form-label" >{{form.phone_number.label}}</label>
+                  </div>
+
+
+
                 </div>
               </div>
 
-            </div>
-            <div class="row">
-              <div class="col-md-6 mb-6">
-                <div class="form-group">
-                  <label for="exampleInputPassword1" style="color: rgb(0, 0, 0);">Enter Password</label><br>
-                  {{form.password1}}
-                </div>
-              </div>
-                <div class="col-md-6 mb-6">
-                <div class="form-group">
-                  <label for="exampleInputPassword1" style="color: rgb(0, 0, 0);">Re-Enter Password</label><br>
-                  {{form.password2}}
-                  <!-- <label>Re-enter Password</label>
-                  <input type="password" class="form-control p_input"> -->
-                </div>
-              </div>
-            </div>
+              <div class="row">
+                <div class="col-md-12 mb-4 pb-2">
 
-                <div class="text-center">
-                    <br>
-                  <button type="submit" class="btn btn-primary btn-block enter-btn">Sign Up</button>
+                  <div class="form-outline">
+                    <!-- <input type="email" name="email" id="emailAddress" class="form-control form-control-lg" />
+                    <label class="form-label" for="emailAddress">Email</label> -->
+                    {{form.email}}
+                    <label class="form-label" >{{form.email.label}}</label>
+                  </div>
+
                 </div>
 
-                <p class="sign-up text-center">Already have an Account?<a href="{% url 'user_login' %}"> Login</a></p>
-                <p class="terms">By creating an account you are accepting our<a href="#"> Terms & Conditions</a></p>
-              </form>
-            </div>
+
+                </div>
+
+
+              <div class="row">
+                <div class="col-md-6 mb-4 d-flex align-items-center">
+
+                  <div class="form-outline datepicker w-100">
+                    <!-- <input type="password" name="password1" class="form-control form-control-lg" id="password" />
+                    <label for="password" class="form-label">{{form.first_name.label}}</label> -->
+                    {{form.password1}}
+                    <label class="form-label" >{{form.password1.label}}</label>
+                  </div>
+
+                </div>
+                <div class="col-md-6 mb-4">
+
+
+
+
+                  <div class="form-outline">
+                    <!-- <input type="password" name="password2" id="password" class="form-control form-control-lg" />
+                    <label class="form-label" for="password">Re-enter Password</label> -->
+                    {{form.password2}}
+                    <label class="form-label" >{{form.password2.label}}</label>
+                  </div>
+
+
+
+                </div>
+
+
+              </div>
+
+              <div class="mt-4 pt-2">
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
+              </div>
+
+            </form>
           </div>
         </div>
-        <!-- content-wrapper ends -->
       </div>
-      <!-- row ends -->
     </div>
-    <!-- page-body-wrapper ends -->
   </div>
+</section>
 
 {% endblock %}
+
+
+
+  <p class="sign-up text-center">Already have an Account?<a href="{% url 'user_login' %}"> Login</a></p>

@@ -1,0 +1,200 @@
+{% extends 'userapp/base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<section class="section-conten padding-y bg">
+    {% include 'includes/alerts.html' %}
+    <div class="container">
+
+        <div class="row">
+
+        <aside class="col-md-3">
+            <!--   SIDEBAR   -->
+            <ul class="list-group">
+
+              <a class="list-group-item " href="{% url 'dashboard' %}"> DashBoard</a>
+
+              <a class="list-group-item" href="{% url 'change_password' %}">Change Password</a>
+              <a class="list-group-item" href="{% url 'view_address' %}"> Address </a>
+              <a class="list-group-item active" href="{% url 'order_summary' %}"> Your Orders</a>
+			  <a class="list-group-item" href="#"> Return and refunds </a>
+            </ul>
+            <br>
+            <a class="btn btn-light btn-block" href="{% url 'user_logout' %}"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a> 
+            <!--   SIDEBAR .//END   -->
+        </aside>
+<!-- row.// -->
+
+    
+    
+	<main class="col-md-9 mt">
+		<article class="card">
+		<header class="card-header">
+			<strong class="d-inline-block mr-3">Logged In As</strong>
+			<span>{{user.first_name}}</span>
+			
+		</header>
+<!-- card-body .// -->
+		</article> <!-- order-group.// --> 
+
+    <!-- Navbar End -->
+
+{% for message in messages %}
+<p>{{ message }}</p>
+{% endfor %}
+
+<div class="card-body  shadow p-3 mb-5 bg-white rounded">
+
+        <div class="row "> 
+            <div class="col-md-12 ">
+                <table class="table table-hover table-responsive">
+                    <thead class="bg-secondary text-dark">
+                        <!-- <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr> -->
+                    </thead>
+
+
+
+                    <tbody>
+
+                        {% for order_item in order_items %}
+                        <tr class="mt-3" >
+                            <td class="align-middle" > <div class="float-left"> <img src="{{ order_item.product.images.url }}" alt="" style="width: 100px;">  {{ order_item.product }}</td>
+                            <td class="align-middle">₹{{ order_item.price }}<td>
+                            <td class="align-middle">{{ order_item.quantity }}</td>
+                            <td class="align-middle" style="color: red;" >{{ order_item.status }}&nbsp
+                            
+
+                            {% if order_item.status == 'New' %}
+
+                                <a href="{% url 'cancel_order' order_item.id %}" type="button" onclick="cancelOrder()" class="btn btn-sm btn-primary"> 
+                                    Cancel Order
+                                </a>
+                            </td>
+
+
+                            {% elif order_item.status == 'Placed' %}
+                            <td style="box-shadow: 0.1em 0.1em  0.1em  rgba(165, 162, 162, 0.4);" class="align-middle">
+                                <a href="{% url 'cancel_order' order_item.id %}" type="button" onclick="cancelOrder()" class="btn btn-sm btn-primary"> 
+                                    Cancel Order
+                                </a>
+                            </td>
+                            {% elif order_item.status == 'Shipped' %}
+                            <td style="box-shadow: 0.1em 0.1em  0.1em  rgba(165, 162, 162, 0.4);" class="align-middle">
+                                <a href="{% url 'cancel_order' order_item.id %}" onclick="cancelOrder()" type="button" class="btn btn-sm btn-primary"> 
+                                    Cancel Order
+                                </a>
+                            </td>
+                            {% elif order_item.status == 'Delivered' %}
+                            <td style="box-shadow: 0.1em 0.1em  0.1em  rgba(165, 162, 162, 0.4);"class="align-middle"> 
+                                <a href="{% url 'return_order' order_item.id %}" onclick="return_order()" type="button" class="btn btn-sm btn-primary " > 
+                                    Return order
+                                </a>
+                            </td>
+                            {% else %}
+                            <td style="box-shadow: 0.1em 0.1em  0.1em  rgba(165, 162, 162, 0.4);"class="align-middle"> 
+                                
+                            </td>
+                            {% endif %}
+                            
+                        </tr>
+                        <!-- modal -->
+                        
+
+                        
+                        
+                        {% endfor %}
+
+                        
+
+
+
+
+
+
+
+
+                  </tbody>
+
+
+
+
+
+
+
+
+                </table>
+                <div class="mt-5 float-right">
+                    <a href="{% url 'generateinvoice' orders.id %}"> <button class="btn btn-sm btn-primary">Download Invoice</button></a>
+                </div>
+            </div>
+            </div>
+
+  
+     </main>
+    </div>
+    </div>
+    
+</section>
+
+
+
+    <script>
+        function cancelOrder() {
+            event.preventDefault();
+            var dlt = event.currentTarget.href
+            console.log(dlt)
+            Swal.fire({
+                title: 'Cancel this order?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#2DAD49',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'cancel order',
+          cancelButtonText: 'Back',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    
+                    window.location = dlt;
+                }
+            })
+        }
+    </script>
+
+
+    <script>
+        function return_order() {
+            event.preventDefault();
+            var dlt = event.currentTarget.href
+            console.log(dlt)
+            Swal.fire({
+                title: 'return this order?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#2DAD49',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Return Order',
+          cancelButtonText: 'Back',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    
+                    window.location = dlt;
+                }
+            })
+        }
+    </script>
+    
+
+
+
+
+{% endblock %}

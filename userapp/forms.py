@@ -9,6 +9,30 @@ class CreateUserForm(UserCreationForm):
     class Meta:
         model = Account
         fields = ['first_name','last_name','username','email','phone_number','password1','password2']
+    
+    def __init__(self,*args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.fields["first_name"].widget.attrs.update(
+                {"class":"form-control form-control-lg","placeholder":"First Name"}
+            )
+            self.fields["last_name"].widget.attrs.update(
+                {"class":"form-control form-control-lg","placeholder":"Last Name"}
+            )
+            self.fields["username"].widget.attrs.update(
+                {"class":"form-control form-control-lg","placeholder":"Username"}
+            )
+            self.fields["email"].widget.attrs.update(
+                {"class":"form-control form-control-lg","placeholder":"Email"}
+            )
+            self.fields["phone_number"].widget.attrs.update(
+                {"class":"form-control form-control-lg","placeholder":"Phone Number"}
+            )
+            self.fields["password1"].widget.attrs.update(
+                {"class":"form-control form-control-lg","placeholder":"Password"}
+            )
+            self.fields["password2"].widget.attrs.update(
+                {"class":"form-control form-control-lg","placeholder":"Re-enter Password "}
+            )
 
 
 class UserForm(forms.ModelForm):

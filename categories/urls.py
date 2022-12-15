@@ -20,8 +20,9 @@ urlpatterns = [
 
     path('product/',views.product,name='product'),
     path('add_product/',views.add_product,name='add_product'),
+
     path('add_product_page/',views.add_product_page,name='add_product_page'),
-    path('subcataddproduct/<int:mid>/',views.load_subcategory,name='load_subcategory'),
+    path('subcataddproduct/<int:catid>/',views.load_subcategory,name='load_subcategory'),
     path('dropdown_P',views.dropdown_P,name='dropdown_P'),
     path('prdt_edit_page',views.prdt_edit_page,name='prdt_edit_page'),
     path('prdt_edit/<int:id>/',views.prdt_edit,name='prdt_edit'),
@@ -29,7 +30,13 @@ urlpatterns = [
     path('prdt_delete/<int:id>',views.prdt_delete,name='prdt_delete'),
 
 
-    path("addvarient/", views.addvarient, name="addvarient"),
+    # Product Varaition
+    path('add_size/',views.add_size,name='add_size'),
+    path('add_color/',views.add_color,name='add_color'),
+    path('variations/',views.variations,name='variations'),
+    path('add_variations/<int:id>/',views.add_variations,name='add_variations'),
+    path('load_size/',views.load_size,name='load_size'),
 
-    # path('products',views.products,name='products'),
+
+
 ]

@@ -1,0 +1,105 @@
+
+{% extends 'userapp/base.html' %}
+{% load static %}
+
+{% block content %}
+
+            <div class="col-lg-9 col-md-12">
+                <div class="row pb-3">
+                    <div class="col-12 pb-1">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+
+
+                        </div>
+                    </div>
+                    {% for i in messages %}
+                    <p class="pl-3"style="color:red;">{{i}}</p>
+                    {% endfor %}
+                    {% if not  wishlist %}
+                    <div class="text-center"style="margin-left:15rem;">
+                    <div class="text-center mt-5 float-left">
+                            <h2 class="text-center"> You Have no products in your Wishlist</h2>
+                        <a class="btn btn-primary " href="{% url 'store' %}">Continue Shopping</a>
+                        </div>
+                    </div>
+                    {% else %}
+                    {% for w in wishlist %}
+                    <div class="col-lg-4 col-md-6 col-sm-12 pb-1">
+                    
+                        <div class="card product-item border-0 mb-4 " style="height:30rem;">
+                            <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                            
+                                <a href="{{ w.get_url }}" class="btn btn-sm text-dark p-0"><img class="img-fluid w-100" style="object-fit: contain;"  src="{{w.img1.url}}" alt=""></a>
+
+                            </div>
+                            <div class="card-footer d-flex justify-content-between bg-light border">
+                                
+                                <h4 class="text-truncate mb-3">{{ w.product_name }}</h4>
+                                <h5 class="price "></h5> 
+                           
+                                    
+                                       
+                            
+                                        <h6 class="text-muted ml-2"><h3>₹{{w.price}}<span style="color: green;"> 
+
+
+                                            {% if w.productoffer.discount %}
+                                        
+                                        
+                                        
+                                            {% if w.productoffer.discount > w.parent_main_prdt.categoryoffer.discount and w.productoffer.discount > w.parent_sub_prdt.subcategoryoffer.discount %}  
+                                                
+                                                    upto {{ w.productoffer.discount }}% off
+                                            {% elif w.parent_main_prdt.categoryoffer.discount > w.productoffer.discount and w.parent_main_prdt.categoryoffer.discount > w.parent_sub_prdt.subcategoryoffer.discount   %}
+                                                    upto {{ w.parent_main_prdt.categoryoffer.discount }}% off
+                                            
+                                            {%else %}
+                                                    upto {{ w.parent_sub_prdt.subcategoryoffer.discount }}% off
+                                            {% endif %}
+                
+                
+                
+                
+                
+                
+                                            {% else %}
+                
+                                            {% endif %}</span></h6>
+                           
+
+
+
+
+                                        
+                                    </h6>
+                                
+                            </div>
+                            <div class="card-footer d-flex justify-content-between bg-light border">
+                                <a href="{% url 'add_to_wishlist' w.id %}" class="btn btn-sm text-red "><i class="fa-solid fa-trash"></i></a>
+
+                                
+                                
+                            </div>
+                            
+                        </div>
+            
+                    </div>
+                    {% endfor %}
+
+                    
+    
+                    {% endif %}
+                    
+            
+                    
+
+
+
+
+
+                </div>
+            </div>
+
+
+            <script src="https://kit.fontawesome.com/cfdba9ae2e.js" crossorigin="anonymous"></script>
+{% endblock %}

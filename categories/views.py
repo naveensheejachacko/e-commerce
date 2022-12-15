@@ -9,9 +9,11 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.utils.text import slugify
 from django.views.decorators.cache import never_cache
-from categories.forms import VariantsForm
-from categories.models import Main_Category,Sub_Category, Product
+
+from categories.models import Color,Size, Variations, Main_Category, Sub_Category, Product
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import EmptyPage,Paginator,PageNotAnInteger 
+
 
 @login_required(login_url='admin_login')
 def main_category(request):
@@ -70,7 +72,7 @@ def edit_main_cat(request,id):
 #         main.thumbnail=request.FILES['maincatimage']
 #         messages.error(request,'Main Category Updated')
 #         return redirect('main_category')
-
+@login_required(login_url='admin_login')
 def main_cat_delete(request,id):
     main=Main_Category.objects.filter(id=id).delete()
     return redirect('main_category')
@@ -151,13 +153,13 @@ def sub_cat_edit(request,id):
     return render(request,'adminapp/sub_cat_edit.html',{
          'main_category':main_category
     })
-
+@login_required(login_url='admin_login')
 def sub_cat_delete(request,id):
     sub=Sub_Category.objects.filter(id=id).delete()
     return redirect('sub_category')
-
-def load_subcategory(request,mid):
-    sub_cat=Sub_Category.objects.filter(parent_main_id=mid)
+@login_required(login_url='admin_login')
+def load_subcategory(request,catid):
+    sub_cat=Sub_Category.objects.filter(parent_main_id=catid)
     print(sub_cat,'..............................')
     context={
         'sub_cat':sub_cat
@@ -178,10 +180,18 @@ def dropdown_P(request):
 @login_required(login_url='admin_login')
 def product(request):
     products=Product.objects.all().order_by('-id')
-    return render(request,'adminapp/products.html',{
-        'products':products
-    })
+    paginator=Paginator(products,3 )
+    page=request.GET.get('page')
+    paged_products=paginator.get_page(page)
 
+
+
+
+    return render(request,'adminapp/products.html',{
+        'products':paged_products,
+
+    })
+@login_required(login_url='admin_login')
 def add_product_page(request):
     main=Main_Category.objects.all()
     sub_cat=Sub_Category.objects.all()
@@ -240,34 +250,55 @@ def prdt_edit_page(request):
         'sub_cat':sub_cat,
     }
     return render(request,'adminapp/product_edit.html',context)
-
+@login_required(login_url='admin_login')
 def prdt_edit(request,id):
     main=Main_Category.objects.all()
     sub_cat=Sub_Category.objects.all()
-    product=Product.objects.all()
+    product=Product.objects.get(id=id)
+    
+    print('#################',product)
     if request.method=='POST':
-        product=Product.objects.get(pk=id)
-        main=request.POST.get('selectmain')
-        sub_cat=request.POST.get('selectsub')
-        product_name=request.POST.get('productname')
-        if Product.objects.filter(product_name=product_name).exists():
-            print("exist cond working...........................")
-            messages.error(request,'Already Exists')
-            return redirect('prdt_edit')
-        else:
-            product.product_name=product_name
-            product.slug=slugify(product_name)
-            product.parent_main__prdt_id=main
-            product.parent_sub__prdt_id=sub_cat
-            product.save()
-            print('updation work......................')
-            messages.error(request,'ProductUpdated')
+        productname=request.POST.get('productname')
+        if Product.objects.filter(product_name=productname).exists():
+            messages.error(request,'Product Name Already Exists')
             return redirect('product')
-    print('page showing................................')
-    # return redirect('sub_cat_edit_page')
+
+        product.product_name=productname
+        product.slug=slugify(productname)
+        product.price=request.POST.get('price')
+        product.stock=request.POST.get('stock')
+        product.product_desc=request.POST.get('productdesc')
+        product.parent_main_id=request.POST.get('selectcategory')
+        product.parent_sub_prdt_id=request.POST.get('selectsubcategory')
+        
+        if 'images' in request.FILES:
+            product.images=request.FILES['images']
+            print('................image fetch.....................')
+        if 'img1' in request.FILES:
+            product.img1=request.FILES['img1']
+            print('................image fetch.....................')
+        if 'img2' in request.FILES:
+            product.img2=request.FILES['img2']
+            print('................image fetch.....................')
+        if 'img3' in request.FILES:
+            product.img3=request.FILES['img3']
+            print('................image fetch.....................')
+
+        if int(product.stock) < 0:
+            product.is_available=False
+        else:
+            product.is_available=True
+        product.save()
+        messages.success(request,"Product Updated!")
+        return redirect('product')
+    
     return render(request,'adminapp/product_edit.html',{
-         'product':product
+        'product':product,
+        'main':main,
+        'sub_cat':sub_cat,
     })
+
+
 
 
 
@@ -284,20 +315,81 @@ def prdt_delete(request,id):
 
 
 
+def add_size(request):
+    if request.method=="POST":
+        if request.POST.get('selectcolor') and request.POST.get('size'):
+            seccolor=request.POST.get('selectcolor')
+            size=request.POST.get('size')
+            if Size.objects.filter(color=seccolor,size_value=size).exists():
+                messages.error(request,"already exists")
+                return redirect('variations')
+            else:
+                s=Size()
+                s.color_id=seccolor
+                s.size_value=size
+                s.save()
+                messages.success(request,'added new size')
+                return redirect('variations')
+        else:
+            messages.error(request,'Required all fields!!')
+            return redirect('variations')
 
-@login_required(login_url="adminsignin")
-def addvarient(request):
-    form = VariantsForm()
 
-    if request.method == "POST":
+@login_required(login_url='admin_login')
+def add_color(request):
+    if request.method=='POST':
+        if request.POST['color']:
+            color=request.POST['color']
+            if Color.objects.filter(color_value=color).exists():
+                messages.error(request,"Already exists")
+                return redirect('variations')
+            else:
+                c=Color()
+                c.color_value=color
+                c.save()
+                messages.success(request,'added new color')
+                return redirect('variations')
+        else:
+            messages.error(request,'Required all fields!!')
+            return redirect('variations')
 
-        form = VariantsForm(request.POST, request.FILES)
+@login_required(login_url='admin_login')
+def variations(request):
+    color=Color.objects.all()
+    return render(request,'adminapp/variations.html',{
+        'color':color
+        })
 
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Variant added successfully")
-            return redirect("product")
+@login_required(login_url='admin_login')
+def add_variations(request,id):
+    product=Product.objects.get(id=id)
+    colors=Color.objects.all()
 
-    context = {"form": form}
+    if request.method=="POST":
+        c=request.POST.get('selectcolor')
+        s=request.POST.get('selectsize')
+        
+        vari=Variations()
+        vari.product_id=product.id
+        vari.color_id=c
+        vari.size_id=s
+        vari.save()
+        messages.success(request,'variation added')
+    return render(request,'adminapp/add_variations.html',{
+        
+        'colors':colors,
+        'product':product
+    })
 
-    return render(request, "adminapp/add_varient.html", context)
+
+
+def load_size(request):
+    print('.....................load size..........')
+    color=request.GET.get('color_id')
+
+    size=Size.objects.filter(color=color).all()
+    return render(request,'adminapp/sizedropdown.html',{
+        'size':size,
+    })
+
+

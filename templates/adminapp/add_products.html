@@ -44,25 +44,42 @@
 
                     
                         <div class="tm-product-img-dummy mx-auto">
-                        <div class="form-group">
-                            <label>Upload Product Image</label><br>
-                                <input type="file" name="images" id="images" class="col-10" placeholder="Add image" required="">
-                            </div>		
-                        </div>		
-                        <div class="form-group">
-                            <label>Upload  Image</label><br>
-                                <input type="file" name="img1" id="img1" class="col-10" placeholder="Add image" >
-                            </div>		
+                            <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
+                                <div class="tm-product-img-dummy mx-auto">
+                                  <i class="fas fa-cloud-upload-alt tm-upload-icon"
+                                   ></i>
+                                </div>
+                                <div class="custom-file mt-3 mb-3">
+                                  <input oninput="checker(this)" id="fileInput1" type="file" name="images" style="display:none ; "required/>
+                                  
+                                  <input  type="button" class="btn btn-primary btn-block mx-auto" value="upload image1"
+                                    onclick="document.getElementById('fileInput1').click();"required />
+                                    <input type="hidden" id="identity" value="1">
+                                </div>
+                  
+                                <!-- image2 -->
+                                <div class="custom-file mt-3 mb-3">
+                                  <input oninput="checker(this)" id="fileInput2" type="file" name="img1"  style="display: none;"required/>
+                                  <input type="button" class="btn btn-primary btn-block mx-auto" value="upload image2"
+                                    onclick="document.getElementById('fileInput2').click();" required/>
+                                    <input type="hidden" id="identity" value="2">
+                                </div>
+                  
+                                <!-- image3 -->
+                  
+                                <div class=" custom-file mt-3 mb-3">
+                                  <input oninput="checker(this)" id="fileInput3" type="file" name="img2" style="display: none;" required/>
+                                  <input type="button" class="btn btn-primary btn-block mx-auto" value="upload image3"
+                                    onclick="document.getElementById('fileInput3').click();"  required/>
+                                    <input type="hidden" id="identity" value="3">
+                                </div>
+                                <div class="custom-file mt-3 mb-3">
+                                    <input oninput="checker(this)" id="fileInput4" type="file" name="img3" style="display: none;" required />
+                                    <input type="button" class="btn btn-primary btn-block mx-auto" value="upload image4"
+                                      onclick="document.getElementById('fileInput4').click();" required />
+                                      <input type="hidden" id="identity" value="4">
+                                  </div>
                         </div>
-                        <div class="form-group">
-                            <label>Upload  Image</label><br>
-                                <input type="file" name="img2" id="img2" class="col-10" placeholder="Add image" >
-                            </div>		
-                        </div>
-                        <div class="form-group">
-                            <label>Upload  Image</label><br>
-                                <input type="file" name="img3" id="img3" class="col-10" placeholder="Add image" >
-                            </div>		
                         </div>
                             <!-- <div class="custom-file mt-3 mb-3 ">
                             <div class="form-group">
@@ -72,11 +89,11 @@
                         <div class="row">
                         <div class="form-group mb-3 col-xs-12 col-sm-6">
                             <label for="date" >Price</label>
-                            <input id="price" name="price" type="text" class="form-control validate" data-large-mode="true"/>
+                            <input id="price" name="price" type="number"  min="1" class="form-control validate" data-large-mode="true"/>
                         </div>
                         <div class="form-group mb-3 col-xs-12 col-sm-6">
                             <label for="stock" >Units In Stocks</label>
-                            <input id="stock" name="stock" type="text" class="form-control validate" required/>
+                            <input id="stock" name="stock" type="number" min="1" class="form-control validate" required/>
                         </div>
                             <!-- <div class="form-group mb-3 col-xs-12 col-sm-6">
                                 <label for="expire_date" >Created Date</label>
@@ -113,6 +130,28 @@
 
 <script src="https://code.jquery.com/jquery-3.6.1.slim.min.js" integrity="sha256-w8CvhFs7iHNVUtnSP0YKEg00p9Ih13rlL9zGqvLdePA=" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+<!--........................... #crop guide................................ -->
+<script defer src="https://cdn.crop.guide/loader/l.js?c=JPHQRG"></script>
+<!-- https://getbootstrap.com/ -->
+
+<script>
+    function checker(id){
+      img = document.getElementById(id.id).value
+      if(!img.match(/\.(jpg|jpeg|png|gif|webp)$/)){
+        swal("image should be jpg , jpeg , png")
+        document.getElementById(id.id).value = "";
+      }
+
+  }
+  </script>
+
+
+
 
 
 <script>

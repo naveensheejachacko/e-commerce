@@ -14,15 +14,16 @@ $(document).ready(function(){
         }
         else
         {
+            console.log('enterr razopay')
             $.ajax({
                 type:"GET",
-                url:"/orders/proceed_to_pay",
+                url:"proceed_to_pay",
 
                 success:function(response){
                     console.log(response);
 
                 var options = {
-                        "key": "rzp_test_J3V3xgJZgn0BJa", // Enter the Key ID generated from the Dashboard
+                        "key": "rzp_test_m3224r9Lm1Uqsu", // Enter the Key ID generated from the Dashboard
                         "amount": response.total_price*100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
                         "currency": "INR",
                         "name": "Electro Mart",
@@ -30,7 +31,7 @@ $(document).ready(function(){
                        
                         // "order_id": "order_9A33XWu170gUtm", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
                         "handler": function (responseb){
-                            alert(responseb.razorpay_payment_id);
+                            // alert(responseb.razorpay_payment_id);
                             data={
                                 'address':address,
                                 "payment_mode":"Razorpay",
@@ -39,7 +40,7 @@ $(document).ready(function(){
                         },
                         $.ajax({
                             method: "POST",
-                            url: "/orders/place_order/",
+                            url: "place_order",
                             data: data,
                             success: function (responsec) {
                                 swal("Congrats",responsec.status).then((value) => {

@@ -6,8 +6,8 @@ from django.urls import reverse
 from django.utils import timezone
 from django.conf import settings
 from random import choices
-from django.db import models
-from django.urls import reverse
+
+
 from django.apps import apps
 from django.db.models.aggregates import Sum
 
@@ -49,7 +49,7 @@ class Product(models.Model):
     modified_date      =models.DateTimeField(auto_now_add=True)
     parent_main_prdt   =models.ForeignKey(Main_Category,on_delete=models.CASCADE)
     parent_sub_prdt    =models.ForeignKey(Sub_Category,on_delete=models.CASCADE)
-    
+    users_wishlist     =models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='users_wishlist',blank=True)
     def __str__(self):
         return self.product_name
     def get_url(self):
@@ -76,8 +76,8 @@ class Product(models.Model):
 
     def offer_price(self):
         try:
-            if self.category.categoryoffer.is_valid:
-                offer_price=(self.price*(self.category.categoryoffer.discount) / 100)
+            if self.parent_main_prdt.categoryoffer.is_valid:
+                offer_price=(self.price*(self.parent_main_prdt.categoryoffer.discount) / 100)
                 new_price=self.price - offer_price
                 return {
                     "new_price":new_price
@@ -85,8 +85,8 @@ class Product(models.Model):
             raise
         except:
             try:
-                if self.subcategory.subcategoryoffer.is_valid:
-                    offer_price=(self.price*(self.subcategory.subcategoryoffer.discount) / 100)
+                if self.parent_sub_prdt.subcategoryoffer.is_valid:
+                    offer_price=(self.price*(self.parent_sub_prdt.subcategoryoffer.discount) / 100)
                     new_price=self.price - offer_price
                     return {
                         "new_price":new_price
@@ -109,26 +109,19 @@ class Product(models.Model):
 
 
 
-
-class VariationManager(models.Manager):
-    def colors(self):
-        return super(VariationManager, self).filter(
-            variation_category="color", is_active=True
-        )
-
-variation_category_choices = (("color", "Color"),)
+class Color(models.Model):
+    color_value=models.CharField(max_length=50,null=True)
 
 
-class Variation(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    variation_category = models.CharField(
-        max_length=100, choices=variation_category_choices
-    )
-    variation_value = models.CharField(max_length=100)
-    is_active = models.BooleanField(default=True)
-    created_date = models.DateTimeField(auto_now=True)
+class Size(models.Model):
+    color=models.ForeignKey(Color,on_delete=models.CASCADE)
+    size_value=models.CharField(max_length=50,null=True)
 
-    objects = VariationManager()
-
+class Variations(models.Model):
+    product=models.ForeignKey(Product,on_delete=models.CASCADE)
+    size=models.ForeignKey(Size,on_delete=models.CASCADE,null=True)
+    color=models.ForeignKey(Color,on_delete=models.CASCADE,null=True)
+        
     def __str__(self):
-        return self.variation_value
+        return self.color.color_value
+
