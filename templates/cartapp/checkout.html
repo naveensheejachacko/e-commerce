@@ -57,65 +57,66 @@
     
         </aside> <!-- col.// -->
         <aside class="col-lg-5">
-    
-                
-    <div class="row">
 
-    <div class="card">
-    <table class="table table-borderless table-shopping-cart">
-    <thead class="text-muted">
-    <tr class="small text-uppercase">
-      <th scope="col">Product</th>
-      <th scope="col" width="120">Quantity</th>
-      <th scope="col" width="120">Price</th>
-      <th scope="col" class="text-right" width="200"> </th>
-    </tr>
-    </thead>
-    <tbody>
+  
 
-    <tr>
-      
-        {% for cart_item in cart_items %}
-
-        <td>
-            
-            <figure class="itemside align-items-center">
-                <div class="aside"><img src="{{cart_item.product.images.url}}" class="img-sm"></div>
-                <figcaption class="info">
-                    <a href="#" class="title text-dark">{{cart_item.product.product_name}}</a>
-                    <!-- <p class="text-muted small">{{cart_item.product.prdt_desc}}</p> -->
-                </figcaption>
-            </figure>
-        </td>
-        <td> <p class="text-muted small">{{cart_item.quantity}}</p>
-        </figcaption>
-        </td>
-        <td> 
-            <div class="price-wrap"> 
-                <!-- <var class="price">₹{{ cart_item.total_price }}</var>  -->
-                <small class="text-muted"> ₹{{ cart_item.product.price}}each </small> 
-            </div>
-            <!-- price-wrap .// -->
-        </td>
-        
-
-    </tr>
-
-{% endfor %}
-
-
-
-    </tbody>
-    </table>
     <div class="row">
 
      {% endif %}
 
             <div class="card mb-5 mt-2">
-            <div class="card-body col-lg-12 ">
+            <div class="card-body col-md-12 ">
               <div class="col-10">
                 <div class="coupon-all">
+                  <div class="table-content table-responsive">
+                  <table class="table-content table-responsive">
+                    <thead class="text-muted">
+                    <tr class="small text-uppercase">
+                      <th scope="col">Product</th>
+                      <th scope="col">Quantity</th>
+                      <th scope="col">Price</th>
+                     
+                    </tr>
+                    </thead>
+                    <tbody>
+                
+                    <tr>
+                      
+                        {% for cart_item in cart_items %}
+                
+                        <td>
+                            
+                            <figure class="itemside align-items-center">
+                                <div class="aside"><img src="{{cart_item.product.images.url}}" class="img-sm"></div>
+                                <figcaption class="info">
+                                    <a href="#" class="title text-dark">{{cart_item.product.product_name}}</a>
+                                    <!-- <p class="text-muted small">{{cart_item.product.prdt_desc}}</p> -->
+                                </figcaption>
+                            </figure>
+                        </td>
+                        <td> <p class="text-muted small">{{cart_item.quantity}}</p>
+                        </figcaption>
+                        </td>
+                        <td> 
+                            <div class="price-wrap"> 
+                                <!-- <var class="price">₹{{ cart_item.total_price }}</var>  -->
+                                <small class="text-muted"> ₹{{ cart_item.product.price}}each </small> 
+                            </div>
+                            <!-- price-wrap .// -->
+                        </td>
+                        
+                
+                    </tr>
+                
+                {% endfor %}
+                
+                
+                
+                    </tbody>
+                    </table>
+                  </div>
                   <form class="mb-5" id="coupon_form">
+                    <br>
                       {% for i in messages %}
                       <p class="pl-3"style="color:red;">{{i}}</p>
                       {% endfor %}
@@ -144,16 +145,16 @@
                     </var> <br> -->
                     <li>
                     <a class="total">
-                      <span>Total ............................................ :₹</span>
+                      <span>Total  &nbsp; &nbsp;  &nbsp;  &nbsp; &nbsp;  &nbsp;  &nbsp; &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp; &nbsp;  &nbsp; :₹</span>
                       <strong id="grand_total">{{ total|floatformat:"2"  }}</strong>
                     </li>
 
                     <var class="price-discount">
-                      Discount Price ........................ :₹
+                      Discount Price  &nbsp; &nbsp; &nbsp;   &nbsp; :₹
                       <strong id="discount_price" style="color: green;">0</strong>
                     </var>
                     <li class="total">
-                      <span>Grand Total ............................... :₹ </span>
+                      <span>Grand Total  &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp;  &nbsp;   &nbsp; :₹ </span>
                       <strong id="total"  style="color: rgb(0, 0, 0);" name="total">{{ total|floatformat:"2"  }}</strong>
                       
                     </li>
