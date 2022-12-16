@@ -92,6 +92,16 @@
                                     Cancel Order
                                 </a>
                             </td>
+
+                            {% elif order_item.status == 'Out for Delivery' %}
+                            <td style="box-shadow: 0.1em 0.1em  0.1em  rgba(165, 162, 162, 0.4);"class="align-middle"> 
+                                <a href="{% url 'return_order' order_item.id %}" onclick="return_order()" type="button" class="btn btn-sm btn-primary " > 
+                                    Return order
+                                </a>
+                            </td>
+
+
+
                             {% elif order_item.status == 'Delivered' %}
                             <td style="box-shadow: 0.1em 0.1em  0.1em  rgba(165, 162, 162, 0.4);"class="align-middle"> 
                                 <a href="{% url 'return_order' order_item.id %}" onclick="return_order()" type="button" class="btn btn-sm btn-primary " > 

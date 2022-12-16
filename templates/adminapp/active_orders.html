@@ -69,20 +69,29 @@
                                 {% if active_order.status == 'New' %}
                                 <option value="Placed">Placed</option>
                                 <option value="Shipped">Shipped</option>
+                                <option value="Out for Delivery">Out for Delivey</option>
                                 <option value="Delivered">Delivered</option>
                                 <option value="Cancelled">Cancel</option>
 
 
                                 {% elif active_order.status == 'Placed' %}
                                 <option value="Shipped">Shipped</option>
+                                <option value="Out for Delivery">Out for Delivey</option>
                                 <option value="Delivered">Delivered</option>
                                 <option value="Cancelled">Cancel</option>
                                
                                 {% elif active_order.status == 'Shipped' %}
+                                <option value="Out for Delivery">Out for Delivey</option>
                                 <option value="Delivered">Delivered</option>
                                 <option value="Cancelled">Cancel</option>
                                 
 
+                                {% elif active_order.status == 'Delivered' %}
+                                <option value="Out for Delivery">Out for Delivey</option>
+                                <option value="Cancelled_item">Cancel</option>
+
+
+                                
                                 {% elif active_order.status == 'Delivered' %}
                                 <option value="Cancelled_item">Cancel</option>
 

@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 from decouple import config
-
+SECURE_CROSS_ORIGIN_OPENER_POLICY ='unsafe-none'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-eko%5elbapt069epw1r^b+-+ygd$glxn&xmsb*21wqf-gt3u+s
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-# ALLOWED_HOSTS = ['54.248.26.243','localhost']
+# ALLOWED_HOSTS = ['http://18.181.197.15','localhost','.electromart.ml']
 
 
 

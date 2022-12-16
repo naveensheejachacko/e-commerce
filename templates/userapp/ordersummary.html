@@ -72,7 +72,7 @@
                         <tr>
                             <td class="align-middle">{{ order.created_at }}</td>
                             <td class="align-middle">{{ order.payment_mode }}</td>
-                            <td class="align-middle">{{ order.total_price }}</td>
+                            <td class="align-middle">{{ order.total_price|floatformat:"2" }}</td>
                             <td class="align-middle">
                             {{ order.address.address }},{{ order.address.state }},{{ order.address.country }}
                             </td>

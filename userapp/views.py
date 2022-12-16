@@ -166,23 +166,11 @@ def verify_signup_otp(request):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 def home(request):
 
     maincategory=Main_Category.objects.all()
     subcategory=Sub_Category.objects.all()
-    topitems=Product.objects.filter(is_available=True).order_by('created_date') [2::-1]
+    topitems=Product.objects.filter(is_available=True).order_by('created_date') [1::-1]
     variations = Variations.objects.all()
     cartitem=CartItem.objects.all()
     coupons=Coupon.objects.all()
