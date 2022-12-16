@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-eko%5elbapt069epw1r^b+-+ygd$glxn&xmsb*21wqf-gt3u+s
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['*']
 ALLOWED_HOSTS = ['http://18.181.197.15','localhost','.electromart.ml']
 
 
@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-
     'crispy_forms',
     'adminapp',
     'userapp',
