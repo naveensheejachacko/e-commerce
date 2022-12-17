@@ -54,7 +54,7 @@
                   {% csrf_token %}
                   <div class="row mt-3">
                     <div class="col-md-4 mt-1">
-                      <select name="month" class="form-control" id="">
+                      <select name="month" class="form-control" id="monthDP">
                         <option value="01">January</option>
                         <option value="02">February</option>
                         <option value="03">March</option>
@@ -82,7 +82,7 @@
                                   {% csrf_token %}
                                   <div class="row mt-3">
                                     <div class="col-md-4 mt-1">
-                                      <select name="year" class="form-control" id="">
+                                      <select name="year" class="form-control" id="yearDP">
                                         <option value="2020">2020</option>
                                         <option value="2021">2021</option>
                                         <option value="2022">2022</option>
@@ -272,9 +272,30 @@
 
   <script src="{% static 'js/table2excel.js'  %}"></script>
   <script>
+
+    const year = new Date().getFullYear()
+    let selectBox = document.getElementById('yearDP')
+    selectBox.value = year
+
+    const month=new Date().getMonth() +1;
+    let selectMonth=document.getElementById('monthDP')
+    selectMonth.value=month
+
+
+
+
+
     document.getElementById('downlaodsalesReportexcel').addEventListener('click',function(){
         var table2excel = new Table2Excel();
         table2excel.export(document.querySelectorAll("#sales-table"));
     })
+
+
+
   </script>
+
+
+
+
+
  {% endblock %}

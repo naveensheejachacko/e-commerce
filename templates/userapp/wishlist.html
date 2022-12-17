@@ -6,12 +6,7 @@
 
             <div class="col-lg-9 col-md-12">
                 <div class="row pb-3">
-                    <div class="col-12 pb-1">
-                        <div class="d-flex align-items-center justify-content-between mb-4">
 
-
-                        </div>
-                    </div>
                     {% for i in messages %}
                     <p class="pl-3"style="color:red;">{{i}}</p>
                     {% endfor %}
@@ -26,7 +21,7 @@
                     {% for w in wishlist %}
                     <div class="col-lg-4 col-md-6 col-sm-12 pb-1">
                     
-                        <div class="card product-item border-0 mb-4 " style="height:30rem;">
+                        <div class="card product-item border-0 mb-4 ml-30  mt-50 " style="border: 3px solid grey;" >
                             <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                             
                                 <a href="{{ w.get_url }}" class="btn btn-sm text-dark p-0"><img class="img-fluid w-100" style="object-fit: contain;"  src="{{w.img1.url}}" alt=""></a>
@@ -34,13 +29,13 @@
                             </div>
                             <div class="card-footer d-flex justify-content-between bg-light border">
                                 
-                                <h4 class="text-truncate mb-3">{{ w.product_name }}</h4>
-                                <h5 class="price "></h5> 
+                                <h6 class="text-truncate mb-3">{{ w.product_name }}</h6>
+                                <h6 class="price "></h6> 
                            
                                     
                                        
                             
-                                        <h6 class="text-muted ml-2"><h3>₹{{w.price}}<span style="color: green;"> 
+                                        <p class="text-muted ml-2"><h3>₹{{w.price}}</h3><span style="color: green;"> 
 
 
                                             {% if w.productoffer.discount %}
@@ -64,7 +59,7 @@
                 
                                             {% else %}
                 
-                                            {% endif %}</span></h6>
+                                            {% endif %}</span></p>
                            
 
 
@@ -72,14 +67,15 @@
 
                                         
                                     </h6>
-                                
-                            </div>
-                            <div class="card-footer d-flex justify-content-between bg-light border">
-                                <a href="{% url 'add_to_wishlist' w.id %}" class="btn btn-sm text-red "><i class="fa-solid fa-trash"></i></a>
+                                    <a href="{% url 'add_to_wishlist' w.id %}" class="btn btn-sm text-red "><i class="fa-solid fa-trash"></i></a>
 
                                 
-                                
                             </div>
+
+                               
+                                
+                                
+                           
                             
                         </div>
             
@@ -90,13 +86,6 @@
     
                     {% endif %}
                     
-            
-                    
-
-
-
-
-
                 </div>
             </div>
 

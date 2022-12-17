@@ -13,10 +13,10 @@
               
               <h3 class="m-3">{{ message }}</h3>
             {% endfor %}
-            <div class="col-lg-6 grid-margin stretch-card">
+            <div class="col-lg-10 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title text-center">Category Offers</h4>
+                    <h4 class="card-title text-center">Main Category Offers</h4>
                     {% if not cat_offer %}
                     <h2 style="color: rgb(150, 150, 150);"> Sorry, No  offer  available</h2>
                     <a href="{% url 'add_category_offer' %}" class="btn btn-secondary btn-sm d-flex justify-content-center">Add Category Offer</a><br>
@@ -34,7 +34,7 @@
                           <tr>
                             
                             
-                            <th>Category Offer Name</th>
+                            <th>Main Category Offer Name</th>
                             <th>Discount</th>
                             
                             <th class="text-center">Status</th>

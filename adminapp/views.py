@@ -199,8 +199,7 @@ def block_user(request,bid):
 
 
 
-
-
+@login_required(login_url='admin_login')
 def activeorders(request):
     
     exclude_list = [
@@ -227,7 +226,7 @@ def activeorders(request):
     }
     return render(request,'adminapp/active_orders.html',context)
 
-
+@login_required(login_url='admin_login')
 def order_history(request):
     exclude_list = [
         "New",
@@ -256,7 +255,7 @@ def order_history(request):
     }
     return render(request, "adminapp/order_history.html", context)
 
-
+@login_required(login_url='admin_login')
 def order_status_change(request):
     id = request.POST['id']
     status = request.POST['status']
@@ -274,13 +273,13 @@ def order_status_change(request):
 
 #offer managemnet
 
-
+@login_required(login_url='admin_login')
 def category_offer(request):
     cat_offer=CategoryOffer.objects.all()
     return render(request,'adminapp/category_offer.html',{
         'cat_offer':cat_offer
     })
-
+@login_required(login_url='admin_login')
 def add_category_offer(request):
     form=CategoryOfferForm()
     if request.method=='POST':
@@ -301,7 +300,7 @@ def add_category_offer(request):
     }
     return render(request,'adminapp/add_category_offer.html',context)    
 
-
+@login_required(login_url='admin_login')
 def edit_category_offer(request,id):
     form=CategoryOfferForm()
     category_offer=get_object_or_404(CategoryOffer,id=id)
@@ -322,13 +321,13 @@ def delete_category_offer(request,id):
     return redirect('category_offer')
 
 
-
+@login_required(login_url='admin_login')
 def subcategory_offer(request):
     sub_offer=SubcategoryOffer.objects.all()
     return render(request,'adminapp/subcategory_offer.html',{
         'sub_offer':sub_offer
     })
-
+@login_required(login_url='admin_login')
 def add_subcategory_offer(request):
     form=SubcategoryOfferForm()
     if request.method=='POST':
@@ -340,17 +339,22 @@ def add_subcategory_offer(request):
         'form':form
     }
     return render(request,'adminapp/add_subcategory_offer.html',context)
+
+
+@login_required(login_url='admin_login')
 def delete_subcategory_offer(request,id):
     SubcategoryOffer.objects.filter(id=id).delete()
     return redirect('subcategory_offer')
 
 
-
+@login_required(login_url='admin_login')
 def product_offer(request):
     prdt_offer=ProductOffer.objects.all()
     return render(request,'adminapp/product_offer.html',{
         'prdt_offer':prdt_offer,
     })
+
+@login_required(login_url='admin_login')  
 def add_product_offer(request):
     form=ProductOfferForm()
     if request.method=='POST':
@@ -362,7 +366,7 @@ def add_product_offer(request):
         'form':form
     }
     return render(request,'adminapp/add_product_offer.html',context)
-
+@login_required(login_url='admin_login')
 def delete_product_offer(request,id):
     ProductOffer.objects.filter(id=id).delete()
     return redirect('product_offer')
@@ -409,7 +413,7 @@ def banner(request):
 
 
 
-
+@login_required(login_url='admin_login')
 def deletebanner(request, banner_id):
     bnr = Banners.objects.get(pk=banner_id)
     bnr.delete()
@@ -421,6 +425,9 @@ def deletebanner(request, banner_id):
 
 
 #coupon management 
+
+
+@login_required(login_url='admin_login')
 def coupons(request):
     coupons=Coupon.objects.all()
     return render(request,'adminapp/coupons.html',{
@@ -428,7 +435,7 @@ def coupons(request):
     })
 
 
-
+@login_required(login_url='admin_login')
 def add_coupons(request):
     form=CouponForm()
     if request.method=='POST':
@@ -443,13 +450,13 @@ def add_coupons(request):
         'form':form
     })
 
-
+@login_required(login_url='admin_login')
 def delete_coupons(request,id):
     Coupon.objects.filter(id=id).delete()
     return redirect('coupons')
 
 
-
+@login_required(login_url='admin_login')
 def product_report(request):
     products=Product.objects.all()
     
@@ -468,7 +475,7 @@ def product_report(request):
 
 
 
-
+@login_required(login_url='admin_login')
 def product_csv(request):
     response=HttpResponse(content_type='text/csv')
     response[
@@ -537,7 +544,7 @@ def product_excel(request):
             "Product Name",
             "Main Category Name",
             "Sub Category Name",
-            "Price"
+            "Price",
             "Stock"
     ]
 

@@ -590,18 +590,19 @@ class generateInvoice(View):
         try:
             orders=Order.objects.get(id=id,user=request.user)
             print(orders,'..............')
-            orderitem=OrderItem.objects.get(id=id,user=request.user)
-            print(orderitem)
-            print('............................')
+            # orderitem=OrderItem.objects.get(id=id,user=request.user)
+            # print(orderitem)
+            # print('............................')
             date=orders.created_at.strftime("%A,%d-%m-%Y")
             
         except:
+            print('invoice cant print')
             return HttpResponse("505 not found")
         data={
             'order_id':orders.id,
             'date':date,
             'name':orders.user.first_name,
-            'address':orderitem.order.address.address,
+            'address':orders.address.address,
             'total_price':orders.total_price,
             'transaction_id':orders.payment_id,
             'payment_mode':orders.payment_mode,
