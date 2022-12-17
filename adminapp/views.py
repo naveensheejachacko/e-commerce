@@ -598,28 +598,32 @@ def salesReport(request):
 
 def by_date(request):
     if request.GET.get('from'):
-        sales_date_from=datetime.datetime.strptime(request.GET.get('from'),"%Y-%m-%d")
-        sales_date_to=datetime.datetime.strptime(request.GET.get('to'),"%Y-%m-%d")
+        if request.GET.get('to'):
+            sales_date_from=datetime.datetime.strptime(request.GET.get('from'),"%Y-%m-%d")
+            sales_date_to=datetime.datetime.strptime(request.GET.get('to'),"%Y-%m-%d")
 
-        sales_date_to+=datetime.timedelta(days=1)
-        orders=Order.objects.filter(created_at__range=[sales_date_from,sales_date_to])
+            sales_date_to+=datetime.timedelta(days=1)
+            orders=Order.objects.filter(created_at__range=[sales_date_from,sales_date_to])
 
-        new_order_list=[]
+            new_order_list=[]
 
-        for i in orders:
-            order_items=OrderItem.objects.filter(order_id=i.id)
-            for j in order_items:
-                item={
-                    'id':i.id,
-                    'ordered_date':i.created_at,
-                    'user':i.user,
-                    'price':j.price,
-                    'method':i.payment_mode,
-                    'status':j.status,
+            for i in orders:
+                order_items=OrderItem.objects.filter(order_id=i.id)
+                for j in order_items:
+                    item={
+                        'id':i.id,
+                        'ordered_date':i.created_at,
+                        'user':i.user,
+                        'price':j.price,
+                        'method':i.payment_mode,
+                        'status':j.status,
 
 
-                }
-                new_order_list.append(item)
+                    }
+                    new_order_list.append(item)
+        else:
+            messages.error(request,'Please select date')
+            return redirect('salesReport')
     else:
         messages.error(request,'Please select date')
         return redirect('salesReport')
