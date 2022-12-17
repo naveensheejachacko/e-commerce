@@ -584,10 +584,12 @@ def salesReport(request):
 
             }
             new_order_list.append(item)
-    # paginator=Paginator(new_order_list,10)
-    # page=request.GET.get('page')
-    # paged_orders_list=paginator.get_page(page)  
-    return render(request,'adminapp/salesReport.html')
+    paginator=Paginator(new_order_list,10)
+    page=request.GET.get('page')
+    paged_orders_list=paginator.get_page(page)  
+    return render(request,'adminapp/salesReport.html',{
+        'order':paged_orders_list,
+    })
         
   
     # return render(request,'adminapp/salesReport.html',{
