@@ -11,10 +11,10 @@
                     <p class="pl-3"style="color:red;">{{i}}</p>
                     {% endfor %}
                     {% if not  wishlist %}
-                    <div class="text-center"style="margin-left:15rem;">
-                    <div class="text-center mt-5 float-left">
-                            <h2 class="text-center"> You Have no products in your Wishlist</h2>
-                        <a class="btn btn-primary " href="{% url 'store' %}">Continue Shopping</a>
+                    <div class="text-center">
+                    <div class=" col-md-12 col-sm-10  text-center mt-100 ">
+                            <h2 class=" text-center float"> You Have no products in your Wishlist</h2>
+                        <a class="btn btn-primary mb-175 " href="{% url 'store' %}">Continue Shopping</a>
                         </div>
                     </div>
                     {% else %}
@@ -91,4 +91,5 @@
 
 
             <script src="https://kit.fontawesome.com/cfdba9ae2e.js" crossorigin="anonymous"></script>
+            
 {% endblock %}
