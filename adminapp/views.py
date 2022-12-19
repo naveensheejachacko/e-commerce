@@ -179,8 +179,14 @@ def admin_logout(request):
     #prfdt management
 
 def user_manage(request):
-    context={'user_details':Account.objects.all().order_by('-id')}#show user details
-    return render(request,'adminapp/user_manage.html',context)
+    users=Account.objects.all().order_by('-id')#show user details
+    paginator=Paginator(users,5)
+    page=request.GET.get('page')
+    paged_user_list=paginator.get_page(page)
+    return render(request,'adminapp/user_manage.html',{
+        'users':paged_user_list
+    })
+
 
 @login_required(login_url='admin_login')
 @never_cache
