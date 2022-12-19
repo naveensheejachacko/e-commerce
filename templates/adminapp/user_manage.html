@@ -97,6 +97,8 @@
 	</div>  
 	
 	<div class="col-12 pb-1 mt-3">
+
+		<h6 style="color: #0D6EFD;">Showing {{ users.end_index }} {{ users_index }} of {{ users.paginator.count }}</h6>
 		<nav aria-label="Page navigation">
 			{% if users.has_other_pages %}
 		  <ul class="pagination justify-content-center mb-3">

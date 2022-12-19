@@ -518,7 +518,7 @@ class OtpGenerate():
         return True
 
 
-
+@login_required(login_url="user_login")
 def view_address(request):
     address=Address.objects.filter(user=request.user)
 
@@ -624,7 +624,7 @@ def render_to_pdf(template_src,context_dict={}):
 # .....................shopppppppp................
 
 #widhlist
-
+@login_required(login_url="user_login")
 def user_wishlist(request):
     products=Product.objects.filter(users_wishlist=request.user)
     

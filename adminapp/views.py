@@ -177,7 +177,7 @@ def admin_logout(request):
     return redirect('admin_login')
 
     #prfdt management
-
+@login_required(login_url='admin_login')
 def user_manage(request):
     users=Account.objects.all().order_by('-id')#show user details
     paginator=Paginator(users,5)
@@ -571,7 +571,7 @@ def product_excel(request):
 
 
     
-
+@login_required(login_url='admin_login')
 def salesReport(request):
     orders=Order.objects.all()
     new_order_list=[]
@@ -601,7 +601,7 @@ def salesReport(request):
     # return render(request,'adminapp/salesReport.html',{
     #     'order':paged_orders_list,
     # })
-
+@login_required(login_url='admin_login')
 def by_date(request):
     if request.GET.get('from'):
         if request.GET.get('to'):
@@ -667,7 +667,7 @@ class generatesalesReportPdf(View):
         return HttpResponse(pdf,content_type='application/pdf')
 
 
-
+@login_required(login_url='admin_login')
 def by_month(request):
     month=request.POST.get('month')
     orders=Order.objects.filter(created_at__month=month)
@@ -691,7 +691,7 @@ def by_month(request):
     return render(request,'adminapp/salesReport.html',{
         'order':new_order_list,
     })
-
+@login_required(login_url='admin_login')
 def by_year(request):
     year=request.POST.get('year')
     orders=Order.objects.filter(created_at__year=year)
