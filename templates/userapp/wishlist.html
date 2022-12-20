@@ -67,7 +67,7 @@
 
                                         
                                     </h6>
-                                    <a href="{% url 'add_to_wishlist' w.id %}" class="btn btn-sm text-red "><i class="fa-solid fa-trash"></i></a>
+                                    <a href="{% url 'add_to_wishlist' w.id %}"  onclick="add_to_wishlist()" class="btn btn-sm text-red "><i class="fa-solid fa-trash"></i></a>
 
                                 
                             </div>
@@ -91,5 +91,35 @@
 
 
             <script src="https://kit.fontawesome.com/cfdba9ae2e.js" crossorigin="anonymous"></script>
+            <script>
+                function add_to_wishlist() {
+                    event.preventDefault();
+                    var dlt = event.currentTarget.href
+                    console.log(dlt)
+                    Swal.fire({
+                        title: 'remove this item?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#2DAD49',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'remove item',
+                  cancelButtonText: 'Back',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            
+                            window.location = dlt;
             
+            
+            
+                        }
+                    })
+                }
+            </script>
+            
+            <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+
 {% endblock %}

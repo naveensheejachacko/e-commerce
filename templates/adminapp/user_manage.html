@@ -210,48 +210,6 @@
   }
 </script>
 
-<script>
-	function blockUser() {
-	  event.preventDefault();
-	  var dlt = event.currentTarget.href
-	  console.log(dlt)
-	  Swal.fire({
-		title: 'Are you sure want to block this user?',
-		text: "You won't be able to revert this!",
-		icon: 'warning',
-		showCancelButton: true,
-		confirmButtonColor: '#2DAD49',
-		cancelButtonColor: '#d33',
-		confirmButtonText: 'Block',
-		cancelButtonText: 'Back',
-	  }).then((result) => {
-		if (result.isConfirmed) {
-		  
-		  window.location = dlt;
-		}
-	  })
-	}
-	function unblockUser() {
-	  event.preventDefault();
-	  var dlt = event.currentTarget.href
-	  console.log(dlt)
-	  Swal.fire({
-		title: 'Are you sure want to block this user?',
-		text: "You won't be able to revert this!",
-		icon: 'warning',
-		showCancelButton: true,
-		confirmButtonColor: '#2DAD49',
-		cancelButtonColor: '#d33',
-		confirmButtonText: 'Unblock',
-		cancelButtonText: 'Back',
-	  }).then((result) => {
-		if (result.isConfirmed) {
-		  
-		  window.location = dlt;
-		}
-	  })
-	}
-  </script>
 
 {% endblock %}
 
