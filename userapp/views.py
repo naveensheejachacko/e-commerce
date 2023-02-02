@@ -175,6 +175,7 @@ def home(request):
     cartitem=CartItem.objects.all()
     coupons=Coupon.objects.all()
     banners = Banners.objects.all()
+    print(Product)
     print('..................................................................',banners)
     cart=Cart.objects.all()
     orders=Order.objects.all()
