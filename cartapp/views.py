@@ -336,6 +336,10 @@ def decrease_quantity(request):
             
             saved_p=total_price_p-total_p
             saved_p=round(saved_p,2)
+<<<<<<< HEAD
+=======
+    print(',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,')
+>>>>>>> d7edf25eaab14e1cd1066118536de61efbcf7206
     return JsonResponse({
         'quantity':qty,
         'total':total_p,

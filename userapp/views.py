@@ -116,6 +116,7 @@ def user_signup(request):
         'form':form
     })
 
+<<<<<<< HEAD
 
 
 
@@ -161,6 +162,8 @@ def user_signup(request):
 
 
 
+=======
+>>>>>>> d7edf25eaab14e1cd1066118536de61efbcf7206
             
 
 def signup_otp(request):
@@ -546,6 +549,7 @@ class OtpGenerate():
     phone=None
 
     def send_otp(phone_number):
+<<<<<<< HEAD
         account_sid = config('account_sid')
         auth_token = config('auth_token')
         target_number = '+918111850031'
@@ -553,6 +557,15 @@ class OtpGenerate():
         otp=random.randint(1000,9999)
         OtpGenerate.Otp = str(otp)
         OtpGenerate.phone_number = phone_number
+=======
+        account_sid=config('account_sid')
+        auth_token=config('auth_token')
+        target_number = '+918111850031'
+        twilio_number=config('twilio_number')
+        otp=random.randint(1000,9999)
+        OtpGenerate.Otp=str(otp)
+        OtpGenerate.phone_number=phone_number
+>>>>>>> d7edf25eaab14e1cd1066118536de61efbcf7206
         msg="your otp for login to Electromart is " + str(otp)
         client=Client(account_sid,auth_token)
         message=client.messages.create(
