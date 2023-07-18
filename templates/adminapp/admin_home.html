@@ -1,0 +1,386 @@
+{% extends 'adminapp/admin_base.html' %}
+{%load static %}
+
+
+{% block content %}
+
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="home-tab">
+                <div class="d-sm-flex align-items-center justify-content-between border-bottom">
+                  <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active ps-0" id="home-tab" data-bs-toggle="tab" href="#" role="tab" aria-controls="overview" aria-selected="true">Overview</a>
+                    </li>
+                    
+                      <li class="nav-item">
+                        <a class="nav-link  ps-0"  href="{% url 'product_report' %}"  aria-controls="overview" aria-selected="true">&nbsp Product Report</a>
+                      </li>
+
+                      <li class="nav-item">
+                        <a class="nav-link ps-0"  href="{% url 'salesReport' %}"  aria-controls="overview" aria-selected="true">&nbsp Sales Report</a>
+                      </li>
+
+                  </ul>
+                  <div>
+                    <div class="btn-wrapper">
+                     
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-content tab-content-basic">
+                  <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview"> 
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <div class="statistics-details d-flex align-items-center justify-content-between">
+                          <div>
+                            <p class="statistics-title">User Count</p>
+                            <h3 class="rate-percentage text-center">{{ total_users }}</h3>
+                            <!-- <p class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>-0.5%</span></p> -->
+                          </div>
+                          <div>
+                            <p class="statistics-title">Product Count</p>
+                            <h3 class="rate-percentage text-center">{{ total_products }}</h3>
+                            <!-- <p class="text-success d-flex"><i class="mdi mdi-menu-up"></i><span>+0.1%</span></p> -->
+                          </div>
+                          <div>
+                            <p class="statistics-title">Total Orders</p>
+                            <h3 class="rate-percentage text-center">{{ total_orders }}</h3>
+                            <!-- <p class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>68.8</span></p> -->
+                          </div>
+                          <div class="d-none d-md-block">
+                            <p class="statistics-title">Total Revenue</p>
+                            <h3 class="rate-percentage">₹{{total_revenue.price__sum|floatformat:2}}</h3>
+                            <!-- <p class="text-success d-flex"><i class="mdi mdi-menu-down"></i><span>+0.8%</span></p> -->
+                          </div>
+                          
+                        </div>
+                      </div>
+                    </div> 
+                    <div class="row">
+                      <div class="col-lg-8 d-flex flex-column">
+                        <div class="row flex-grow">
+                          <div class="col-12 col-lg-4 col-lg-12 grid-margin stretch-card">
+                            <div class="card card-rounded">
+                              <div class="card-body"style="height:35rem;">
+
+                                <div class="d-sm-flex justify-content-between align-items-start">
+                                  <div>
+                                   <h4 class="card-title card-title-dash">Sales </h4>
+                                  
+                                  </div>
+                                  <div id="Sales Data"></div>
+                                </div>
+                                <div class="chartjs-wrapper mt-5">
+                                  <canvas id="sales-data" width="800" height="450"></canvas>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <div class="col-lg-4 d-flex flex-column">
+                        <div class="row flex-grow">
+
+
+                          {% comment %} <div class="col-md-6 col-lg-12 grid-margin stretch-card">
+                            <div class="card bg-primary card-rounded">
+                              <div class="card-body pb-0">
+                                <h4 class="card-title card-title-dash text-white mb-4">Status Summary</h4>
+                                <div class="row">
+                                  <div class="col-sm-4">
+                                    <p class="status-summary-ight-white mb-1">Closed Value</p>
+                                    <h2 class="text-info">357</h2>
+                                  </div>
+                                  <div class="col-sm-8">
+                                    <div class="status-summary-chart-wrapper pb-4">
+                                      <canvas id="status-summary"></canvas>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div> {% endcomment %}
+
+
+                          {% comment %} <div class="col-md-6 col-lg-12 grid-margin stretch-card">
+                            <div class="card card-rounded">
+                              <div class="card-body">
+                                <div class="row">
+                                  <div class="col-sm-6">
+                                    <div class="d-flex justify-content-between align-items-center mb-2 mb-sm-0">
+                                      <div class="circle-progress-width">
+                                        <div id="totalVisitors" class="progressbar-js-circle pr-2"></div>
+                                      </div>
+                                      <div>
+                                        <p class="text-small mb-2">Total Users</p>
+                                        <h4 class="mb-0 fw-bold">{{total_users}}</h4>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-sm-6">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                      <div class="circle-progress-width">
+                                        <div id="visitperday" class="progressbar-js-circle pr-2"></div>
+                                      </div>
+                                      <div>
+                                        <p class="text-small mb-2">Visits per day</p>
+                                        <h4 class="mb-0 fw-bold">{{visitors}}</h4>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div> {% endcomment %}
+
+                        </div>
+
+                        <div class="row flex-grow">
+                          <div class="col-12 grid-margin stretch-card">
+                            <div class="card card-rounded">
+                              <div class="card-body">
+                                <div class="row">
+                                  <div class="col-lg-12">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                      <h4 class="card-title card-title-dash">Monthly Sales</h4>
+                                    </div>
+                                    <canvas class="my-auto" id="total-sales" width="100" height="100"></canvas>
+                                    <div id="doughnut-chart-legend" class="mt-5 text-center"></div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                    
+                        </div>
+
+
+
+            
+                       
+                      </div>
+
+
+
+
+                      
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-8 d-flex flex-column">
+                        <div class="row flex-grow">
+                          <div class="col-12 grid-margin stretch-card" style="height:35rem;">
+                            <div class="card card-rounded">
+                              <div class="card-body">
+                                <div class="d-sm-flex justify-content-between align-items-start">
+                                  <div>
+                                    <h4 class="card-title card-title-dash">Most Moving Product</h4>
+                                  </div>
+                                  <div>
+                                
+                                  </div>
+                                </div>
+                                <div class="d-sm-flex align-items-center mt-1 justify-content-between">
+                                  <div class="d-sm-flex align-items-center mt-4 justify-content-between"><h2 class="me-2 fw-bold"></h2><h4 class="me-2"></h4><h4 class="text-success"></h4></div>
+                                  <div class="me-3"><div id="marketing-overview-legend"></div></div>
+                                </div>
+                                <div class="chartjs-bar-wrapper mt-3">
+                                  <canvas id="most-moving-product"></canvas>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      
+                      </div>
+                      <div class="col-lg-4 d-flex flex-column">
+                        <div class="row flex-grow">
+                          
+                        </div>
+                        <div class="row flex-grow">
+                          <div class="col-12 grid-margin stretch-card">
+                            <div class="card card-rounded">
+                              <div class="card-body">
+                                <div class="row">
+                                  <div class="col-lg-12">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                      <h4 class="card-title card-title-dash">Status Count</h4>
+                                    </div>
+                                    <canvas class="my-auto" id="status_count" width="200"height="200"></canvas>
+                                    <div id="doughnut-chart-legend" class="mt-5 text-center"></div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row flex-grow">
+                          <div class="col-12 grid-margin stretch-card">
+                            {% comment %} <div class="card card-rounded">
+                              <div class="card-body">
+                                <div class="row">
+                                  <div class="col-lg-12">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                      <div>
+                                        <h4 class="card-title card-title-dash">Leave Report</h4>
+                                      </div>
+                                      <div>
+                                        <div class="dropdown">
+                                          <button class="btn btn-secondary dropdown-toggle toggle-dark btn-lg mb-0 me-0" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Month Wise </button>
+                                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
+                                            <h6 class="dropdown-header">week Wise</h6>
+                                            <a class="dropdown-item" href="#">Year Wise</a>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="mt-3">
+                                      <canvas id="most-moving-product"></canvas>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div> {% endcomment %}
+                          </div>
+                        </div>
+                    
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+<!-- #............................... chart.................. -->
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
+<script>
+
+{% comment %} ............................weekly chart.................... {% endcomment %}
+
+new Chart(document.getElementById("sales-data"), {
+  type: 'line',
+  data: {
+    labels: [{% for d in dates %} 
+        "{{d.created_at__date}}",
+        {% endfor %}],
+
+    datasets: [{ 
+        data: [{% for s in sales %}
+              "{{ s.sales }}",
+              {% endfor %}],
+        label: "Product Sales",
+        borderColor: "#3e95cd",
+        fill: false
+      }, { 
+        data: [{% for d in dates %}
+              "{{ d.order_items }}",
+               {% endfor %}],
+        label: "Order Placed",
+        borderColor: "#8e5ea2",
+        fill: false
+      }, { 
+        data: [{% for r in returns %}
+                "{{ r.returns }}", 
+                {% endfor %}],
+      label: "Returned Orders",
+      borderColor: "#3cba9f",
+      fill: false
+      }, 
+    ]
+  },
+  options: {
+    title: {
+      display: true,
+      text: ''
+    }
+  }
+});
+
+
+
+  {% comment %} ......................Monthly sales..................... {% endcomment %}
+
+
+  new Chart(document.getElementById("total-sales"), {
+    type: 'doughnut',
+    data: {
+      labels: ["Januvary", "Februvary", "March", "April", "May","June","July","August","September","October","November","December"],
+      datasets: [
+        {
+          label: "Total Sales",
+          backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","#ff6699","#cc6600","#993366","#999966","#66ff33","#00ff99"],
+          data:{{ monthly_order_count }},
+        }
+      ]
+    },
+    options: {
+      title: {
+        display: true,
+        text: ''
+      }
+    }
+});
+
+
+new Chart(document.getElementById("most-moving-product"), {
+  type: 'horizontalBar',
+  data: {
+    labels: [{% for m in most_moving_product %} "{{m.product_name|slice:":10"}}",{% endfor %}],
+    datasets: [
+      {
+        {% comment %} label: "Population (millions)", {% endcomment %}
+        backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+        data: {{most_moving_product_count}}
+      }
+    ]
+  },
+  options: {
+    legend: { display: false },
+    title: {
+      display: true,
+      {% comment %} text: 'Predicted world population (millions) in 2050' {% endcomment %}
+    }
+  }
+});
+new Chart(document.getElementById("status_count"), {
+  type: 'pie',
+  data: {
+    labels: ["Placed","Shipped","Delivered","Returned","Cancelled"],
+    datasets: [{
+      {% comment %} label: "Population (millions)", {% endcomment %}
+      backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+      data: {{ status_count }}
+    }]
+  },
+  options: {
+    title: {
+      display: true,
+      {% comment %} text: 'Predicted world population (millions) in 2050' {% endcomment %}
+    }
+  }
+});
+
+
+
+
+
+</script>
+
+
+
+
+
+
+
+      {% endblock %}

@@ -1,0 +1,104 @@
+
+{% extends 'userapp/base.html' %}
+{% load static %}
+
+
+
+
+    {% block content%}
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg">
+{% include 'includes/alerts.html' %}
+<div class="container">
+	<div class="row">
+
+        
+        <aside class="col-md-3">
+            <!--   SIDEBAR   -->
+            <ul class="list-group">
+
+              <a class="list-group-item active" href="{% url 'dashboard' %}"> My order history </a>
+              
+              <a class="list-group-item" href="{% url 'change_password' %}">Change Password</a>
+              <a class="list-group-item" href="{% url 'view_address' %}"> Address </a>
+              <a class="list-group-item" href="{% url 'order_summary' %}"> Your Orders</a>
+              <a class="list-group-item" href="#"> Return and refunds </a>
+            </ul>
+            <br>
+            <a class="btn btn-light btn-block" href="{% url 'user_logout' %}"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a> 
+            <!--   SIDEBAR .//END   -->
+        </aside>
+   
+	<main class="col-md-9 mt-5">
+		<article class="card">
+		<header class="card-header">
+			<strong class="d-inline-block mr-3">Edit Your Profile</strong>
+			
+		</header>
+		<div class="card-body">
+			<div class="row"> 
+				<div class="col-md-12">
+          <form action="{% url 'edit_profile' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>First Name</label>
+                {{user_form.first_name}}
+              </div>
+              <div class="form-group col-md-6">
+                <label>Last Name</label>
+                {{user_form.last_name}}
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Phone Number</label>
+                {{user_form.phone_number}}
+              </div>
+              <div class="form-group col-md-6">
+                <label>Profile Picture</label>
+                {{profile_form.profile_picture}}
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Address Line 1</label>
+              {{profile_form.address_line_1}}
+            </div>
+            <div class="form-group">
+              <label>Address Line 2</label>
+              {{profile_form.address_line_2}}
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label>City</label>
+                {{profile_form.city}}
+              </div>
+              <div class="form-group col-md-4">
+                <label>State</label>
+                {{profile_form.state}}
+              </div>
+              <div class="form-group col-md-4">
+                <label>Country</label>
+                {{profile_form.country}}
+              </div>
+            </div>
+            <input type="submit" value="Save Changes" class="btn btn-primary col-12">
+          </form>
+              
+				</div>
+
+			</div> <!-- row.// -->
+		</div> <!-- card-body .// -->
+		</article> <!-- order-group.// --> 
+	</main>
+</div> <!-- row.// -->
+</div>
+
+
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+{% endblock %}
+
+

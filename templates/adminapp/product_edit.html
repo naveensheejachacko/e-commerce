@@ -1,0 +1,161 @@
+{% extends 'adminapp/admin_base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="main-panel">        
+    <div class="content-wrapper">
+      <div class="row">
+        
+        
+        <div class="col-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title text-center">Edit Product</h4>
+              <p class="card-description">
+                Update Details
+              </p>
+              <form class="forms-sample" action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="exampleInputName1">Product Name</label>
+                  <input type="text" value="{{ product.product_name }}" class="form-control"name='productname' id="exampleInputName1" placeholder="Product Name" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="exampleInputPassword4">Price</label>
+                  <input type="text" value="{{ product.price }}" class="form-control" name="price" id="exampleInputPassword4" placeholder="Price" required>
+                </div>
+                
+                <div class="form-group">
+                  <label for="exampleInputPassword4">Stock</label>
+                  <input type="text" value="{{ product.stock }}" class="form-control" name="stock" id="exampleInputPassword4" placeholder="Available Stock" required>
+                </div>
+
+
+
+                <div class="form-group">
+                  <label for="exampleSelectGender">Select Main Category</label>
+                    <select class="form-control" name="selectcategory"  id="select1">
+                      {% for c in main %}
+                      <option  value="{{ c.id }}">{{ c.main_category_name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="exampleSelectGender">Select Sub Category</label>
+                      <select  class="form-control" id="select2" name="selectsubcategory"> 
+                      
+                      </select>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
+                      <div class="tm-product-img-dummy mx-auto">
+                        {% if product.images %}
+                        <img class="w-100" src="{{product.images.url}}" alt="pd_img" >
+                        {% else %}
+                         <p>No image found</p> 
+                        {% endif %}
+                      </div>
+        
+                      <div class="custom-file mt-3 mb-3">
+                        <input id="fileInput"  oninput="checker(this)" type="file" name="images" value=""  style="display:none ;" required/>
+                        <input type="button" class="btn btn-primary btn-block mx-auto" value="upload image1"
+                          onclick="document.getElementById('fileInput').click();" />
+                      </div>
+        
+                      <!-- image2 -->
+        
+                      <div class="mt-3">
+                      <div class="tm-product-img-dummy mx-auto">
+                        <img class="w-100" src="{{product.img1.url}}" alt="pd_img" >
+                      </div>
+        
+                      <div class="custom-file mt-3 mb-3">
+                        <input id="fileInput2" oninput="checker(this)" type="file" name="img1" value="{{edit.imag2.url}}" style="display:none ;" required />
+                        <input type="button" class="btn btn-primary btn-block mx-auto" value="upload image2"
+                          onclick="document.getElementById('fileInput2').click();" />
+                      </div>
+                      </div>
+        
+                      <!-- image3 -->
+        
+                      <div class="mt-3">
+                        <div class="tm-product-img-dummy mx-auto">
+                          <img class="w-100" src="{{product.img2.url}}" alt="pd_img">
+                        </div>
+          
+                        <div class="custom-file mt-3 mb-3">
+                          <input id="fileInput3" oninput="checker(this)" type="file" value="{{edit.img2.url}}" name="img2" style="display:none;" required/>
+                          <input type="button" class="btn btn-primary btn-block mx-auto" value="upload image3"
+                            onclick="document.getElementById('fileInput3').click();" />
+                        </div>
+                        </div>
+                        <!-- image4 -->
+        
+                      <div class="mt-3">
+                        <div class="tm-product-img-dummy mx-auto">
+                          <img class="w-100" src="{{product.img3.url}}" alt="pd_img" >
+                        </div>
+          
+                        <div class="custom-file mt-3 mb-3">
+                          <input id="fileInput4" oninput="checker(this)" type="file" name="img3" value="{{product.img3.url}}" style="display:none;"  required/>
+                          <input type="button" class="btn btn-primary btn-block mx-auto" value="upload image4"
+                            onclick="document.getElementById('fileInput4').click();" />
+                        </div>
+                        </div>
+                    </div>
+                
+                <div class="form-group">
+                  <label for="exampleTextarea1">Product Description</label>
+                  <textarea value="{{ product.product_desc }}" class="form-control" name="productdesc" id="exampleTextarea1" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary me-2">Submit</button>
+                <a href="{% url 'product' %}" type="button" class="btn btn-light">Cancel</a>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+
+        <script>
+          $("#select1").change(function (){
+            var url = "{% url 'dropdown_P' %}"
+            var category_id = $(this).val();
+    
+            $.ajax({
+              url : url,
+              data :{"category":category_id},
+              success: function(data){
+                $("#select2").html(data);
+              }
+    
+            });
+    
+          });
+
+    
+    
+        </script>
+
+
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <!-- https://getbootstrap.com/ -->
+        
+        <script>
+            function checker(id){
+              img = document.getElementById(id.id).value
+              if(!img.match(/\.(jpg|jpeg|png|gif|webp)$/)){
+                swal("image should be jpg , jpeg , png")
+                document.getElementById(id.id).value = "";
+              }
+        
+          }
+          </script>
+      
+        
+
+{% endblock %}
+
+

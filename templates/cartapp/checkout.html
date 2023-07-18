@@ -1,0 +1,365 @@
+{% extends 'userapp/base.html' %}
+{% load static %}
+{% block content %}
+
+
+
+<section class="section-content padding-y bg">
+    <div class="container col-10">
+        <form action="{% url 'place_order' %}" method="POST">
+            {% csrf_token %}
+    
+    <!-- ============================ COMPONENT 1 ================================= -->
+    {% if  total  > 0 %}
+    <div class="row">
+        
+        <aside class="col-lg-6">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title lg-4">
+                Billing Address
+            </h4>
+                      
+          {% if not address %}
+          <div class="col-md-8 order-md-1 mt-3 text-center">
+           <p> <b> Please Add Address to procced your order</b></p>
+            
+            <a href="{% url 'add_address' %}" class="btn btn-primary mt-5" style="width:16rem;" type="submit">Add New Address  </a>
+            </div>
+          {% else %}
+             {% for address in address %}
+            <div class="card-body">
+                <div class="row"> 
+                    <div class="col-md-8">
+                        <input type="radio" required value="{{ address.id }}" name="address" class="address float-left  mr-2" style="height:2rem;width:1rem;" >
+                        <h3 class="text-muted">{{address.fname}} {{address.lname}}</h3>
+                        
+                        Phone:{{address.phone_number}} <br>
+                        Email: {{address.email}} <br>
+                        <p>{{address.address}} <br>  
+                        Location: {{address.state}}, {{address.country}}, <br> 
+                        P.O. Box: {{address.pincode}} 
+                         </p>
+                         <hr>
+                    </div>
+                    {% endfor %}
+                    <a href="{% url 'add_address' %}" class="btn btn-primary"> Add New Address</a> 
+                </div> <!-- row.// -->
+
+            </div>
+
+
+        
+</div>
+
+        
+    </div> <!-- card.// -->
+    
+        </aside> <!-- col.// -->
+        <aside class="col-lg-5">
+
+  
+
+    <div class="row">
+
+     {% endif %}
+
+            <div class="card mb-5 mt-2">
+            <div class="card-body col-md-12 ">
+              <div class="col-10">
+                <div class="coupon-all">
+                  <div class="table-content table-responsive">
+                  <table class="table-content table-responsive">
+                    <thead class="text-muted">
+                    <tr class="small text-uppercase">
+                      <th scope="col">Product</th>
+                      <th scope="col">Quantity</th>
+                      <th scope="col">Price</th>
+                     
+                    </tr>
+                    </thead>
+                    <tbody>
+                
+                    <tr>
+                      
+                        {% for cart_item in cart_items %}
+                
+                        <td>
+                            
+                            <figure class="itemside align-items-center">
+                                <div class="aside"><img src="{{cart_item.product.images.url}}" class="img-sm"></div>
+                                <figcaption class="info">
+                                    <a href="#" class="title text-dark">{{cart_item.product.product_name}}</a>
+                                    <!-- <p class="text-muted small">{{cart_item.product.prdt_desc}}</p> -->
+                                </figcaption>
+                            </figure>
+                        </td>
+                        <td> <p class="text-muted small">{{cart_item.quantity}}</p>
+                        </figcaption>
+                        </td>
+                        <td> 
+                            <div class="price-wrap"> 
+                                <!-- <var class="price">₹{{ cart_item.total_price }}</var>  -->
+                                <small class="text-muted"> ₹{{ cart_item.product.price}}each </small> 
+                            </div>
+                            <!-- price-wrap .// -->
+                        </td>
+                        
+                
+                    </tr>
+                
+                {% endfor %}
+                
+                
+                
+                    </tbody>
+                    </table>
+                  </div>
+                  <form class="mb-5" id="coupon_form">
+                    <br>
+                      {% for i in messages %}
+                      <p class="pl-3"style="color:red;">{{i}}</p>
+                      {% endfor %}
+                   <div class="input-group">
+                      <input type="text" name="code" id="code" class="form-control p-2" placeholder="Coupon Code">
+                      <div class="input-group-append " >
+                          <a onclick='apply_coupon()' class="tp-btn-h1" >Apply Coupon</a>
+                      </div>
+                   <!-- <div class="coupon2">
+                      <button class="btn btn-block btn-primary" name="update_cart" type="submit">Update cart</button>
+                   </div> -->
+                </div>
+                </form>
+          </div>
+          </div>
+
+                <div class="price-wrap"> 
+<!--                     
+                    <var class="price">Sub Total ........ :₹
+                      {{total }}</var> <br> -->
+<!-- 
+                    <var id="grand_total">Total Amount .......................... :₹
+                      {% for cart_item in cart_items %}
+                      <strong id="grand_total">{{ cart_item.sub_total }}</strong>
+                      {%endfor %}
+                    </var> <br> -->
+                    <li>
+                    <a class="total">
+                      <span>Total  &nbsp; &nbsp;  &nbsp;  &nbsp; &nbsp;  &nbsp;  &nbsp; &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp; &nbsp;  &nbsp; :₹</span>
+                      <strong id="grand_total">{{ total|floatformat:"2"  }}</strong>
+                    </li>
+
+                    <var class="price-discount">
+                      Discount Price  &nbsp; &nbsp; &nbsp;   &nbsp; :₹
+                      <strong id="discount_price" style="color: green;">0</strong>
+                    </var>
+                    <li class="total">
+                      <span>Grand Total  &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp;  &nbsp;   &nbsp; :₹ </span>
+                      <strong id="total"  style="color: rgb(0, 0, 0);" name="total">{{ total|floatformat:"2"  }}</strong>
+                      
+                    </li>
+
+
+
+                    <!-- <var id="discount_price">Discount Price......
+                      <strong id="discount_price"  style="color: green;"></strong></var> <br>
+                    </var> <br>
+
+                    
+                    <var id="total" name="total">Grand Total ....... :₹{{grand_total}}</var> <br> -->
+
+                    
+           
+          
+              
+                </div>
+                
+                <input type="hidden" value="COD" name="payment_mode">
+                {% if not address%}
+                <button disabled type="submit" name="submit" class="btn btn-primary btn-block w-100 cod" type="button">Cash on Delivey</button>
+                {% else %}
+                <div class="mt-3">
+                <button type="submit" name="submit" class="btn btn-primary btn-block w-100 cod" type="button">Cash on Delivey</button>
+               
+                <button class="btn btn-success btn-block w-100 mt-2 payWithRazorpay " method="GET" type="button">Pay With Razorpay  </button>
+                <div id="paypal-button-container" class="mt-2"></div>
+                </div>
+                {% endif %}
+            </div>
+            </div> 
+            <a href="{% url 'home' %}" class="btn btn-light btn-block ">Continue Shopping</a><!-- card-body.// -->
+            </div> <!-- card.// -->
+    
+    </aside> <!-- col.// -->
+    
+    
+    </div> <!-- row.// -->
+
+    
+
+    {% else %}
+<h2 class="mt-50">
+  You Have NO Item to Place Order 
+</h2>
+     <a  href="{% url 'home' %}" class="btn  btn-primary mt-100">Continue Shopping</a>
+    {% endif %}
+    <!-- ============================ COMPONENT 1 END .// ================================= -->
+</form>
+    </div> <!-- container .//  -->
+    </section>
+
+    
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <script src="{% static '/admin/js/jquery-3.6.1.js' %}"></script>
+    <script src="{% static '/js/checkout.js' %}"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<!-- 
+    <script src="{% static '/js/coupon.js' %}"></script> -->
+<!-- .....................paypal.................... -->
+<script src="https://cdn.jsdelivr.net/gh/cosmogicofficial/quantumalert@latest/minfile/quantumalert.js" charset="utf-8"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD&intent=capture&enable-funding=venmo" data-sdk-integration-source="integrationbuilder"></script>
+
+<!-- <script src="https://www.paypal.com/sdk/js?&client-id=ATlWz5sh8OnJT10LuEAfrTmbZSJmZnO_VvkdIe5Aq3XP9wFkVil2ohNJplfe3Ca5BYGZCQMm9yezv_EC&currency=USD"></script> -->
+
+
+
+
+<script>
+
+
+  {% comment %} coupon {% endcomment %}
+
+
+  function apply_coupon(){
+    
+
+    var code=document.getElementById('code').value
+
+  
+
+      $.ajax({
+        type:"GET",
+        url:"/cartapp/apply_coupon/",
+        data:{
+            'code':code
+        },
+        success : function(r){
+          if (r.c_exists==true){
+
+          
+            if(r.status==true){
+
+            
+            $('#total').text("₹"+r.total)
+            $('#discount_price').text("-"+r.discount)
+            Qual.success("Success !","Coupon applied");
+          }else{
+            
+            Qual.error("Oh no !","The Coupon has expired!!!!!Try another Coupon...",);
+        
+          }
+        }else{
+          Qual.error("Oh no !","Coupon is not valid");
+        }
+            
+        },
+        error:function(r){
+          Qual.error("Oh no !","Something wrong happened");
+        }
+      });
+
+
+  } 
+
+
+
+
+
+
+
+
+
+
+
+
+
+    paypal.Buttons({
+        style:{
+            shape:'pill',
+        },
+
+        onClick:function(data,actions){
+            var address=$(".address:checked").val();
+            var token=$('input[name=csrfmiddlewaretoken]').val();
+            console.log(address)
+            if (address == undefined){
+                
+                swal("Please Select Address", "Alert!", "error");
+                return false;
+            }
+            else{
+              return true;
+            }
+
+          },
+      // Sets up the transaction when a payment button is clicked
+      createOrder: function(data, actions) {
+        return actions.order.create({
+          purchase_units: [{
+            amount: {
+              value: '{{ total|floatformat:"2"  }}'// Can reference variables or functions. Example: `value: document.getElementById('...').value`
+            }
+          }]
+        });
+      },
+
+      // Finalize the transaction after payer approval
+      onApprove: function(data, actions) {
+        return actions.order.capture().then(function(orderData) {
+          // Successful capture! For dev/demo purposes:
+              console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+              
+            
+
+          // When ready to go live, remove the alert and show a success message within this page. For example:
+          // var element = document.getElementById('paypal-button-container');
+          // element.innerHTML = '';
+          // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+          // Or go to another URL:  actions.redirect('thank_you.html');
+        var address=$(".address:checked").val();
+        var token=$('input[name=csrfmiddlewaretoken]').val();
+        data={
+            'address':address,
+            "payment_mode":"Paypal",
+            'payment_id': orderData.id,
+            csrfmiddlewaretoken:token
+        }
+        $.ajax({
+            method: "POST",
+            url: "/orders/place_order/",
+            data: data,
+            success: function (responsec) {
+                swal("Congrats",responsec.status).then((value) => {
+                    window.location.href='/dashboard/'
+                });
+                
+                
+            }
+        });
+        });
+      }
+    }).render('#paypal-button-container');
+
+
+
+    
+  </script>
+
+
+
+
+
+
+
+{% endblock %}

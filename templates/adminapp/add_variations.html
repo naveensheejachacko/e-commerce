@@ -1,0 +1,91 @@
+{% extends 'adminapp/admin_base.html' %}
+
+
+
+{% block content %}
+
+
+<div class="main-panel">        
+  <div class="content-wrapper">
+    <div class="row">
+      
+      <div class="col-md-6 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Add Variations</h4>
+            <p class="card-description">
+              {% for msg in messages %}
+              <h4 class="col-12 p-0 my-2 text-warning text-center font-weight-bold"> {{msg}} </h4>
+              {% endfor %} 
+            </p>
+            <form class="forms-sample" method="POST" action="{% url 'add_variations' product.id %}">
+              {% csrf_token %}
+              <div class="form-group row">
+                <label for="exampleInputUsername2" class="col-sm-3 col-form-label"></label>
+                <div class="form-group">
+                  
+                    <div>
+                      <h4>Product name :{{ product.product_name }}</h4>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleSelectGender">Select Colour</label>
+                        <select class="form-control" name="selectcolor"  id="select1">
+                          {% for c in colors %}
+                          <option  value="{{ c.id }}">{{ c.color_value }}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label for="exampleSelectGender">Specification</label>
+                          <select  class="form-control" id="select2" name="selectsize"> 
+                            <option value=""disabled>spec</option>
+                          </select>
+                        </div>
+                </div>
+                
+              </div>
+              
+              
+              
+              
+              <button type="submit" class="btn btn-primary me-2">Submit</button>
+              
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+      
+    </div>
+  </div>
+
+</div>
+<!-- main-panel ends -->
+</div>
+<!-- page-body-wrapper ends -->
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+
+$("#select1").change(function(){
+var url="{% url 'load_size' %}"
+var color_id=$(this).val();
+$.ajax({
+  url:url,
+  data:{"color_id":color_id},
+  success:function(data){
+    $("#select2").html(data);
+  }
+});
+});
+</script>
+
+
+
+
+
+
+{% endblock %}
+

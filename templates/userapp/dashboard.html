@@ -1,0 +1,124 @@
+
+{% extends 'userapp/base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<section class="section-conten padding-y bg">
+    {% include 'includes/alerts.html' %}
+    <div class="container">
+
+        <div class="row">
+
+        <aside class="col-md-3">
+            <!--   SIDEBAR   -->
+            <ul class="list-group">
+
+              <a class="list-group-item active" href="{% url 'dashboard' %}"> DashBoard</a>
+
+              <a class="list-group-item" href="{% url 'change_password' %}">Change Password</a>
+              <a class="list-group-item" href="{% url 'view_address' %}"> Address </a>
+              <a class="list-group-item" href="{% url 'order_summary' %}"> Your Orders</a>
+			  <a class="list-group-item" href="#"> Return and refunds </a>
+            </ul>
+            <br>
+            <a class="btn btn-light btn-block" href="{% url 'user_logout' %}"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a> 
+            <!--   SIDEBAR .//END   -->
+        </aside>
+<!-- row.// -->
+
+    
+    
+	<main class="col-md-9">
+		<article class="card">
+		<header class="card-header">
+			<strong class="d-inline-block mr-3">Logged In As</strong>
+			<span>{{user.first_name}}</span>
+			<a href="{% url 'edit_profile' %}" class="btn btn-outline-warning">Edit profile</a>
+		</header>
+		<div class="card-body">
+			<div class="row"> 
+
+				<div class="col-md-6">
+					<div class="card" style="text-align: center;">
+						<div class="card-body">
+							<h5 class="card-title">Total Orders</h5>
+							<h4>{{orders_count}}</h4>
+							<a href="{% url 'order_summary'%}">View Orders</a>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<div class="card" style="text-align: center;">
+						<div class="card-body">
+
+							{% for u in userprofile %}
+    
+							<img src="{{u.profile_picture.url}}" alt="profile pic" width="50" height="50" style="border-radius: 50%;">
+							<p class="mb-0">{{user.email}}</p>
+							<p>{{user.phone_number}}</p>
+              {% endfor %}
+							
+						</div>
+					</div>
+				</div>
+
+			</div> <!-- row.// -->
+		</div> <!-- card-body .// -->
+		</article> <!-- order-group.// --> 
+
+
+
+
+
+  
+
+    {% if not orders %}
+    <!-- <h3 class="text-center mt-5" style="color: #FF7F7F;">Oops..!</h3> -->
+    <!-- <h5 class="text-center" style="color: #313031;">It looks like you haven't made your order yet.</h5> -->
+    <div class="row justify-content-evenly"style="margin-top:3em;"  >
+	<a href="{% url 'order_summary' %}" class="btn btn-primary col-3"  style=" margin-left: 10em; margin-bottom: 2em;">Go to Orders</a>
+	<a href="{% url 'store' %}" class="btn btn-primary  col-3"  style="  margin-bottom: 2em;">Shop Now</a>
+</div>
+    {% else %}
+
+</main>
+<!-- row.// -->
+
+{% endif %}
+
+</section>
+
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+
+<script>
+	function return_order() {
+		event.preventDefault();
+		var dlt = event.currentTarget.href
+		console.log(dlt)
+		Swal.fire({
+			title: 'return this order?',
+			text: "You won't be able to revert this!",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#2DAD49',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Return Order',
+      cancelButtonText: 'Back',
+		}).then((result) => {
+			if (result.isConfirmed) {
+				
+				window.location = dlt;
+			}
+		})
+	}
+</script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{% endblock %}

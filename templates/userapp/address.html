@@ -1,0 +1,91 @@
+
+{% extends 'userapp/base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg">
+
+    <div class="container">
+        <div class="row">
+        <aside class="col-md-3">
+            <!--   SIDEBAR   -->
+            <ul class="list-group">
+
+                <a class="list-group-item " href="{% url 'dashboard' %}">Dashboard </a>
+                
+                <a class="list-group-item" href="{% url 'change_password' %}">Change Password</a>
+                <a class="list-group-item active" href="{% url 'view_address' %}"> Address </a>
+                <a class="list-group-item" href="{% url 'order_summary' %}">Your Orders</a>
+                <a class="list-group-item" href="#"> Return and refunds </a>
+            </ul>
+            <br>
+            <a class="btn btn-light btn-block" href="{% url 'user_logout' %}"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a> 
+            <!--   SIDEBAR .//END   -->
+        </aside>
+
+        <main class="col-md-7">
+            {% for message in messages %}
+            <h4 style="color: rgb(0, 0, 0);">{{message}}</h4>
+            {% endfor %}
+            <article class="card">
+
+                <header class="card-header" >
+                    <strong class="d-inline-block mr-3">Saved Address:</strong>
+                     
+                    <a href="{% url 'add_address' %}" class="btn  btn-success " style="margin-left:20em;" > <span class="text">Add New Address</span>  </a> 
+                
+            </header>   
+            {% for address in address %}
+            <div class="card-body">
+                <div class="row"> 
+                    <div class="col-md-8">
+                        <h3 class="text-muted">{{address.fname}} {{address.lname}}</h3>
+                        
+                        Phone:{{address.phone_number}} Email: {{address.email}} <br>
+                        <p>{{address.address}} <br>  
+                        Location: {{address.state}}, {{address.country}}, <br> 
+                        P.O. Box: {{address.pincode}} 
+                         </p>
+                         <span>
+                            <a href="{% url 'delete-address' address.id %}" class="small-gray-text"
+                               onclick="deleteAddress()" style="color: red;">Delete</a>
+                        </span>
+                         <hr>
+                    </div>
+                    {% endfor %}
+                </div> <!-- row.// -->
+            </div> <!-- card-body .// -->
+<!-- table-responsive .end// -->
+            </article> <!-- order-group.// --> 
+        </main>
+    </div> <!-- row.// -->
+    </div>
+    
+    
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+    <script>
+        function deleteAddress() {
+            event.preventDefault();
+            var dlt = event.currentTarget.href
+            console.log(dlt)
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    
+                    window.location = dlt;
+                }
+            })
+        }
+    </script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    {% endblock %}

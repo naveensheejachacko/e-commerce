@@ -1,0 +1,125 @@
+
+{% extends 'userapp/base.html' %}
+{% load static %}
+
+{% block content %}
+
+            <div class="col-lg-9 col-md-12">
+                <div class="row pb-3">
+
+                    {% for i in messages %}
+                    <p class="pl-3"style="color:red;">{{i}}</p>
+                    {% endfor %}
+                    {% if not  wishlist %}
+                    <div class="text-center">
+                    <div class=" col-md-12 col-sm-10  text-center mt-100 ">
+                            <h2 class=" text-center float"> You Have no products in your Wishlist</h2>
+                        <a class="btn btn-primary mb-175 " href="{% url 'store' %}">Continue Shopping</a>
+                        </div>
+                    </div>
+                    {% else %}
+                    {% for w in wishlist %}
+                    <div class="col-lg-4 col-md-6 col-sm-12 pb-1">
+                    
+                        <div class="card product-item border-0 mb-4 ml-30  mt-50 " style="border: 3px solid grey;" >
+                            <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                            
+                                <a href="{{ w.get_url }}" class="btn btn-sm text-dark p-0"><img class="img-fluid w-100" style="object-fit: contain;"  src="{{w.img1.url}}" alt=""></a>
+
+                            </div>
+                            <div class="card-footer d-flex justify-content-between bg-light border">
+                                
+                                <h6 class="text-truncate mb-3">{{ w.product_name }}</h6>
+                                <h6 class="price "></h6> 
+                           
+                                    
+                                       
+                            
+                                        <p class="text-muted ml-2"><h3>₹{{w.price}}</h3><span style="color: green;"> 
+
+
+                                            {% if w.productoffer.discount %}
+                                        
+                                        
+                                        
+                                            {% if w.productoffer.discount > w.parent_main_prdt.categoryoffer.discount and w.productoffer.discount > w.parent_sub_prdt.subcategoryoffer.discount %}  
+                                                
+                                                    upto {{ w.productoffer.discount }}% off
+                                            {% elif w.parent_main_prdt.categoryoffer.discount > w.productoffer.discount and w.parent_main_prdt.categoryoffer.discount > w.parent_sub_prdt.subcategoryoffer.discount   %}
+                                                    upto {{ w.parent_main_prdt.categoryoffer.discount }}% off
+                                            
+                                            {%else %}
+                                                    upto {{ w.parent_sub_prdt.subcategoryoffer.discount }}% off
+                                            {% endif %}
+                
+                
+                
+                
+                
+                
+                                            {% else %}
+                
+                                            {% endif %}</span></p>
+                           
+
+
+
+
+                                        
+                                    </h6>
+                                    <a href="{% url 'add_to_wishlist' w.id %}"  onclick="add_to_wishlist()" class="btn btn-sm text-red "><i class="fa-solid fa-trash"></i></a>
+
+                                
+                            </div>
+
+                               
+                                
+                                
+                           
+                            
+                        </div>
+            
+                    </div>
+                    {% endfor %}
+
+                    
+    
+                    {% endif %}
+                    
+                </div>
+            </div>
+
+
+            <script src="https://kit.fontawesome.com/cfdba9ae2e.js" crossorigin="anonymous"></script>
+            <script>
+                function add_to_wishlist() {
+                    event.preventDefault();
+                    var dlt = event.currentTarget.href
+                    console.log(dlt)
+                    Swal.fire({
+                        title: 'remove this item?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#2DAD49',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'remove item',
+                  cancelButtonText: 'Back',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            
+                            window.location = dlt;
+            
+            
+            
+                        }
+                    })
+                }
+            </script>
+            
+            <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+
+{% endblock %}

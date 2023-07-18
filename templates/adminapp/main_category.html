@@ -1,0 +1,84 @@
+{% extends 'adminapp/admin_base.html' %}
+{% block content %}
+<div class="container col-md-10" style=" color:rgb(0, 0, 0);   
+            border:1px solid;">
+	<div class="table-responsive">
+		<div class="table-wrapper">
+			<div class="table-title">
+				<div class="row">
+					{% for msg in messages %}
+					<h4 class="col-12 p-0 my-2 text-danger text-center font-weight-bold"> {{msg}} </h4>
+					{% endfor %}
+					<div class="col-sm-6">
+						<h2>Main <b>Category</b></h2>
+					</div>
+					<div class="col-sm-6">
+						<a href="{% url 'add_main_cat' %}" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Category</span></a>
+						
+					</div>
+				</div>
+			</div>
+			<table class="table table-striped table-hover">
+				<thead>
+
+					<tr>
+						<th></th>
+						<th scope="col">Si NO.</th>
+						<th scope="col">Main Category</th>
+						<th scope="col">Image</th>
+					</tr>
+				</thead>
+                <tbody>
+					{% for m in main_category %}
+					<tr></tr>
+					<tr>
+
+						<th>
+
+						</th>
+						<td>{{forloop.counter}}</td>
+						<td>{{m.main_category_name}}</td>
+						<td><img src="{{m.thumbnail.url}}"  style="border-radius :0;" alt=""></td>
+						<td></td>
+						<td >		
+		
+							<a href="{% url 'edit_main_cat' m.id %}"><button type="button" class="btn btn-outline-primary">Edit</button> 
+							<a href="{% url 'main_cat_delete' m.id %}" ><button type="button" class="btn btn-danger mx-2"  onclick="return confirm('Are you sure you want to delete this item?');" >Delete</button></a> 
+
+						</td>
+					</tr>
+					{% endfor %}
+                </tbody>
+
+			</table>
+
+		</div>
+	</div>        
+</div>
+<!-- Edit Modal HTML -->
+
+<!-- Edit Modal HTML -->
+
+<!-- Delete Modal HTML -->
+<!-- <div id="deleteEmployeeModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form>
+				<div class="modal-header">						
+					<h4 class="modal-title">Delete Main Category</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">					
+					<p>Are you sure you want to delete these Records?</p>
+					<p class="text-warning"><small>This action cannot be undone.</small></p>
+				</div>
+				<div class="modal-footer">
+					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+					<input type="submit" class="btn btn-danger" value="Delete">
+				</div>
+			</form>
+		</div>
+	</div>
+</div> -->
+
+{% endblock %}

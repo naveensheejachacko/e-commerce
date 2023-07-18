@@ -1,0 +1,53 @@
+{% extends "adminapp/admin_base.html" %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+{% load static %}
+
+
+{% block content %}
+<div class="container mt-5">
+   <div class="row d-flex justify-content-center align-items-center">
+        <div class="col-12 col-md-10 ">
+            <div class="card shadow p-3 mb-5 bg-white rounded" style="border-radius: 8px;">
+                <div class="card-body p-5">    
+                    <h4>Add Banner</h4>
+
+                    <form action="{% url 'add_banner' %}" method="post" enctype="multipart/form-data" class="col-xl-6">
+                       
+                        {% csrf_token %}
+                        {% for msg in messages %}
+                        <h4 class="col-12 p-0 my-2 text-warning text-center font-weight-bold"> {{msg}} </h4>
+                        {% endfor %} 
+                        {{ form | crispy }}
+                        <div class="form-group">
+                            <div id="image-box"  class="image-container"></div>
+                            <button class="btn btn-outline-info" id="crop-btn" style="width: 100%; margin-top: 10px; display: none;" type="button">Crop</button>
+                            <button class="btn btn-outline-info" id="confirm-btn" style="width: 100%; margin-top: 10px;" type="submit">Post</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>  
+    </div> 
+</div>
+
+
+
+
+<!--........................... #crop guide................................ -->
+<script defer src="https://cdn.crop.guide/loader/l.js?c=JPHQRG"></script>
+
+
+<script>
+    function checker(id){
+      img = document.getElementById(id.id).value
+      if(!img.match(/\.(jpg|jpeg|png|gif)$/)){
+        swal("image should be jpg , jpeg , png")
+        document.getElementById(id.id).value = "";
+      }
+
+  }
+  </script>
+
+
+{% endblock %}

@@ -1,0 +1,93 @@
+
+{% extends 'userapp/base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<section class="section-conten padding-y bg">
+    {% include 'includes/alerts.html' %}
+    <div class="container">
+
+        <div class="row">
+
+        <aside class="col-md-3">
+            <!--   SIDEBAR   -->
+            <ul class="list-group">
+
+              <a class="list-group-item " href="{% url 'dashboard' %}"> DashBoard</a>
+
+              <a class="list-group-item" href="{% url 'change_password' %}">Change Password</a>
+              <a class="list-group-item" href="{% url 'view_address' %}"> Address </a>
+              <a class="list-group-item active" href="{% url 'order_summary' %}"> Your Orders</a>
+			  <a class="list-group-item" href="#"> Return and refunds </a>
+            </ul>
+            <br>
+            <a class="btn btn-light btn-block" href="{% url 'user_logout' %}"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a> 
+            <!--   SIDEBAR .//END   -->
+        </aside>
+<!-- row.// -->
+
+    
+    
+	<main class="col-md-9 mt">
+		<article class="card">
+		<header class="card-header">
+			<strong class="d-inline-block mr-3">Logged In As</strong>
+			<span>{{user.first_name}}</span>
+			
+		</header>
+<!-- card-body .// -->
+		</article> <!-- order-group.// --> 
+
+
+    {% for message in messages %}
+    <div class=" container alert alert-success" role="alert">
+        <h3 class="text-center">{{ message }}</h3>
+    </div>
+      {% endfor %}
+    <!-- Cart Start -->
+    {% if not orders %}
+<h2 class="text-center"> You have no orders</h2>
+<div class="text-center mt-5">
+<a class="btn btn-primary " href="{% url 'store' %}">Continue Shopping</a>
+</div>
+{% else %}
+
+            <div class="col-md-12 table-responsive mb-5">
+                <table class="table table-bordered text-center mb-0 text-center">
+                    <thead class="bg-secondary text-dark">
+                        <tr>
+                            <th>Ordered Date</th>
+                            <th>Payment Mode</th>
+                            <th>Total Price</th>
+                            <th>Shipping Address</th>
+                            <!-- <th>Status</th> -->
+                     
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody class="align-middle">
+                        {% for order in orders %}
+                        <tr>
+                            <td class="align-middle">{{ order.created_at }}</td>
+                            <td class="align-middle">{{ order.payment_mode }}</td>
+                            <td class="align-middle">{{ order.total_price|floatformat:"2" }}</td>
+                            <td class="align-middle">
+                            {{ order.address.address }},{{ order.address.state }},{{ order.address.country }}
+                            </td>
+                            <!-- <td class="align-middle">{{ order.status }}</td> -->
+                            <td class="align-middle"> <a href="{% url 'orderview' order.id %}"> <button class="btn btn-sm btn-primary">View</button></a></td>
+                        </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+                </table>
+            </div>
+            
+
+
+    </section>
+    {% endif %}
+
+{% endblock %}

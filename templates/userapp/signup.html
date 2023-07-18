@@ -1,0 +1,152 @@
+{% extends 'userapp/base.html' %}
+{%load static%}
+
+{% block content %}
+
+<style>
+
+
+  .gradient-custom {
+    /* fallback for old browsers */
+    background: #f093fb;
+    
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to bottom right,  rgb(255, 245, 245), rgb(100, 111, 55));
+    
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to bottom right, rgb(255, 245, 245), rgb(100, 111, 55))
+    }
+    
+    .card-registration .select-input.form-control[readonly]:not([disabled]) {
+    font-size: 1rem;
+    line-height: 2.15;
+    padding-left: .75em;
+    padding-right: .75em;
+    }
+    .card-registration .select-arrow {
+    top: 13px;
+    }
+</style>
+
+<section class="vh-100 gradient-custom">
+  <div class="container py-5 h-100">
+    <div class="row justify-content-center align-items-center h-100">
+      <div class="col-12 col-lg-9 col-xl-7">
+        <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+          <div class="card-body p-4 p-md-5">
+            <h3 class="mb-4 pb-2 pb-md-0 mb-md-5  "style="align-items-center" >Signup Here<i class="fa-thin fa-user-plus"></i></h3>
+            <form action="" method="POST"> 
+              {% csrf_token %}
+
+              <div class="row">
+                <div class="col-md-6 mb-4">
+
+                  <div class="form-outline">
+                    <!-- <input type="text" id="firstName" name="first_name" class="form-control form-control-lg" /> -->
+                    {{form.first_name}}
+                    <label class="form-label" >{{form.first_name.label}}</label>
+                  </div>
+
+                </div>
+                <div class="col-md-6 mb-4">
+
+                  <div class="form-outline">
+                    <!-- <input type="text" id="lastName"name="last_name" class="form-control form-control-lg" /> -->
+                    {{form.last_name}}
+                    <label class="form-label">{{form.last_name.label}}</label>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-4 d-flex align-items-center">
+
+                  <div class="form-outline datepicker w-100">
+                    <!-- <input type="text" name="username" class="form-control form-control-lg" id="birthdayDate" /> -->
+                    {{form.username}}
+                    <label class="form-label" >{{form.username.label}}</label>
+                    
+                  </div>
+
+                </div>
+                <div class="col-md-6 mb-4">
+
+
+
+
+                  <div class="form-outline">
+                    <!-- <input type="text" name="Phone_number" id="emailAddress" class="form-control form-control-lg" />
+                    <label class="form-label" for="text">Phone Number</label> -->
+                    {{form.phone_number}}
+                    <label class="form-label" >{{form.phone_number.label}}</label>
+                  </div>
+
+
+
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12 mb-4 pb-2">
+
+                  <div class="form-outline">
+                    <!-- <input type="email" name="email" id="emailAddress" class="form-control form-control-lg" />
+                    <label class="form-label" for="emailAddress">Email</label> -->
+                    {{form.email}}
+                    <label class="form-label" >{{form.email.label}}</label>
+                  </div>
+
+                </div>
+
+
+                </div>
+
+
+              <div class="row">
+                <div class="col-md-6 mb-4 d-flex align-items-center">
+
+                  <div class="form-outline datepicker w-100">
+                    <!-- <input type="password" name="password1" class="form-control form-control-lg" id="password" />
+                    <label for="password" class="form-label">{{form.first_name.label}}</label> -->
+                    {{form.password1}}
+                    <label class="form-label" >{{form.password1.label}}</label>
+                  </div>
+
+                </div>
+                <div class="col-md-6 mb-4">
+
+
+
+
+                  <div class="form-outline">
+                    <!-- <input type="password" name="password2" id="password" class="form-control form-control-lg" />
+                    <label class="form-label" for="password">Re-enter Password</label> -->
+                    {{form.password2}}
+                    <label class="form-label" >{{form.password2.label}}</label>
+                  </div>
+
+
+
+                </div>
+
+
+              </div>
+
+              <div class="mt-4 pt-2">
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+
+
+  <p class="sign-up text-center">Already have an Account?<a href="{% url 'user_login' %}"> Login</a></p>
