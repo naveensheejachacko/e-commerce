@@ -80,22 +80,14 @@
                                                 </div>
                                             <input type="text"
                                             id="quantity_value{{ forloop.counter }}" 
-<<<<<<< HEAD
                                             min="1" max="5"
-=======
-                                            min="1" max="20"
->>>>>>> d7edf25eaab14e1cd1066118536de61efbcf7206
                                             name="quantity" 
                                             class="form-control form-control-sm  text-center" 
                                             value="{{ cart_item.quantity }}">
                                             
                                             <div class="input-group-btn"></div>
                                                 <button class="btn btn-sm btn-light btn-minus"
-<<<<<<< HEAD
                                                 min="1" max="5" type="button"
-=======
-                                                 max="20"  type="button"
->>>>>>> d7edf25eaab14e1cd1066118536de61efbcf7206
                                                  onclick= 'increaseQuantity("quantity_value{{ forloop.counter }}","{{ cart_item.product.id }}","sub_total{{ forloop.counter }}","{{ cart_item.id}}")' >
                                                  <i class="fa fa-plus"></i>
                                                 </button>
