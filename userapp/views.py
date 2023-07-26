@@ -203,10 +203,10 @@ def verify_signup_otp(request):
             return redirect('home')
         else:
             messages.error(request,"Invalid Otp")
-            return redirect('signup-otp')
+            return redirect('signup_otp')
     else:
         messages.error(request,"Invalid Credentials")
-        return redirect('signup-otp')
+        return redirect('signup_otp')
 
 
 
