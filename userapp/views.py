@@ -110,7 +110,7 @@ def user_signup(request):
                 request.session["password"]=password
                 request.session["username"]=username
                 OtpGenerate.send_otp(phone_number)
-                return redirect('signup-otp')
+                return redirect('signup_otp')
 
     return render(request,'userapp/signup.html',{
         'form':form
@@ -552,7 +552,7 @@ class OtpGenerate():
         twilio_number = config('twilio_number')
         otp=random.randint(1000,9999)
         OtpGenerate.Otp = str(otp)
-        OtpGenerate.phone_number = phone_number
+        OtpGenerate.phone_number = target_number
         msg="your otp for login to Electromart is " + str(otp)
         client=Client(account_sid,auth_token)
         message=client.messages.create(

@@ -11,7 +11,7 @@ urlpatterns = [
 
 
     path('signup/',views.user_signup,name='signup'),
-    path('signup-otp/',views.signup_otp,name='signup-otp'),
+    path('signup_otp/',views.signup_otp,name='signup_otp'),
     path('verify_signup_otp/',views.verify_signup_otp,name='verify_signup_otp'),
 
 
