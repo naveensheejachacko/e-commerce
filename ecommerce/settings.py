@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-eko%5elbapt069epw1r^b+-+ygd$glxn&xmsb*21wqf-gt3u+s
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 # ALLOWED_HOSTS = ['http://18.181.197.15','localhost','.electromart.ml']

@@ -193,10 +193,6 @@ def verify_signup_otp(request):
             profile.user_id = user.id
             profile.profile_picture = "avatar.jpeg"
             profile.save()
-
-
-
-
             user.phone_number=phone_number
             user.save()
             auth.login(request,user)
