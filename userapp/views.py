@@ -212,7 +212,6 @@ def verify_signup_otp(request):
 
 
 def home(request):
-
     maincategory=Main_Category.objects.all()
     subcategory=Sub_Category.objects.all()
     topitems=Product.objects.filter(is_available=True).order_by('created_date') [:4]
@@ -442,11 +441,6 @@ def accept_return(request,id):
     order_item.save()
     product.save()
     return HttpResponseRedirect(request.META["HTTP_REFERER"])
-
-
-
-
-
 
 @login_required(login_url='user_login')    
 def user_logout(request):
