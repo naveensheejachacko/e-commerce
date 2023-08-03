@@ -110,7 +110,7 @@ def user_signup(request):
                 request.session["password"]=password
                 request.session["username"]=username
                 OtpGenerate.send_otp(phone_number)
-                return redirect('signup_otp')
+                return redirect('signup-otp')
 
     return render(request,'userapp/signup.html',{
         'form':form
@@ -199,10 +199,10 @@ def verify_signup_otp(request):
             return redirect('home')
         else:
             messages.error(request,"Invalid Otp")
-            return redirect('signup_otp')
+            return redirect('signup-otp')
     else:
         messages.error(request,"Invalid Credentials")
-        return redirect('signup_otp')
+        return redirect('signup-otp')
 
 
 
@@ -680,6 +680,9 @@ def add_to_wishlist(request,id):
     return HttpResponseRedirect(request.META["HTTP_REFERER"])
 
 
+
+def error_404(request, exception):
+    return render(request, 'userapp/404.html')
 
 
 

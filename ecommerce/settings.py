@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-eko%5elbapt069epw1r^b+-+ygd$glxn&xmsb*21wqf-gt3u+s
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 # ALLOWED_HOSTS = ['http://18.181.197.15','localhost','.electromart.ml']
@@ -92,26 +92,26 @@ AUTH_USER_MODEL= 'account.Account'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'electromart',
-#         'USER':'postgres',
-#         'PASSWORD':123,
-#         'HOST':'localhost',
-# }
-# }
-
-
 DATABASES = {
-     'default': {
-         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-         'NAME': 'electromart',
-         'USER':'myprojectuser',
-         'PASSWORD':'7081',
-         'HOST':'localhost',
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'electromart',
+        'USER':'postgres',
+        'PASSWORD':123,
+        'HOST':'localhost',
 }
 }
+
+
+# DATABASES = {
+#      'default': {
+#          'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#          'NAME': 'electromart',
+#          'USER':'myprojectuser',
+#          'PASSWORD':'7081',
+#          'HOST':'localhost',
+# }
+# }
 
 
 
