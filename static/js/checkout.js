@@ -14,7 +14,7 @@ $(document).ready(function(){
         }
         else
         {
-            console.log('enterr razopay')
+            // console.log('enterr razopay')
             $.ajax({
                 type:"GET",
                 url:"/orders/proceed_to_pay",
@@ -23,7 +23,7 @@ $(document).ready(function(){
                     console.log(response);
 
                 var options = {
-                        "key": "rzp_test_m3224r9Lm1Uqsu", // Enter the Key ID generated from the Dashboard
+                        "key": "rzp_test_64R421AOqlDcmn", // Enter the Key ID generated from the Dashboard
                         "amount": response.total_price*100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
                         "currency": "INR",
                         "name": "Electro Mart",
@@ -39,7 +39,7 @@ $(document).ready(function(){
                                 csrfmiddlewaretoken:token                        
                         },
 
-                        console.log('place order')
+                        // console.log('place order')
                         $.ajax({
                             method: "POST",
                             url: "/orders/place_order/",
@@ -55,12 +55,12 @@ $(document).ready(function(){
 
                     },
                         "prefill": {
-                            "name": "Gaurav Kumar",
+                            "name": "Electromart",
                             "email": "gaurav.kumar@example.com",
-                            "contact": "9999999999"
+                            "contact": "8111850031"
                         },
                         "notes": {
-                           "address": "Razorpay Corporate Office"
+                           "address": "Kochin"
                         },
                         "theme": {
                     "color": "#3399cc"

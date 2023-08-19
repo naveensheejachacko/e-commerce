@@ -456,7 +456,7 @@ def otp_login(request):
                 messages.error(request,"please enter A valid mobile number")
                 return redirect(otp_login_page)
             else:
-                print('snedinging otp...................................')
+                # print('snedinging otp...................................')
                 OtpGenerate.send_otp(phone_number)
                 return redirect('enter_otp')
 
@@ -542,7 +542,8 @@ class OtpGenerate():
         twilio_number = config('twilio_number')
         otp=random.randint(1000,9999)
         OtpGenerate.Otp = str(otp)
-        OtpGenerate.phone_number = target_number
+        OtpGenerate.phone = target_number
+        OtpGenerate.phone_number = phone_number
         msg="your otp for login to Electromart is " + str(otp)
         client=Client(account_sid,auth_token)
         message=client.messages.create(
