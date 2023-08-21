@@ -107,7 +107,7 @@ DATABASES = {
 #      'default': {
 #          'ENGINE': 'django.db.backends.postgresql_psycopg2',
 #          'NAME': 'electromart',
-#          'USER':'myprojectuser',
+#          'USER':'naveen',
 #          'PASSWORD':'7081',
 #          'HOST':'localhost',
 # }
